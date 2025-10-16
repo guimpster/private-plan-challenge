@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from './config/config.module';
-import { TriggerModule } from './api/account/account.module';
-import { MessageModule } from './api/message/message.module';
-import { OrchestratorModule } from './api/orchestrator/orchestrator.module';
+import { AccountModule } from './api/account/account.module';
 
 @Module({
   imports: [
-    TriggerModule,
-    MessageModule,
+    AccountModule,
     ConfigModule.register({ type: 'json' }),
-    OrchestratorModule,
   ],
   providers: [],
   controllers: [],

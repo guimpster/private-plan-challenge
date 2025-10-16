@@ -1,18 +1,21 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { AccountService } from '../../business/message/service/message.service';
-import { CreateMessageDto } from '../../business/message/dto/create-message.dto';
+import { Controller, Get } from '@nestjs/common';
+import { AccountService } from '../../business/service/account/account.service';
+import { AccountDto } from './dtos/account.dto';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  @Post()
-  create(@Body() createMessageDto: CreateMessageDto) {
-    return this.accountService.create(createMessageDto);
-  }
+  @Get()
+  async findOne(): Promise<AccountDto> {
+    const account = await this.accountService.findByUserId();
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.accountService.findOne(id);
+    return new AccountDto({
+        id: account.id,
+        cashAvailableForWithdrawal: account.cashAvailableForWithdrawal,
+        cashBalance: account.cashBalance,
+        created_at: account.created_at,
+        updated_at: account.updated_at
+    });
   }
 }

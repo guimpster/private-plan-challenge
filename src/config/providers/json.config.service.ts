@@ -5,6 +5,6 @@ import { Injectable } from '@nestjs/common';
 export class JsonConfigService extends ConfigService {
   constructor() {
     super();
-    this.envConfig = require(`${process.cwd()}/config-vars.json`);
+    this.envConfig = require(`${process.cwd()}/${process.env.NODE_ENV}.config-vars.json`);
   }
 }
