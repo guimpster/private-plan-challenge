@@ -1,5 +1,6 @@
 export class Account {
   id: string;
+  userId: string;
   cashAvailableForWithdrawal: number;
   cashBalance: number;
   source: 'system' | 'whatsapp';

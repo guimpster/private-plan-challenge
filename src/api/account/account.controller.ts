@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AccountService } from '../../business/service/account/account.service';
 import { AccountDto } from './dtos/account.dto';
 
@@ -6,9 +6,11 @@ import { AccountDto } from './dtos/account.dto';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  @Get()
-  async findOne(): Promise<AccountDto> {
-    const account = await this.accountService.findByUserId();
+  @Get('/user/:id')
+  async findOne(@Param('id') userId: string): Promise<AccountDto | undefined> {
+    const account = await this.accountService.findByUserId(userId);
+
+    if (!account) return;
 
     return new AccountDto({
         id: account.id,

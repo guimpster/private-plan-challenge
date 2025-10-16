@@ -8,7 +8,7 @@ export class AccountService {
   constructor(private readonly accountRepository: AccountRepository) {}
 
   // TODO: check if user is authenticated and has permissions
-  async findByUserId(userId: string): Promise<Account> {
+  async findByUserId(userId: string): Promise<Account | undefined> {
     return this.accountRepository.getByUserId(userId);
   }
 }

@@ -6,7 +6,6 @@ import {
 
 import { AppModule } from './app.module'
 import { ConfigService } from './config/config.service';
-import fastifyLogger from './config/logger/FastifyLoggerConfig';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

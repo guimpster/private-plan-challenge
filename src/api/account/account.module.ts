@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AccountController } from './account.controller';
-import { ElasticModule } from '../../repository/elasticsearch/elastic.module';
-import { MessageService } from 'src/business/service/account/account.service';
-import { MessageRepository } from 'src/business/repository/account.repository';
-import { ElasticMessageRepository } from 'src/repository/elasticsearch/elastic.message.repository';
+import { InMemoryModule } from 'src/repository/in-memory/in-memory.module';
+import { AccountRepository } from 'src/business/repository/account.repository';
+import { InMemoryAccountRepository } from 'src/repository/in-memory/in-memory.account.repository';
+import { AccountService } from 'src/business/service/account/account.service';
 
 @Module({
-  imports: [ElasticModule],
+  imports: [InMemoryModule],
   providers: [
-    MessageService,
+    AccountService,
     {
-      provide: MessageRepository,
-      useExisting: ElasticMessageRepository,
+      provide: AccountRepository,
+      useExisting: InMemoryAccountRepository,
     },
   ],
   controllers: [AccountController],
