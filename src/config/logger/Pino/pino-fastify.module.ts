@@ -36,5 +36,7 @@ const messageFormat = (log, messageKey, logLevel) => {
       },
     }),
   ],
+  providers: [],
+  controllers: [],
 })
-export class PinoModule {}
+export class PinoFastifyModule {}

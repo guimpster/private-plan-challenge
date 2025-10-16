@@ -10,7 +10,7 @@ import { AccountRepository } from 'src/business/repository/account.repository';
 export class InMemoryAccountRepository extends AccountRepository {
     private accounts: Account[] = [];
 
-    private readonly fakeAccountsFile = path.join(__dirname, '../../data/accounts.json');
+    private readonly fakeAccountsFile = path.join(__dirname, './data/accounts.json');
 
     private readonly logger = new Logger(InMemoryAccountRepository.name);
 
