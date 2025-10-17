@@ -1,0 +1,465 @@
+{
+    "users": [
+        {
+            "id": "19ca04c6-9c96-40f4-b7db-a55394b5a58d",
+            "email": "alice.santos@example.com",
+            "phoneNumber": "+5588942256566",
+            "fullName": "Alice Santos",
+            "gender": "female",
+            "birthDate": "1990-01-01",
+            "address": {
+                "city": "Curitiba",
+                "postalCode": "27082-558",
+                "street": "Rua A, 475",
+                "state": "PR"
+            },
+            "profession": "Software Engineer",
+            "source": "system",
+            "accounts": [
+                {
+                    "id": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
+                    "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d",
+                    "cashAvailableForWithdrawal": 4183.94,
+                    "cashBalance": 5449.54,
+                    "source": "system",
+                    "withdrawals": [
+                        {
+                            "id": "350408b1-822c-474b-9f26-24d17098ba07",
+                            "sourcePrivatePlanAccountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
+                            "sourceTransactionId": "6b533489-a1f9-439f-9cea-c2ae31e81300",
+                            "destinationBankAccountId": "b61648ba-0323-4e9a-8046-413c88de1245",
+                            "destinationTransactionId": "b067ec56-a3a5-484a-a80e-b953a8d8935e",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 492.48,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Withdrawal #1",
+                            "source": "system",
+                            "created_at": "2025-10-03T23:15:03Z",
+                            "updated_at": "2025-10-03T23:15:03Z"
+                        },
+                        {
+                            "id": "14ea502f-c4ef-4dbb-a893-debf0d8679e7",
+                            "sourcePrivatePlanAccountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
+                            "sourceTransactionId": "8093e7e4-8105-4633-a8a1-730cef4107e9",
+                            "destinationBankAccountId": "b61648ba-0323-4e9a-8046-413c88de1245",
+                            "destinationTransactionId": "16d27b95-57ec-4003-81ed-ef2637777372",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 611.15,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Withdrawal #2",
+                            "source": "system",
+                            "created_at": "2025-10-05T23:15:03Z",
+                            "updated_at": "2025-10-05T23:15:03Z"
+                        }
+                    ],
+                    "deposits": [
+                        {
+                            "id": "55df886b-0684-454a-aaeb-b95c391ca243",
+                            "sourceBankAccountId": "096f0bdc-2a6c-4fa4-910c-840ed45e4d13",
+                            "sourceTransactionId": "9f53bd63-1c53-408a-9816-275e9ebae458",
+                            "destinationPrivatePlanAccountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
+                            "destinationTransactionId": "031a4a83-b1b8-4b33-bc6c-c85c6ace0517",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 2841.98,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Initial deposit #1",
+                            "source": "system",
+                            "created_at": "2025-09-18T23:15:03Z",
+                            "updated_at": "2025-09-18T23:15:03Z"
+                        },
+                        {
+                            "id": "3760d14d-17bf-4deb-a3eb-8b2438ec25df",
+                            "sourceBankAccountId": "096f0bdc-2a6c-4fa4-910c-840ed45e4d13",
+                            "sourceTransactionId": "317e662f-cbcd-499c-a045-26e20b71e334",
+                            "destinationPrivatePlanAccountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
+                            "destinationTransactionId": "da981ce5-623a-46e5-bc3f-fe00bb7e0209",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 2405.38,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Initial deposit #2",
+                            "source": "system",
+                            "created_at": "2025-09-20T23:15:03Z",
+                            "updated_at": "2025-09-20T23:15:03Z"
+                        }
+                    ],
+                    "modality": "VGBL",
+                    "inactivated_at": null,
+                    "created_at": "2025-08-17T23:15:03Z",
+                    "updated_at": "2025-10-11T23:15:03Z"
+                }
+            ],
+            "bankAccounts": [
+                {
+                    "id": "096f0bdc-2a6c-4fa4-910c-840ed45e4d13",
+                    "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d",
+                    "bankAccountType": "savings",
+                    "name": "Itaú",
+                    "code": "341",
+                    "agencyNumber": "3260",
+                    "accountNumber": "659144",
+                    "accountDigit": "6"
+                },
+                {
+                    "id": "b61648ba-0323-4e9a-8046-413c88de1245",
+                    "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d",
+                    "bankAccountType": "savings",
+                    "name": "Bradesco",
+                    "code": "237",
+                    "agencyNumber": "3387",
+                    "accountNumber": "363145",
+                    "accountDigit": "5"
+                }
+            ],
+            "inactivated_at": null,
+            "created_at": "2025-08-17T23:15:03Z",
+            "updated_at": "2025-10-11T23:15:03Z"
+        },
+        {
+            "id": "45974916-e884-4d6b-b15f-20bac251437b",
+            "email": "bruno.pereira@example.com",
+            "phoneNumber": "+5555968065702",
+            "fullName": "Bruno Pereira",
+            "gender": "male",
+            "birthDate": "1990-01-01",
+            "address": {
+                "city": "Curitiba",
+                "postalCode": "71747-549",
+                "street": "Rua C, 243",
+                "state": "PR"
+            },
+            "profession": "Software Engineer",
+            "source": "system",
+            "accounts": [
+                {
+                    "id": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
+                    "userId": "45974916-e884-4d6b-b15f-20bac251437b",
+                    "cashAvailableForWithdrawal": 1838.79,
+                    "cashBalance": 3412.75,
+                    "source": "system",
+                    "withdrawals": [
+                        {
+                            "id": "996182ea-1ae6-442a-83fc-b03413d13c88",
+                            "sourcePrivatePlanAccountId": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
+                            "sourceTransactionId": "7cd749ea-6569-4492-aa87-56e788837aaa",
+                            "destinationBankAccountId": "7ccc1c7a-5b3e-41e3-b698-42202313c419",
+                            "destinationTransactionId": "830f71e5-51e4-4a50-8cfa-4327a99e9b6c",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 369.17,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Withdrawal #1",
+                            "source": "system",
+                            "created_at": "2025-10-03T23:15:03Z",
+                            "updated_at": "2025-10-03T23:15:03Z"
+                        },
+                        {
+                            "id": "6861e40e-2136-442e-bff8-f5bd58c3763b",
+                            "sourcePrivatePlanAccountId": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
+                            "sourceTransactionId": "0adc5e3a-47ca-463b-b517-f4a5c6083b19",
+                            "destinationBankAccountId": "7ccc1c7a-5b3e-41e3-b698-42202313c419",
+                            "destinationTransactionId": "1662dec7-728a-420b-bc52-723a05b01e04",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 136.88,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Withdrawal #2",
+                            "source": "system",
+                            "created_at": "2025-10-05T23:15:03Z",
+                            "updated_at": "2025-10-05T23:15:03Z"
+                        }
+                    ],
+                    "deposits": [
+                        {
+                            "id": "1d7d6a04-7844-4ea2-923b-e8db359fb4b7",
+                            "sourceBankAccountId": "b2918e91-5ec6-4188-990d-66343cb978b1",
+                            "sourceTransactionId": "be39f865-826f-45bf-ab96-0051c1e8e749",
+                            "destinationPrivatePlanAccountId": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
+                            "destinationTransactionId": "4e5d6c32-0440-435e-80ec-e0adb40b3a1f",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 1465.87,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Initial deposit #1",
+                            "source": "system",
+                            "created_at": "2025-09-18T23:15:03Z",
+                            "updated_at": "2025-09-18T23:15:03Z"
+                        },
+                        {
+                            "id": "f843be68-3a08-4b1b-a8dc-398d0ab50667",
+                            "sourceBankAccountId": "b2918e91-5ec6-4188-990d-66343cb978b1",
+                            "sourceTransactionId": "d7e109a0-9aae-4af6-b029-84981b060620",
+                            "destinationPrivatePlanAccountId": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
+                            "destinationTransactionId": "1326c7a6-efa5-467c-949b-6b7d86fdc7e6",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 1597.45,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Initial deposit #2",
+                            "source": "system",
+                            "created_at": "2025-09-20T23:15:03Z",
+                            "updated_at": "2025-09-20T23:15:03Z"
+                        }
+                    ],
+                    "modality": "PGBL",
+                    "inactivated_at": null,
+                    "created_at": "2025-08-17T23:15:03Z",
+                    "updated_at": "2025-10-11T23:15:03Z"
+                }
+            ],
+            "bankAccounts": [
+                {
+                    "id": "b2918e91-5ec6-4188-990d-66343cb978b1",
+                    "userId": "45974916-e884-4d6b-b15f-20bac251437b",
+                    "bankAccountType": "checking",
+                    "name": "Itaú",
+                    "code": "341",
+                    "agencyNumber": "7253",
+                    "accountNumber": "938029",
+                    "accountDigit": "6"
+                },
+                {
+                    "id": "7ccc1c7a-5b3e-41e3-b698-42202313c419",
+                    "userId": "45974916-e884-4d6b-b15f-20bac251437b",
+                    "bankAccountType": "checking",
+                    "name": "Bradesco",
+                    "code": "237",
+                    "agencyNumber": "8421",
+                    "accountNumber": "292061",
+                    "accountDigit": "1"
+                }
+            ],
+            "inactivated_at": null,
+            "created_at": "2025-08-17T23:15:03Z",
+            "updated_at": "2025-10-11T23:15:03Z"
+        },
+        {
+            "id": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+            "email": "carla.souza@example.com",
+            "phoneNumber": "+5529967461649",
+            "fullName": "Carla Souza",
+            "gender": "female",
+            "birthDate": "1990-01-01",
+            "address": {
+                "city": "Rio de Janeiro",
+                "postalCode": "62187-311",
+                "street": "Rua E, 997",
+                "state": "RJ"
+            },
+            "profession": "Software Engineer",
+            "source": "system",
+            "accounts": [
+                {
+                    "id": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
+                    "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+                    "cashAvailableForWithdrawal": 6369.12,
+                    "cashBalance": 9507.53,
+                    "source": "system",
+                    "withdrawals": [
+                        {
+                            "id": "e22e70a4-ffca-45a7-bcc2-f73e23aff4b2",
+                            "sourcePrivatePlanAccountId": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
+                            "sourceTransactionId": "5108c8da-838d-4525-b79f-4bc611f76da0",
+                            "destinationBankAccountId": "162e9849-7301-49c6-8e9a-243fc20ac579",
+                            "destinationTransactionId": "c6a86ba7-1f24-43eb-b278-bbeaa3e287b5",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 746.61,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Withdrawal #1",
+                            "source": "system",
+                            "created_at": "2025-10-03T23:15:03Z",
+                            "updated_at": "2025-10-03T23:15:03Z"
+                        },
+                        {
+                            "id": "cf09e694-9d5e-475d-b487-cb193b7e3f34",
+                            "sourcePrivatePlanAccountId": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
+                            "sourceTransactionId": "b67a2b33-0b99-411b-bbf7-18cd25746859",
+                            "destinationBankAccountId": "162e9849-7301-49c6-8e9a-243fc20ac579",
+                            "destinationTransactionId": "630d88bb-bc76-4bc1-ae6d-19cbdb36071c",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 224.36,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Withdrawal #2",
+                            "source": "system",
+                            "created_at": "2025-10-05T23:15:03Z",
+                            "updated_at": "2025-10-05T23:15:03Z"
+                        }
+                    ],
+                    "deposits": [
+                        {
+                            "id": "7943208a-0afd-4d05-9340-32859c84847f",
+                            "sourceBankAccountId": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
+                            "sourceTransactionId": "b23d146f-1fd7-4f11-b04c-6fa875f09b1d",
+                            "destinationPrivatePlanAccountId": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
+                            "destinationTransactionId": "a3d16c90-ac10-4cd1-bb63-c8c69aa6518c",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 1888.23,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Initial deposit #1",
+                            "source": "system",
+                            "created_at": "2025-09-18T23:15:03Z",
+                            "updated_at": "2025-09-18T23:15:03Z"
+                        },
+                        {
+                            "id": "85d0ee07-81cf-4cc8-a763-bc7db1b49769",
+                            "sourceBankAccountId": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
+                            "sourceTransactionId": "17fa5ef5-7a92-49b0-ab03-7c45e990fc4b",
+                            "destinationPrivatePlanAccountId": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
+                            "destinationTransactionId": "a134f04e-cd04-4d75-9a23-c419321d44c5",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 746.07,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Initial deposit #2",
+                            "source": "system",
+                            "created_at": "2025-09-20T23:15:03Z",
+                            "updated_at": "2025-09-20T23:15:03Z"
+                        }
+                    ],
+                    "modality": "VGBL",
+                    "inactivated_at": null,
+                    "created_at": "2025-08-17T23:15:03Z",
+                    "updated_at": "2025-10-11T23:15:03Z"
+                },
+                {
+                    "id": "bf68782d-633d-488b-bc80-ddaacf53628e",
+                    "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+                    "cashAvailableForWithdrawal": 5103.75,
+                    "cashBalance": 6027.57,
+                    "source": "system",
+                    "withdrawals": [
+                        {
+                            "id": "9904f17a-2d97-4c99-8a1c-676eccefc1c6",
+                            "sourcePrivatePlanAccountId": "bf68782d-633d-488b-bc80-ddaacf53628e",
+                            "sourceTransactionId": "a09bc877-7a3a-405f-be3c-c62b8e16968f",
+                            "destinationBankAccountId": "162e9849-7301-49c6-8e9a-243fc20ac579",
+                            "destinationTransactionId": "0a12e091-8d90-4556-924c-6e7636b1cbc5",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 750.17,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Withdrawal #1",
+                            "source": "system",
+                            "created_at": "2025-10-03T23:15:03Z",
+                            "updated_at": "2025-10-03T23:15:03Z"
+                        },
+                        {
+                            "id": "5c73bc50-a777-4880-861f-67aef62acc4c",
+                            "sourcePrivatePlanAccountId": "bf68782d-633d-488b-bc80-ddaacf53628e",
+                            "sourceTransactionId": "a14a195a-a9d1-454f-9519-d2340e251b88",
+                            "destinationBankAccountId": "162e9849-7301-49c6-8e9a-243fc20ac579",
+                            "destinationTransactionId": "c61c1f7b-9ee4-472f-b738-cd5b79e34145",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 478.76,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Withdrawal #2",
+                            "source": "system",
+                            "created_at": "2025-10-05T23:15:03Z",
+                            "updated_at": "2025-10-05T23:15:03Z"
+                        }
+                    ],
+                    "deposits": [
+                        {
+                            "id": "2fbe0696-82ef-437f-b8d4-9ffed69c5795",
+                            "sourceBankAccountId": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
+                            "sourceTransactionId": "8191f21d-2b7f-43dd-b524-c3a90c78a238",
+                            "destinationPrivatePlanAccountId": "bf68782d-633d-488b-bc80-ddaacf53628e",
+                            "destinationTransactionId": "590e7fa2-98e2-400a-8028-7eff33ab4c41",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 2779.76,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Initial deposit #1",
+                            "source": "system",
+                            "created_at": "2025-09-18T23:15:03Z",
+                            "updated_at": "2025-09-18T23:15:03Z"
+                        },
+                        {
+                            "id": "eb025f88-f130-40c4-bdd2-cfe018fa0a6d",
+                            "sourceBankAccountId": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
+                            "sourceTransactionId": "912708d5-4e93-4148-944e-19c857a222d3",
+                            "destinationPrivatePlanAccountId": "bf68782d-633d-488b-bc80-ddaacf53628e",
+                            "destinationTransactionId": "db2e1858-02e6-4845-aba6-0724a832dca1",
+                            "processed": true,
+                            "sentToDestination": true,
+                            "userCredited": true,
+                            "amount": 1419.43,
+                            "cancelRequested": false,
+                            "canceled": false,
+                            "comment": "Initial deposit #2",
+                            "source": "system",
+                            "created_at": "2025-09-20T23:15:03Z",
+                            "updated_at": "2025-09-20T23:15:03Z"
+                        }
+                    ],
+                    "modality": "PGBL",
+                    "inactivated_at": null,
+                    "created_at": "2025-08-17T23:15:03Z",
+                    "updated_at": "2025-10-11T23:15:03Z"
+                }
+            ],
+            "bankAccounts": [
+                {
+                    "id": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
+                    "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+                    "bankAccountType": "savings",
+                    "name": "Bradesco",
+                    "code": "237",
+                    "agencyNumber": "3368",
+                    "accountNumber": "134796",
+                    "accountDigit": "1"
+                },
+                {
+                    "id": "162e9849-7301-49c6-8e9a-243fc20ac579",
+                    "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+                    "bankAccountType": "savings",
+                    "name": "Bradesco",
+                    "code": "237",
+                    "agencyNumber": "8744",
+                    "accountNumber": "783253",
+                    "accountDigit": "1"
+                }
+            ],
+            "inactivated_at": null,
+            "created_at": "2025-08-17T23:15:03Z",
+            "updated_at": "2025-10-11T23:15:03Z"
+        }
+    ]
+}

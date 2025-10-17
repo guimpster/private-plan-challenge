@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AccountController } from './account.controller';
-import { InMemoryModule } from 'src/repository/in-memory/in-memory.module';
-import { AccountRepository } from 'src/business/repository/account.repository';
-import { InMemoryAccountRepository } from 'src/repository/in-memory/in-memory.account.repository';
-import { AccountService } from 'src/business/service/account/account.service';
+import { InMemoryPrivatePlanModule } from 'src/repository/in-memory/in-memory-private-plan-account.module';
+import { PrivatePlanAccountRepository } from 'src/business/repository/private-plan-account.repository';
+import { InMemoryPrivatePlanAccountRepository } from 'src/repository/in-memory/in-memory-private-plan-account.repository';
+import { PrivatePlanAccountService } from 'src/business/service/private-plan-account.service';
 
 @Module({
-  imports: [InMemoryModule],
+  imports: [InMemoryPrivatePlanModule],
   providers: [
-    AccountService,
+    PrivatePlanAccountService,
     {
-      provide: AccountRepository,
-      useExisting: InMemoryAccountRepository,
+      provide: PrivatePlanAccountRepository,
+      useExisting: InMemoryPrivatePlanAccountRepository,
     },
   ],
   controllers: [AccountController],

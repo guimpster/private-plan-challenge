@@ -1,8 +1,10 @@
-export class Withdrawal {
+import { Source } from "./source.entity";
+
+export class PrivatePlanWithdrawal {
   id: string;
-  sourceAccountId: string;
+  sourcePrivatePlanAccountId: string;
   sourceTransactionId: string;
-  destinationAccountId: string;
+  destinationBankAccountId: string;
   destinationTransactionId: string;
   processed: boolean;
   sentToDestination: boolean;
@@ -11,11 +13,11 @@ export class Withdrawal {
   cancelRequested: boolean;
   canceled: boolean;
   comment: string;
-  source: 'system' | 'whatsapp' | 'ops';
+  source: Source;
   created_at: Date;
   updated_at: Date;
 
-  constructor(partial: Partial<Withdrawal>) {
+  constructor(partial: Partial<PrivatePlanWithdrawal>) {
     Object.assign(this, partial);
   }
 }
