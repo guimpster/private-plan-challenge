@@ -175,7 +175,7 @@ HTTP Request → Controller → QueryBus/CommandBus → Handler → ApplicationS
 - **Database**: In-Memory (with support for SQLite, MongoDB, MySQL)
 - **Validation**: class-validator + class-transformer
 - **Documentation**: Swagger/OpenAPI
-- **Logging**: Pino (Fastify)
+- **Logging**: Pino (NestJS)
 - **Package Manager**: pnpm
 
 ## 📁 Project Structure
@@ -231,6 +231,7 @@ src/
 - **Documentation**: Complete Swagger/OpenAPI documentation
 - **Validation**: Comprehensive input validation and error handling
 - **Type Safety**: Full TypeScript support with proper typing
+- **Error Handling**: Global exception filter for consistent error responses
 
 ## 🧪 Testing Strategy
 

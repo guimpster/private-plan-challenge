@@ -1,23 +1,13 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module'
 import { ConfigService } from './config/config.service';
-import { fastifyPinoLogger } from './config/logger/fastify-logger-config';
-// import { GlobalExceptionFilter } from './ports/api/common/global-exception.filter';
+import { GlobalExceptionFilter } from './ports/api/common/global-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter({
-      loggerInstance: fastifyPinoLogger,
-    }),
-  );
+  const app = await NestFactory.create(AppModule);
 
   // Global validation pipe
   app.useGlobalPipes(new ValidationPipe({
@@ -26,8 +16,8 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
   }));
 
-  // Global exception filter - temporarily disabled
-  // app.useGlobalFilters(new GlobalExceptionFilter());
+  // Global exception filter
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   // Swagger configuration
   const config = new DocumentBuilder()
