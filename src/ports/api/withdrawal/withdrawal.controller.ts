@@ -3,7 +3,7 @@ import { PrivatePlanWithdrawalService } from 'src/business/service/private-plan-
 import { ProcessWithdrawalDto } from './dtos/process-withdrawal.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { DebitAccountCommand } from 'src/cqrs/withdrawal/commands';
-import { PrivatePlanWithdrawalStep } from 'src/business/entities/private-plan-withdrawal';
+import { PrivatePlanWithdrawalStep } from 'src/business/domain/private-plan-withdrawal';
 
 @Controller('withdrawal')
 export class WithdrawalController {

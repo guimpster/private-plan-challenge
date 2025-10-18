@@ -1,5 +1,5 @@
 import { PrivatePlanDeposit } from "./private-plan-deposit";
-import { Source } from './source.entity'
+import { Source } from './source'
 import { PrivatePlanWithdrawal } from "./private-plan-withdrawal";
 
 export class PrivatePlanAccount {

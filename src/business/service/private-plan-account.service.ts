@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrivatePlanAccount } from '../entities/private-plan-account';
+import { PrivatePlanAccount } from '../domain/private-plan-account';
 import { PrivatePlanAccountRepository } from '../repository/private-plan-account.repository';
 
 @Injectable()

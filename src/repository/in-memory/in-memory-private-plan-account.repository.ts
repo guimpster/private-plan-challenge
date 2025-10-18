@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { PrivatePlanAccount } from 'src/business/entities/private-plan-account';
+import { PrivatePlanAccount } from 'src/business/domain/private-plan-account';
 import { PrivatePlanAccountRepository } from 'src/business/repository/private-plan-account.repository';
 import { IN_MEMORY_DB } from './db/in-memory-db';
 import type { DBData } from './db/in-memory-db.entity';
