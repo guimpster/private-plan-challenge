@@ -1,98 +1,292 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Stay Challenge - Clean Architecture Financial API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A comprehensive financial operations API built with **NestJS** and **Clean Architecture** principles, implementing CQRS pattern and RESTful API best practices.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🏗️ Architecture Overview
 
-## Description
+This project demonstrates a production-ready implementation of Clean Architecture with the following key features:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Clean Architecture**: Proper layer separation with dependency inversion
+- **CQRS Pattern**: Command Query Responsibility Segregation for scalable operations
+- **Domain-Driven Design**: Rich domain models with business logic encapsulation
+- **RESTful APIs**: Best practices for API design and documentation
+- **Event-Driven Architecture**: Domain events for loose coupling
+- **Type Safety**: Full TypeScript implementation with validation
 
-## Project setup
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- pnpm (recommended) or npm
+
+### Installation
 
 ```bash
-$ pnpm install
+# Clone the repository
+git clone <repository-url>
+cd stay-challenge
+
+# Install dependencies
+pnpm install
 ```
 
-## Compile and run the project
+### Development
 
 ```bash
-# development
-$ pnpm run start
+# Start in development mode with hot reload
+pnpm run start
 
-# watch mode
-$ pnpm run start:dev
+# Start in watch mode
+pnpm run start:dev
 
-# production mode
-$ pnpm run start:prod
+# Build the project
+pnpm run build
+
+# Start in production mode
+pnpm run start:prod
 ```
 
-## Run tests
+### Testing
 
 ```bash
-# unit tests
-$ pnpm run test
+# Run unit tests
+pnpm run test
 
-# e2e tests
-$ pnpm run test:e2e
+# Run e2e tests
+pnpm run test:e2e
 
-# test coverage
-$ pnpm run test:cov
+# Run tests with coverage
+pnpm run test:cov
 ```
 
-## Deployment
+## 📚 API Documentation
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Once the application is running, you can access:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **API Base URL**: `http://localhost:3000/api/v1`
+- **Swagger Documentation**: `http://localhost:3000/api/docs`
+- **Health Check**: `http://localhost:3000/health`
+
+## 🔧 API Endpoints
+
+### Account Management
+
+```http
+GET /api/v1/users/{userId}/accounts/{accountId}
+```
+
+**Description**: Retrieve account details including balance and metadata.
+
+**Response Example**:
+```json
+{
+  "id": "acc_123456789",
+  "cashAvailableForWithdrawal": 1000.50,
+  "cashBalance": 1500.75,
+  "created_at": "2023-10-18T14:30:00.000Z",
+  "updated_at": "2023-10-18T15:45:00.000Z"
+}
+```
+
+### Withdrawal Operations
+
+#### Create Withdrawal
+```http
+POST /api/v1/users/{userId}/accounts/{accountId}/withdrawals
+```
+
+**Request Body**:
+```json
+{
+  "userId": "user_123456789",
+  "accountId": "acc_123456789",
+  "bankAccountId": "bank_987654321",
+  "amount": 500.00
+}
+```
+
+**Response**:
+```json
+{
+  "id": "withdrawal_123456789",
+  "userId": "user_123456789",
+  "accountId": "acc_123456789",
+  "bankAccountId": "bank_987654321",
+  "amount": 500.00,
+  "status": "CREATED",
+  "created_at": "2023-10-18T14:30:00.000Z"
+}
+```
+
+#### Get Withdrawal Status
+```http
+GET /api/v1/users/{userId}/accounts/{accountId}/withdrawals/{withdrawalId}
+```
+
+### Webhook Endpoints
+
+#### Bradesco Bank Webhook
+```http
+POST /api/v1/webhooks/bradesco
+```
+
+**Description**: Receives bank transfer notifications from Bradesco.
+
+## 🏛️ Architecture Layers
+
+### Domain Layer (`src/business/domain/`)
+- **Entities**: Core business objects (`User`, `PrivatePlanAccount`)
+- **Value Objects**: Immutable objects (`Money`, `AccountId`, `UserId`)
+- **Domain Services**: Business logic (`AccountDomainService`)
+- **Domain Events**: Business events (`AccountDebitedEvent`, `InsufficientFundsEvent`)
+
+### Application Layer (`src/application/`)
+- **Application Services**: Orchestrate domain objects
+- **Commands/Queries**: Structured data transfer objects
+- **Use Cases**: Application-specific business rules
+
+### Infrastructure Layer (`src/infrastructure/`)
+- **Repositories**: Data access implementations
+- **Event Handlers**: Handle domain events
+- **External Services**: Bank integrations, notifications
+
+### Interface Adapters (`src/ports/`)
+- **Controllers**: HTTP request/response handling
+- **DTOs**: API boundary objects
+- **Webhooks**: External service integrations
+
+### CQRS Layer (`src/cqrs/`)
+- **Commands**: Write operations
+- **Queries**: Read operations
+- **Command/Query Handlers**: Process operations
+
+## 🔄 Data Flow
+
+```
+HTTP Request → Controller → QueryBus/CommandBus → Handler → ApplicationService → DomainService → Repository → Database
+```
+
+## 🛠️ Technology Stack
+
+- **Framework**: NestJS (Node.js)
+- **Language**: TypeScript
+- **Architecture**: Clean Architecture + CQRS
+- **Database**: In-Memory (with support for SQLite, MongoDB, MySQL)
+- **Validation**: class-validator + class-transformer
+- **Documentation**: Swagger/OpenAPI
+- **Logging**: Pino (Fastify)
+- **Package Manager**: pnpm
+
+## 📁 Project Structure
+
+```
+src/
+├── business/                 # Domain Layer
+│   ├── domain/              # Core business entities and logic
+│   ├── repository/          # Repository interfaces (ports)
+│   ├── service/             # Domain services
+│   └── errors/              # Domain-specific errors
+├── application/             # Application Layer
+│   └── services/            # Application services
+├── infrastructure/          # Infrastructure Layer
+│   ├── event-handlers/      # Domain event handlers
+│   └── services/            # External service implementations
+├── cqrs/                    # CQRS Layer
+│   ├── account/             # Account-related commands/queries
+│   └── withdrawal/          # Withdrawal-related commands/queries
+├── ports/                   # Interface Adapters Layer
+│   ├── api/                 # REST API controllers
+│   ├── webhooks/            # Webhook handlers
+│   └── mail/                # Email adapters
+├── infrastructure/          # Infrastructure implementations
+│   ├── db/                  # Database implementations
+│   │   ├── in-memory/       # In-memory database
+│   │   └── sqlite/          # SQLite database
+│   ├── event-handlers/      # Domain event handlers
+│   └── services/            # Infrastructure services
+├── repository/              # Repository implementations
+│   ├── in-memory/           # In-memory repository implementations
+│   ├── mongodb/             # MongoDB repository implementations
+│   └── sqlite/              # SQLite repository implementations
+└── config/                  # Configuration management
+```
+
+## 🎯 Key Features
+
+### Clean Architecture Benefits
+- **Independence**: Business rules are independent of frameworks and databases
+- **Testability**: Business logic can be tested without external dependencies
+- **Flexibility**: Easy to change external concerns without affecting business logic
+- **Maintainability**: Clear separation of concerns makes code easier to understand
+
+### CQRS Benefits
+- **Scalability**: Separate read and write models can be scaled independently
+- **Performance**: Optimized queries for read operations
+- **Complexity Management**: Clear separation between commands and queries
+- **Event Sourcing Ready**: Foundation for event sourcing implementation
+
+### REST API Benefits
+- **Standards Compliance**: Follows REST principles and HTTP standards
+- **Documentation**: Complete Swagger/OpenAPI documentation
+- **Validation**: Comprehensive input validation and error handling
+- **Type Safety**: Full TypeScript support with proper typing
+
+## 🧪 Testing Strategy
+
+- **Unit Tests**: Test domain logic in isolation
+- **Integration Tests**: Test application services with real repositories
+- **E2E Tests**: Test complete user workflows through the API
+- **Contract Tests**: Ensure API contracts are maintained
+
+## 🚀 Deployment
+
+### Environment Variables
+
+Create a `.env` file or use the provided `local.config-vars.json`:
+
+```json
+{
+  "NODE_ENV": "local",
+  "API_PORT": 3000,
+  "API_HOST": "localhost"
+}
+```
+
+### Production Deployment
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Build the application
+pnpm run build
+
+# Start in production mode
+pnpm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 📖 Documentation
 
-## Resources
+- **[Architecture Documentation](./ARCHITECTURE.md)**: Detailed clean architecture implementation
+- **[API Documentation](http://localhost:3000/api/docs)**: Interactive Swagger documentation
+- **[NestJS Documentation](https://docs.nestjs.com)**: Framework documentation
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🤝 Contributing
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Support
+## 📄 License
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Stay in touch
+## 🙏 Acknowledgments
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- [NestJS](https://nestjs.com/) - Progressive Node.js framework
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - Robert C. Martin
+- [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html) - Eric Evans
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**Built with ❤️ using Clean Architecture principles and modern TypeScript practices.**

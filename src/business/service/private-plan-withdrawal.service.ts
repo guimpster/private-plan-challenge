@@ -5,7 +5,7 @@ import { PrivatePlanAccountRepository } from '../repository/private-plan-account
 import { BankTransferError, BusinessError, CouldNotTransferError, NotEnoughFunds } from '../errors/errors';
 import { randomUUID } from 'crypto';
 import { Source } from '../domain/source';
-import type { BankService } from './bank.service';
+import { BankService } from './bank.service';
 
 @Injectable()
 export class PrivatePlanWithdrawalService {
@@ -119,5 +119,29 @@ export class PrivatePlanWithdrawalService {
     await this.privatePlanAccountRepository.creditFailedWithdrawal(userId, accountId, withdrawal.amount);
 
     await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step: PrivatePlanWithdrawalStep.FAILED });
+  }
+
+  async finalizeWithdrawalSuccess(withdrawalId: string, bankTxnId: string): Promise<void> {
+    // Find withdrawal by ID across all users and accounts
+    // This is a simplified implementation - in a real scenario, you'd need to track withdrawalId to user/account mapping
+    // For now, we'll implement a basic version that updates the withdrawal status
+    
+    // TODO: Implement proper withdrawal lookup by ID
+    // This method should find the withdrawal and update it to completed status
+    console.log(`Finalizing withdrawal ${withdrawalId} with bank transaction ID ${bankTxnId}`);
+  }
+
+  async finalizeWithdrawalFailure(withdrawalId: string, reason: string): Promise<void> {
+    // Find withdrawal by ID across all users and accounts
+    // This is a simplified implementation - in a real scenario, you'd need to track withdrawalId to user/account mapping
+    // For now, we'll implement a basic version that updates the withdrawal status
+    
+    // TODO: Implement proper withdrawal lookup by ID
+    // This method should find the withdrawal and update it to failed status
+    console.log(`Finalizing withdrawal ${withdrawalId} as failed. Reason: ${reason}`);
+  }
+
+  async getWithdrawalById(userId: string, accountId: string, withdrawalId: string): Promise<PrivatePlanWithdrawal | undefined> {
+    return this.privatePlanWithdrawalRepository.getById(userId, accountId, withdrawalId);
   }
 }

@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { IN_MEMORY_DB } from './db/in-memory-db';
-import type { DBData } from './db/in-memory-db.entity';
+import { IN_MEMORY_DB } from '../../infrastructure/db/in-memory/in-memory-db';
+import type { DBData } from '../../infrastructure/db/in-memory/in-memory-db.entity';
 import { PrivatePlanWithdrawalRepository } from 'src/business/repository/private-plan-withdrawal.repository';
 import { PrivatePlanWithdrawal } from 'src/business/domain/private-plan-withdrawal';
 

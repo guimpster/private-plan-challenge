@@ -5,7 +5,7 @@ import { ReceiveBankTransferCommand } from 'src/cqrs/withdrawal/commands';
 import { CouldNotTransferError } from 'src/business/errors/errors';
 
 @Controller('bradesco')
-export class AccountController {
+export class BradescoController {
   constructor(private readonly commandBus: CommandBus) {}
 
   @Post('')

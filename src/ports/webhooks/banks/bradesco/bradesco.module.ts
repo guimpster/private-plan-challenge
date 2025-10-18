@@ -1,19 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AccountController } from './bradesco.controller';
-import { InMemoryPrivatePlanModule } from 'src/repository/in-memory/in-memory-private-plan-account.module';
-import { PrivatePlanAccountRepository } from 'src/business/repository/private-plan-account.repository';
-import { InMemoryPrivatePlanAccountRepository } from 'src/repository/in-memory/in-memory-private-plan-account.repository';
-import { PrivatePlanAccountService } from 'src/business/service/private-plan-account.service';
+import { BradescoController } from './bradesco.controller';
+import { WithdrawalsModule } from 'src/cqrs/withdrawal/withdrawal.module';
 
 @Module({
-  imports: [InMemoryPrivatePlanModule],
-  providers: [
-    PrivatePlanAccountService,
-    {
-      provide: PrivatePlanAccountRepository,
-      useExisting: InMemoryPrivatePlanAccountRepository,
-    },
-  ],
-  controllers: [AccountController],
+  imports: [WithdrawalsModule],
+  controllers: [BradescoController],
 })
 export class BradescoWebHookModule {}

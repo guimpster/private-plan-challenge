@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { InMemoryPrivatePlanAccountRepository } from './in-memory-private-plan-account.repository';
-import { InMemoryDbModule } from './db/in-memory-db';
+import { InMemoryDbModule } from '../../infrastructure/db/in-memory/in-memory-db';
 import { InMemoryPrivatePlanWithdrawalRepository } from './in-memory-private-plan-withdrawal.repository';
 
 

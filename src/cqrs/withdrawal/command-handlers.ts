@@ -48,7 +48,7 @@ export class FinalizeWithdrawalHandler implements ICommandHandler<FinalizeWithdr
     if (success) {
       await this.privatePlanWithdrawalService.finalizeWithdrawalSuccess(withdrawalId, bankTxnId!);
     } else {
-      await this.privatePlanWithdrawalService.finalizeWithdrawalFailure(withdrawalId, reason);
+      await this.privatePlanWithdrawalService.finalizeWithdrawalFailure(withdrawalId, reason || 'Unknown error');
     }
   }
 }

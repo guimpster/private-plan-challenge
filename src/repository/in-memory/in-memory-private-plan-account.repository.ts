@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { PrivatePlanAccount } from 'src/business/domain/private-plan-account';
 import { PrivatePlanAccountRepository } from 'src/business/repository/private-plan-account.repository';
-import { IN_MEMORY_DB } from './db/in-memory-db';
-import type { DBData } from './db/in-memory-db.entity';
+import { IN_MEMORY_DB } from '../../infrastructure/db/in-memory/in-memory-db';
+import type { DBData } from '../../infrastructure/db/in-memory/in-memory-db.entity';
 import { Result } from 'src/business/common';
 import { AccountNotFoundError, NotEnoughFunds, UserNotFoundError } from 'src/business/errors/errors';
 
