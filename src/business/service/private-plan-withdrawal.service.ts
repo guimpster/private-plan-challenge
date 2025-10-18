@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { BankTransferStatus, NotificationDeliveryState, PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from '../entities/private-plan-withdrawal';
 import { PrivatePlanWithdrawalRepository } from '../repository/private-plan-withdrawal.repository';
 import { PrivatePlanAccountRepository } from '../repository/private-plan-account.repository';
-import { BankTransferError, BusinessError, NotEnoughFunds } from '../errors/errors';
+import { BankTransferError, BusinessError, CouldNotTransferError, NotEnoughFunds } from '../errors/errors';
 import { randomUUID } from 'crypto';
 import { Source } from '../entities/source.entity';
 import type { BankService } from './bank.service';
@@ -95,7 +95,7 @@ export class PrivatePlanWithdrawalService {
     }
   }
 
-  async receiveBankTransferNotification(userId: string, accountId: string, withdrawalId: string, success: boolean, error: BusinessError): Promise<void> {
+  async receiveBankTransferNotification(userId: string, accountId: string, withdrawalId: string, success: boolean, error?: CouldNotTransferError): Promise<void> {
     const withdrawal = await this.privatePlanWithdrawalRepository.getById(userId, accountId, withdrawalId);
     if (!withdrawal) {
       throw new BadRequestException(`Withdrawal ${withdrawalId} not found for account ${accountId} and user ${userId}`);
@@ -105,7 +105,7 @@ export class PrivatePlanWithdrawalService {
 
     const step = success ? PrivatePlanWithdrawalStep.COMPLETED : PrivatePlanWithdrawalStep.ROLLING_BACK;
 
-    await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step });
+    await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step, comment: error ? error.message : '' });
   }
 
   async rollbackDebit(userId: string, accountId: string, withdrawalId: string): Promise<void> {

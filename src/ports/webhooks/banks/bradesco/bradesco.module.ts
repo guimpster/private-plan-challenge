@@ -16,4 +16,4 @@ import { PrivatePlanAccountService } from 'src/business/service/private-plan-acc
   ],
   controllers: [AccountController],
 })
-export class AccountModule {}
+export class BradescoWebHookModule {}

@@ -1,11 +1,11 @@
 export class BradescoWebHookDto {
-  id: string;
-  cashAvailableForWithdrawal: number;
-  cashBalance: number;
-  created_at: Date;
-  updated_at: Date;
+  userId: string;
+  accountId: string;
+  withdrawalId: string;
+  success: boolean;
+  error: string;
 
-  constructor(partial: Partial<BradescoDto>) {
+  constructor(partial: Partial<BradescoWebHookDto>) {
     Object.assign(this, partial);
   }
 }

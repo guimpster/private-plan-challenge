@@ -20,3 +20,7 @@ export class AccountNotFoundError extends BusinessError {
 export class WithdrawalNotFoundError extends BusinessError {
   name = 'WithdrawalNotFoundError';
 }
+
+export class CouldNotTransferError extends BusinessError {
+  name = 'CouldNotTransferError';
+}
