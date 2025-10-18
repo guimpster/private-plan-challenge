@@ -11,21 +11,12 @@ import {
   NotFoundException,
   BadRequestException
 } from '@nestjs/common';
-import { 
-  ApiTags, 
-  ApiOperation, 
-  ApiResponse, 
-  ApiParam,
-  ApiBody
-} from '@nestjs/swagger';
 import { PrivatePlanWithdrawalService } from 'src/business/service/private-plan-withdrawal.service';
 import { CreateWithdrawalDto, WithdrawalResponseDto } from './dtos/process-withdrawal.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { DebitAccountCommand } from 'src/cqrs/withdrawal/commands';
 import { PrivatePlanWithdrawalStep } from 'src/business/domain/private-plan-withdrawal';
-import { ErrorResponseDto, ValidationErrorResponseDto } from '../common/error-response.dto';
 
-@ApiTags('Withdrawals')
 @Controller('api/v1/users/:userId/accounts/:accountId/withdrawals')
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 export class WithdrawalController {
@@ -36,44 +27,6 @@ export class WithdrawalController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ 
-    summary: 'Create a new withdrawal',
-    description: 'Initiates a new withdrawal from the specified account to the bank account'
-  })
-  @ApiParam({ 
-    name: 'userId', 
-    description: 'User identifier',
-    example: 'user_123456789'
-  })
-  @ApiParam({ 
-    name: 'accountId', 
-    description: 'Account identifier',
-    example: 'acc_123456789'
-  })
-  @ApiBody({ 
-    type: CreateWithdrawalDto,
-    description: 'Withdrawal details'
-  })
-  @ApiResponse({ 
-    status: HttpStatus.CREATED, 
-    description: 'Withdrawal created successfully',
-    type: WithdrawalResponseDto
-  })
-  @ApiResponse({ 
-    status: HttpStatus.BAD_REQUEST, 
-    description: 'Invalid request data',
-    type: ValidationErrorResponseDto
-  })
-  @ApiResponse({ 
-    status: HttpStatus.NOT_FOUND, 
-    description: 'User or account not found',
-    type: ErrorResponseDto
-  })
-  @ApiResponse({ 
-    status: HttpStatus.UNPROCESSABLE_ENTITY, 
-    description: 'Insufficient funds or invalid withdrawal',
-    type: ErrorResponseDto
-  })
   async createWithdrawal(
     @Param('userId') userId: string,
     @Param('accountId') accountId: string,
@@ -132,35 +85,6 @@ export class WithdrawalController {
   }
 
   @Get(':withdrawalId')
-  @ApiOperation({ 
-    summary: 'Get withdrawal by ID',
-    description: 'Retrieves withdrawal details by ID'
-  })
-  @ApiParam({ 
-    name: 'userId', 
-    description: 'User identifier',
-    example: 'user_123456789'
-  })
-  @ApiParam({ 
-    name: 'accountId', 
-    description: 'Account identifier',
-    example: 'acc_123456789'
-  })
-  @ApiParam({ 
-    name: 'withdrawalId', 
-    description: 'Withdrawal identifier',
-    example: 'withdrawal_123456789'
-  })
-  @ApiResponse({ 
-    status: HttpStatus.OK, 
-    description: 'Withdrawal found successfully',
-    type: WithdrawalResponseDto
-  })
-  @ApiResponse({ 
-    status: HttpStatus.NOT_FOUND, 
-    description: 'Withdrawal not found',
-    type: ErrorResponseDto
-  })
   async getWithdrawal(
     @Param('userId') userId: string,
     @Param('accountId') accountId: string,

@@ -62,10 +62,18 @@ pnpm run test:cov
 
 ## 📚 API Documentation
 
+The API documentation is defined in a centralized `openapi.yml` file using OpenAPI 3.0 specification. This approach provides:
+
+- **Centralized Documentation**: All API specs in one YAML file
+- **Clean Controllers**: No decorators cluttering the controller code
+- **Version Control**: Easy to track documentation changes
+- **Tool Compatibility**: Works with various OpenAPI tools
+
 Once the application is running, you can access:
 
 - **API Base URL**: `http://localhost:3000/api/v1`
 - **Swagger Documentation**: `http://localhost:3000/api/docs`
+- **OpenAPI JSON**: `http://localhost:3000/api/docs-json`
 - **Health Check**: `http://localhost:3000/health`
 
 ## 🔧 API Endpoints
@@ -174,13 +182,14 @@ HTTP Request → Controller → QueryBus/CommandBus → Handler → ApplicationS
 - **Architecture**: Clean Architecture + CQRS
 - **Database**: In-Memory (with support for SQLite, MongoDB, MySQL)
 - **Validation**: class-validator + class-transformer
-- **Documentation**: Swagger/OpenAPI
+- **Documentation**: OpenAPI 3.0 (YAML-based)
 - **Logging**: Pino (NestJS)
 - **Package Manager**: pnpm
 
 ## 📁 Project Structure
 
 ```
+├── openapi.yml              # OpenAPI 3.0 specification (YAML)
 src/
 ├── business/                 # Domain Layer
 │   ├── domain/              # Core business entities and logic
@@ -228,7 +237,7 @@ src/
 
 ### REST API Benefits
 - **Standards Compliance**: Follows REST principles and HTTP standards
-- **Documentation**: Complete Swagger/OpenAPI documentation
+- **Documentation**: Complete OpenAPI 3.0 documentation (YAML-based)
 - **Validation**: Comprehensive input validation and error handling
 - **Type Safety**: Full TypeScript support with proper typing
 - **Error Handling**: Global exception filter for consistent error responses

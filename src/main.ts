@@ -1,6 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { parse } from 'yaml';
 
 import { AppModule } from './app.module'
 import { ConfigService } from './config/config.service';
@@ -19,28 +22,22 @@ async function bootstrap() {
   // Global exception filter
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  // Swagger configuration
-  const config = new DocumentBuilder()
-    .setTitle('Stay Challenge API')
-    .setDescription('A clean architecture implementation for financial operations')
-    .setVersion('1.0')
-    .addTag('Accounts', 'Account management operations')
-    .addTag('Withdrawals', 'Withdrawal operations')
-    .addTag('Webhooks', 'Webhook endpoints for external services')
-    .addBearerAuth()
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
+  // Swagger configuration from YAML file
+  const yamlFile = readFileSync(join(__dirname, '../openapi.yml'), 'utf8');
+  const document = parse(yamlFile);
+  
   SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },
   });
 
+  // Server configuration
   const configService = app.get(ConfigService);
   const port = +configService.get('API_PORT');
   const host = configService.get('API_HOST');
   
+  // Run the application
   await app.listen(port, host);
   
   console.log(`🚀 Application is running on: http://${host}:${port}`);

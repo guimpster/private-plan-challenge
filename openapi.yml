@@ -1,0 +1,395 @@
+openapi: 3.0.0
+info:
+  title: Stay Challenge API
+  description: A clean architecture implementation for financial operations
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+tags:
+  - name: Accounts
+    description: Account management operations
+  - name: Withdrawals
+    description: Withdrawal operations
+  - name: Webhooks
+    description: Webhook endpoints for external services
+
+paths:
+  /api/v1/users/{userId}/accounts/{accountId}:
+    get:
+      tags:
+        - Accounts
+      summary: Get account by ID
+      description: Retrieves account details for a specific user and account ID
+      operationId: getAccountById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: User identifier
+          schema:
+            type: string
+            example: user_123456789
+        - name: accountId
+          in: path
+          required: true
+          description: Account identifier
+          schema:
+            type: string
+            example: acc_123456789
+      responses:
+        '200':
+          description: Account found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '403':
+          description: Access forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+  /api/v1/users/{userId}/accounts/{accountId}/withdrawals:
+    post:
+      tags:
+        - Withdrawals
+      summary: Create a new withdrawal
+      description: Initiates a new withdrawal from the specified account to the bank account
+      operationId: createWithdrawal
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: User identifier
+          schema:
+            type: string
+            example: user_123456789
+        - name: accountId
+          in: path
+          required: true
+          description: Account identifier
+          schema:
+            type: string
+            example: acc_123456789
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWithdrawalDto'
+            example:
+              userId: user_123456789
+              accountId: acc_123456789
+              bankAccountId: bank_987654321
+              amount: 500.00
+      responses:
+        '201':
+          description: Withdrawal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WithdrawalResponseDto'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponseDto'
+        '404':
+          description: User or account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '422':
+          description: Insufficient funds or invalid withdrawal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+  /api/v1/users/{userId}/accounts/{accountId}/withdrawals/{withdrawalId}:
+    get:
+      tags:
+        - Withdrawals
+      summary: Get withdrawal by ID
+      description: Retrieves withdrawal details by ID
+      operationId: getWithdrawalById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: User identifier
+          schema:
+            type: string
+            example: user_123456789
+        - name: accountId
+          in: path
+          required: true
+          description: Account identifier
+          schema:
+            type: string
+            example: acc_123456789
+        - name: withdrawalId
+          in: path
+          required: true
+          description: Withdrawal identifier
+          schema:
+            type: string
+            example: withdrawal_123456789
+      responses:
+        '200':
+          description: Withdrawal found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WithdrawalResponseDto'
+        '404':
+          description: Withdrawal not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+  /bradesco:
+    post:
+      tags:
+        - Webhooks
+      summary: Bradesco Bank Webhook
+      description: Receives bank transfer notifications from Bradesco
+      operationId: bradescoWebhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transactionId:
+                  type: string
+                  description: Bank transaction identifier
+                status:
+                  type: string
+                  enum: [success, failed, pending]
+                  description: Transaction status
+                amount:
+                  type: number
+                  description: Transaction amount
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Transaction timestamp
+      responses:
+        '200':
+          description: Webhook processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Webhook processed successfully
+        '400':
+          description: Invalid webhook data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+components:
+  schemas:
+    AccountDto:
+      type: object
+      required:
+        - id
+        - cashAvailableForWithdrawal
+        - cashBalance
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          description: Unique account identifier
+          example: acc_123456789
+        cashAvailableForWithdrawal:
+          type: number
+          description: Cash available for withdrawal
+          minimum: 0
+          example: 1000.50
+        cashBalance:
+          type: number
+          description: Total cash balance
+          minimum: 0
+          example: 1500.75
+        created_at:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+          example: '2023-10-18T14:30:00.000Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: '2023-10-18T15:45:00.000Z'
+
+    CreateWithdrawalDto:
+      type: object
+      required:
+        - userId
+        - accountId
+        - bankAccountId
+        - amount
+      properties:
+        userId:
+          type: string
+          description: User identifier
+          example: user_123456789
+        accountId:
+          type: string
+          description: Account identifier
+          example: acc_123456789
+        bankAccountId:
+          type: string
+          description: Bank account identifier for withdrawal destination
+          example: bank_987654321
+        amount:
+          type: number
+          description: Withdrawal amount
+          minimum: 0.01
+          example: 500.00
+
+    WithdrawalResponseDto:
+      type: object
+      required:
+        - id
+        - userId
+        - accountId
+        - bankAccountId
+        - amount
+        - status
+        - created_at
+      properties:
+        id:
+          type: string
+          description: Withdrawal identifier
+          example: withdrawal_123456789
+        userId:
+          type: string
+          description: User identifier
+          example: user_123456789
+        accountId:
+          type: string
+          description: Account identifier
+          example: acc_123456789
+        bankAccountId:
+          type: string
+          description: Bank account identifier
+          example: bank_987654321
+        amount:
+          type: number
+          description: Withdrawal amount
+          example: 500.00
+        status:
+          type: string
+          description: Current withdrawal status
+          enum:
+            - CREATED
+            - DEBITING
+            - SENDING_TO_BANK
+            - COMPLETED
+            - FAILED
+            - ROLLING_BACK
+            - INSUFFICIENT_FUNDS
+          example: CREATED
+        created_at:
+          type: string
+          format: date-time
+          description: Withdrawal creation timestamp
+          example: '2023-10-18T14:30:00.000Z'
+
+    ErrorResponseDto:
+      type: object
+      required:
+        - statusCode
+        - message
+        - error
+        - timestamp
+        - path
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code
+          example: 404
+        message:
+          type: string
+          description: Error message
+          example: Account acc123 not found for user user123
+        error:
+          type: string
+          description: HTTP error type
+          example: Not Found
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the error
+          example: '2023-10-18T14:30:00.000Z'
+        path:
+          type: string
+          description: Path of the request that caused the error
+          example: /api/v1/users/user123/accounts/acc123
+
+    ValidationErrorResponseDto:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponseDto'
+        - type: object
+          properties:
+            message:
+              type: array
+              items:
+                type: string
+              description: Detailed validation errors for each field
+              example:
+                - amount must not be less than 0.01
+                - userId should not be empty
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token authentication
+
+security:
+  - bearerAuth: []
+
+externalDocs:
+  description: Find more info about the API
+  url: https://github.com/example/stay-challenge
