@@ -2,10 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { BankTransferStatus, NotificationDeliveryState, PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from '../entities/private-plan-withdrawal';
 import { PrivatePlanWithdrawalRepository } from '../repository/private-plan-withdrawal.repository';
 import { PrivatePlanAccountRepository } from '../repository/private-plan-account.repository';
-import { BankTransferError, NotEnoughFunds } from '../errors/errors';
+import { BankTransferError, BusinessError, NotEnoughFunds } from '../errors/errors';
 import { randomUUID } from 'crypto';
 import { Source } from '../entities/source.entity';
-import type { NotificationService } from './notification.service';
 import type { BankService } from './bank.service';
 
 @Injectable()
@@ -14,7 +13,6 @@ export class PrivatePlanWithdrawalService {
     private readonly privatePlanWithdrawalRepository: PrivatePlanWithdrawalRepository,
     private readonly privatePlanAccountRepository: PrivatePlanAccountRepository,
     private readonly bankService: BankService,
-    private readonly notificationService: NotificationService,
   ) {}
 
   private assertStep(
@@ -73,8 +71,6 @@ export class PrivatePlanWithdrawalService {
 
         await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step });
 
-        await this.notificationService.notifyUserOfFailure(userId, accountId, withdrawal.id, result.error);
-
         return;
     }
 
@@ -95,12 +91,21 @@ export class PrivatePlanWithdrawalService {
     if (!result.ok && result.error instanceof BankTransferError) {
         await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step: PrivatePlanWithdrawalStep.ROLLING_BACK });
 
-        await this.notificationService.notifyUserOfFailure(userId, accountId, withdrawal.id, result.error);
-
         return;
     }
+  }
 
-    await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step: PrivatePlanWithdrawalStep.COMPLETED });
+  async receiveBankTransferNotification(userId: string, accountId: string, withdrawalId: string, success: boolean, error: BusinessError): Promise<void> {
+    const withdrawal = await this.privatePlanWithdrawalRepository.getById(userId, accountId, withdrawalId);
+    if (!withdrawal) {
+      throw new BadRequestException(`Withdrawal ${withdrawalId} not found for account ${accountId} and user ${userId}`);
+    }
+
+    this.assertStep(withdrawal, PrivatePlanWithdrawalStep.SENDING_TO_BANK);
+
+    const step = success ? PrivatePlanWithdrawalStep.COMPLETED : PrivatePlanWithdrawalStep.ROLLING_BACK;
+
+    await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step });
   }
 
   async rollbackDebit(userId: string, accountId: string, withdrawalId: string): Promise<void> {

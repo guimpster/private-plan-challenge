@@ -23,6 +23,16 @@ export class WithdrawalsSaga {
         new NotifyUserCommand(e.withdrawalId, true),
       ]),
     );
+  
+  @Saga()
+  onTransferReceived = (events$: Observable<any>) =>
+    events$.pipe(
+      ofType(TransferReceivedEvent),
+      mergeMap(e => [
+        new FinalizeWithdrawalCommand(e.withdrawalId, true, e.bankTxnId),
+        new NotifyUserCommand(e.withdrawalId, true),
+      ]),
+    );
 
   @Saga()
   onTransferFailed = (events$: Observable<any>) =>

@@ -10,6 +10,10 @@ export class TransferSentEvent {
   constructor(public readonly withdrawalId: string, public readonly bankTxnId: string) {}
 }
 
+export class TransferReceivedEvent {
+  constructor(public readonly withdrawalId: string, public readonly bankTxnId: string) {}
+}
+
 export class TransferFailedEvent {
   constructor(public readonly withdrawalId: string, public readonly reason: string) {}
 }

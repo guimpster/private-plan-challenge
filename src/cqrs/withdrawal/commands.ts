@@ -1,3 +1,5 @@
+import { BusinessError } from "src/business/errors/errors";
+
 export class DebitAccountCommand {
   constructor(
     public readonly userId: string,
@@ -11,6 +13,16 @@ export class SendBankTransferCommand {
     public readonly userId: string,
     public readonly accountId: string,
     public readonly withdrawalId: string
+  ) {}
+}
+
+export class ReceiveBankTransferCommand {
+  constructor(
+    public readonly userId: string,
+    public readonly accountId: string,
+    public readonly withdrawalId: string,
+    public readonly success: boolean,
+    public readonly error?: BusinessError,
   ) {}
 }
 
@@ -38,7 +50,6 @@ export class NotifyUserCommand {
     public readonly userId: string,
     public readonly accountId: string,
     public readonly withdrawalId: string,
-    public readonly success: boolean,
-    public readonly reason?: string,
+    public readonly error: BusinessError,
   ) {}
 }

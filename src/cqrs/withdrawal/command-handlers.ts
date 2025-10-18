@@ -1,13 +1,14 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, RollbackDebitCommand, SendBankTransferCommand } from "./commands";
+import { DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, ReceiveBankTransferCommand, RollbackDebitCommand, SendBankTransferCommand } from "./commands";
 import { PrivatePlanWithdrawalService } from "src/business/service/private-plan-withdrawal.service";
+import { NotificationService } from "src/business/service/notification.service";
 
 @CommandHandler(DebitAccountCommand)
 export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand> {
   constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
 
   async execute(command: DebitAccountCommand): Promise<void> {
-    await this.privatePlanWithdrawalService.debitAccount(command.withdrawalId);
+    await this.privatePlanWithdrawalService.debitAccount(command.userId, command.accountId, command.withdrawalId);
   }
 }
 
@@ -16,7 +17,16 @@ export class SendBankTransferHandler implements ICommandHandler<SendBankTransfer
   constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
 
   async execute(command: SendBankTransferCommand): Promise<void> {
-    await this.privatePlanWithdrawalService.sendBankTransfer(command.withdrawalId);
+    await this.privatePlanWithdrawalService.sendBankTransfer(command.userId, command.accountId, command.withdrawalId);
+  }
+}
+
+@CommandHandler(ReceiveBankTransferCommand)
+export class ReceiveBankTransferHandler implements ICommandHandler<ReceiveBankTransferCommand> {
+  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
+
+  async execute(command: ReceiveBankTransferCommand): Promise<void> {
+    await this.privatePlanWithdrawalService.receiveBankTransferNotification(command.userId, command.accountId, command.withdrawalId, command.success, command.error);
   }
 }
 
@@ -25,7 +35,7 @@ export class RollbackDebitHandler implements ICommandHandler<RollbackDebitComman
   constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
 
   async execute(command: RollbackDebitCommand): Promise<void> {
-    await this.privatePlanWithdrawalService.rollbackDebit(command.withdrawalId);
+    await this.privatePlanWithdrawalService.rollbackDebit(command.userId, command.accountId, command.withdrawalId);
   }
 }
 
@@ -45,14 +55,13 @@ export class FinalizeWithdrawalHandler implements ICommandHandler<FinalizeWithdr
 
 @CommandHandler(NotifyUserCommand)
 export class NotifyUserHandler implements ICommandHandler<NotifyUserCommand> {
-  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
+  constructor(private readonly notificationService: NotificationService) {}
 
   async execute(command: NotifyUserCommand): Promise<void> {
-    const { withdrawalId, success, reason } = command;
-    if (success) {
-      await this.privatePlanWithdrawalService.notifyUserOfSuccess(withdrawalId);
+    if (command.error) {
+      await this.notificationService.notifyUserOfSuccess(command.userId, command.accountId, command.withdrawalId);
     } else {
-      await this.privatePlanWithdrawalService.notifyUserOfFailure(withdrawalId, reason);
+      await this.notificationService.notifyUserOfFailure(command.userId, command.accountId, command.withdrawalId, command.error);
     }
   }
 }
