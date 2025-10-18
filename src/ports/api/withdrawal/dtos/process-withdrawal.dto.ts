@@ -1,6 +1,7 @@
 import { IsString, IsNumber, IsNotEmpty, Min } from 'class-validator';
+import { BaseEntity } from 'src/business/common/base-entity';
 
-export class CreateWithdrawalDto {
+export class CreateWithdrawalDto extends BaseEntity {
   @IsString()
   @IsNotEmpty()
   userId: string;
@@ -16,13 +17,9 @@ export class CreateWithdrawalDto {
   @IsNumber()
   @Min(0.01)
   amount: number;
-
-  constructor(partial: Partial<CreateWithdrawalDto>) {
-    Object.assign(this, partial);
-  }
 }
 
-export class WithdrawalResponseDto {
+export class WithdrawalResponseDto extends BaseEntity {
   id: string;
   userId: string;
   accountId: string;
@@ -30,8 +27,4 @@ export class WithdrawalResponseDto {
   amount: number;
   status: string;
   created_at: Date;
-
-  constructor(partial: Partial<WithdrawalResponseDto>) {
-    Object.assign(this, partial);
-  }
 }

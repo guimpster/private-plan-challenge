@@ -1,4 +1,5 @@
 import { Source } from "./source";
+import { BaseEntity } from "../common/base-entity";
 
 export enum PrivatePlanWithdrawalStep {
   CREATED = 'CREATED',
@@ -23,7 +24,7 @@ export enum NotificationDeliveryState {
   FAILED = 'FAILED',
 }
 
-export class PrivatePlanWithdrawal {
+export class PrivatePlanWithdrawal extends BaseEntity {
   id: string;
   sourcePrivatePlanAccountId: string;
   sourceTransactionId: string;
@@ -51,6 +52,6 @@ export class PrivatePlanWithdrawal {
   updated_at: Date;
 
   constructor(partial: Partial<PrivatePlanWithdrawal>) {
-    Object.assign(this, { step: PrivatePlanWithdrawalStep.CREATED }, partial);
+    super({ step: PrivatePlanWithdrawalStep.CREATED, ...partial });
   }
 }

@@ -2,10 +2,11 @@ import { Address } from './address';
 import { BankAccount } from './bank-account';
 import { PrivatePlanAccount } from './private-plan-account';
 import { Source } from './source';
+import { BaseEntity } from '../common/base-entity';
 
 export type Gender = 'male' | 'female' | 'other';
 
-export class User {
+export class User extends BaseEntity {
   id: string;
   email: string;
   phoneNumber: string;
@@ -20,8 +21,4 @@ export class User {
   inactivated_at: Date | null;
   created_at: Date;
   updated_at: Date;
-
-  constructor(partial: Partial<User>) {
-    Object.assign(this, partial);
-  }
 }

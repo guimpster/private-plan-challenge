@@ -192,6 +192,7 @@ HTTP Request → Controller → QueryBus/CommandBus → Handler → ApplicationS
 ├── openapi.yml              # OpenAPI 3.0 specification (YAML)
 src/
 ├── business/                 # Domain Layer
+│   ├── common/              # Common base classes and utilities
 │   ├── domain/              # Core business entities and logic
 │   ├── repository/          # Repository interfaces (ports)
 │   ├── service/             # Domain services

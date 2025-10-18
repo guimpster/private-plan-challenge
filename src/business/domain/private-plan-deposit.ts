@@ -1,6 +1,7 @@
 import { Source } from "./source";
+import { BaseEntity } from "../common/base-entity";
 
-export class PrivatePlanDeposit {
+export class PrivatePlanDeposit extends BaseEntity {
   id: string;
   sourceBankAccountId: string;
   sourceTransactionId: string;
@@ -17,8 +18,4 @@ export class PrivatePlanDeposit {
   release_at: Date;
   created_at: Date;
   updated_at: Date;
-
-  constructor(partial: Partial<PrivatePlanDeposit>) {
-    Object.assign(this, partial);
-  }
 }

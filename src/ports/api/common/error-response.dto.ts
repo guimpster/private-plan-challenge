@@ -1,13 +1,11 @@
-export class ErrorResponseDto {
+import { BaseEntity } from 'src/business/common/base-entity';
+
+export class ErrorResponseDto extends BaseEntity {
   statusCode: number;
   message: string;
   error: string;
   timestamp: string;
   path: string;
-
-  constructor(partial: Partial<ErrorResponseDto>) {
-    Object.assign(this, partial);
-  }
 }
 
 export class ValidationErrorResponseDto extends ErrorResponseDto {
