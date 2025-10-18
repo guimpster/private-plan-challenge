@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { InMemoryPrivatePlanModule } from '../repository/in-memory/in-memory-private-plan-account.module';
-import { BankService } from '../business/service/bank.service';
+import { BankService } from '../business/domain/services/bank.service';
 import { MockBankService } from './services/mock-bank.service';
-import { NotificationService } from '../business/service/notification.service';
+import { NotificationService } from '../business/domain/services/notification.service';
 import { MockNotificationService } from './services/mock-notification.service';
 
 @Module({

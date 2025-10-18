@@ -1,4 +1,4 @@
-import { BaseEntity } from "../common/base-entity";
+import { BaseEntity } from "../../common/base-entity";
 
 export enum BankAccountName {
     BRADESCO = 'Bradesco',

@@ -1,6 +1,6 @@
 import { Module, OnModuleInit } from '@nestjs/common';
-import { DomainEventDispatcher } from '../business/domain/domain-events';
-import { AccountDebitedEvent, AccountCreditedEvent, InsufficientFundsEvent } from '../business/domain/account-events';
+import { DomainEventDispatcher } from '../business/domain/events/domain-events';
+import { AccountDebitedEvent, AccountCreditedEvent, InsufficientFundsEvent } from '../business/domain/events/account-events';
 import { 
   AccountDebitedEventHandler, 
   AccountCreditedEventHandler, 

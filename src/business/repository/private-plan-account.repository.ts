@@ -1,5 +1,5 @@
 import { Result } from "../common";
-import { PrivatePlanAccount } from "../domain/private-plan-account";
+import { PrivatePlanAccount } from "../domain/entities/private-plan-account";
 import { NotEnoughFunds } from "../errors/errors";
 
 export abstract class PrivatePlanAccountRepository {

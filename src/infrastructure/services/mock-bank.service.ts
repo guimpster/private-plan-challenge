@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BankService } from '../../business/service/bank.service';
+import { BankService } from '../../business/domain/services/bank.service';
 import { Result } from '../../business/common';
 import { BankTransferError } from '../../business/errors/errors';
 

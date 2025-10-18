@@ -85,8 +85,11 @@ The fundamental rule of Clean Architecture is that **source code dependencies ca
 src/
 ├── business/                 # Domain Layer
 │   ├── domain/              # Core business entities and logic
+│   │   ├── entities/        # Domain entities
+│   │   ├── value-objects/   # Value objects
+│   │   ├── events/          # Domain events
+│   │   └── services/        # Domain services
 │   ├── repository/          # Repository interfaces (ports)
-│   ├── service/             # Domain services
 │   └── errors/              # Domain-specific errors
 ├── application/             # Application Layer
 │   └── services/            # Application services

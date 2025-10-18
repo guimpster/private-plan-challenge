@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { BankTransferStatus, NotificationDeliveryState, PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from '../domain/private-plan-withdrawal';
-import { PrivatePlanWithdrawalRepository } from '../repository/private-plan-withdrawal.repository';
-import { PrivatePlanAccountRepository } from '../repository/private-plan-account.repository';
-import { BankTransferError, BusinessError, CouldNotTransferError, NotEnoughFunds } from '../errors/errors';
+import { BankTransferStatus, NotificationDeliveryState, PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from '../entities/private-plan-withdrawal';
+import { PrivatePlanWithdrawalRepository } from '../../repository/private-plan-withdrawal.repository';
+import { PrivatePlanAccountRepository } from '../../repository/private-plan-account.repository';
+import { BankTransferError, BusinessError, CouldNotTransferError, NotEnoughFunds } from '../../errors/errors';
 import { randomUUID } from 'crypto';
-import { Source } from '../domain/source';
+import { Source } from '../entities/source';
 import { BankService } from './bank.service';
 
 @Injectable()

@@ -1,6 +1,6 @@
-import { PrivatePlanAccount } from './private-plan-account';
-import { AccountDebitedEvent, AccountCreditedEvent, InsufficientFundsEvent } from './account-events';
-import { DomainEventDispatcher } from './domain-events';
+import { PrivatePlanAccount } from '../entities/private-plan-account';
+import { AccountDebitedEvent, AccountCreditedEvent, InsufficientFundsEvent } from '../events/account-events';
+import { DomainEventDispatcher } from '../events/domain-events';
 
 export class AccountDomainService {
   static async debitAccount(

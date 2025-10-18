@@ -11,11 +11,11 @@ import {
   NotFoundException,
   BadRequestException
 } from '@nestjs/common';
-import { PrivatePlanWithdrawalService } from 'src/business/service/private-plan-withdrawal.service';
+import { PrivatePlanWithdrawalService } from 'src/business/domain/services/private-plan-withdrawal.service';
 import { CreateWithdrawalDto, WithdrawalResponseDto } from './dtos/process-withdrawal.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { DebitAccountCommand } from 'src/cqrs/withdrawal/commands';
-import { PrivatePlanWithdrawalStep } from 'src/business/domain/private-plan-withdrawal';
+import { PrivatePlanWithdrawalStep } from 'src/business/domain/entities/private-plan-withdrawal';
 
 @Controller('api/v1/users/:userId/accounts/:accountId/withdrawals')
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))

@@ -1,5 +1,5 @@
 import { Source } from "./source";
-import { BaseEntity } from "../common/base-entity";
+import { BaseEntity } from "../../common/base-entity";
 
 export enum PrivatePlanWithdrawalStep {
   CREATED = 'CREATED',

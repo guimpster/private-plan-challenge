@@ -2,7 +2,7 @@ import { Address } from './address';
 import { BankAccount } from './bank-account';
 import { PrivatePlanAccount } from './private-plan-account';
 import { Source } from './source';
-import { BaseEntity } from '../common/base-entity';
+import { BaseEntity } from '../../common/base-entity';
 
 export type Gender = 'male' | 'female' | 'other';
 

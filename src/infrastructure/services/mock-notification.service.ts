@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { NotificationService } from '../../business/service/notification.service';
+import { NotificationService } from '../../business/domain/services/notification.service';
 import { BusinessError } from '../../business/errors/errors';
 
 @Injectable()

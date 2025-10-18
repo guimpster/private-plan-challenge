@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import { IN_MEMORY_DB } from '../../infrastructure/db/in-memory/in-memory-db';
 import type { DBData } from '../../infrastructure/db/in-memory/in-memory-db.entity';
 import { PrivatePlanWithdrawalRepository } from 'src/business/repository/private-plan-withdrawal.repository';
-import { PrivatePlanWithdrawal } from 'src/business/domain/private-plan-withdrawal';
+import { PrivatePlanWithdrawal } from 'src/business/domain/entities/private-plan-withdrawal';
 
 @Injectable()
 export class InMemoryPrivatePlanWithdrawalRepository extends PrivatePlanWithdrawalRepository {

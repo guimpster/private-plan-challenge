@@ -1,4 +1,4 @@
-import { PrivatePlanWithdrawal } from '../domain/private-plan-withdrawal';
+import { PrivatePlanWithdrawal } from '../domain/entities/private-plan-withdrawal';
 
 
 export abstract class PrivatePlanWithdrawalRepository {

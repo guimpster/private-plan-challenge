@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrivatePlanAccount } from '../domain/private-plan-account';
-import { PrivatePlanAccountRepository } from '../repository/private-plan-account.repository';
+import { PrivatePlanAccount } from '../entities/private-plan-account';
+import { PrivatePlanAccountRepository } from '../../repository/private-plan-account.repository';
 
 @Injectable()
 export class PrivatePlanAccountService {

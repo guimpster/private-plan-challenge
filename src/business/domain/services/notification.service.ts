@@ -1,4 +1,4 @@
-import { BusinessError } from "../errors/errors";
+import { BusinessError } from "../../errors/errors";
 
 export abstract class NotificationService {
     abstract notifyUserOfSuccess(userId: string, accountId: string, withdrawalId: string): Promise<void>;

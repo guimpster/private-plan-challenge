@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrivatePlanAccount } from '../../business/domain/private-plan-account';
+import { PrivatePlanAccount } from '../../business/domain/entities/private-plan-account';
 import { PrivatePlanAccountRepository } from '../../business/repository/private-plan-account.repository';
-import { AccountDomainService } from '../../business/domain/account-domain-service';
-import { Money, AccountId, UserId } from '../../business/domain/value-objects';
+import { AccountDomainService } from '../../business/domain/services/account-domain-service';
+import { Money, AccountId, UserId } from '../../business/domain/value-objects/value-objects';
 
 export interface GetAccountQuery {
   userId: string;

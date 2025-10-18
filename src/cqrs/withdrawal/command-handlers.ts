@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, ReceiveBankTransferCommand, RollbackDebitCommand, SendBankTransferCommand } from "./commands";
-import { PrivatePlanWithdrawalService } from "src/business/service/private-plan-withdrawal.service";
-import { NotificationService } from "src/business/service/notification.service";
+import { PrivatePlanWithdrawalService } from "src/business/domain/services/private-plan-withdrawal.service";
+import { NotificationService } from "src/business/domain/services/notification.service";
 
 @CommandHandler(DebitAccountCommand)
 export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand> {

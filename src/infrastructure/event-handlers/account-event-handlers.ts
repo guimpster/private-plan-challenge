@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { DomainEventHandler } from '../../business/domain/domain-events';
-import { AccountDebitedEvent, AccountCreditedEvent, InsufficientFundsEvent } from '../../business/domain/account-events';
+import { DomainEventHandler } from '../../business/domain/events/domain-events';
+import { AccountDebitedEvent, AccountCreditedEvent, InsufficientFundsEvent } from '../../business/domain/events/account-events';
 
 @Injectable()
 export class AccountDebitedEventHandler implements DomainEventHandler<AccountDebitedEvent> {
