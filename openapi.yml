@@ -100,22 +100,10 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - bankAccountId
-                - amount
-              properties:
-                bankAccountId:
-                  type: string
-                  description: Bank account identifier for the withdrawal destination
-                  example: bank_987654321
-                amount:
-                  type: number
-                  format: decimal
-                  minimum: 0.01
-                  description: Amount to withdraw
-                  example: 500.00
+              $ref: '#/components/schemas/CreateWithdrawalDto'
             example:
+              userId: user_123456789
+              accountId: acc_123456789
               bankAccountId: bank_987654321
               amount: 500.00
       responses:
@@ -271,6 +259,32 @@ components:
           format: date-time
           description: Last update timestamp
           example: '2023-10-18T15:45:00.000Z'
+
+    CreateWithdrawalDto:
+      type: object
+      required:
+        - userId
+        - accountId
+        - bankAccountId
+        - amount
+      properties:
+        userId:
+          type: string
+          description: User identifier
+          example: user_123456789
+        accountId:
+          type: string
+          description: Account identifier
+          example: acc_123456789
+        bankAccountId:
+          type: string
+          description: Bank account identifier for withdrawal destination
+          example: bank_987654321
+        amount:
+          type: number
+          description: Withdrawal amount
+          minimum: 0.01
+          example: 500.00
 
     WithdrawalResponseDto:
       type: object

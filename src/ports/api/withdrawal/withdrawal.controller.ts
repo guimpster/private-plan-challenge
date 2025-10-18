@@ -6,16 +6,19 @@ import {
   Param,
   HttpStatus,
   HttpCode,
+  ValidationPipe,
+  UsePipes,
   NotFoundException,
   BadRequestException
 } from '@nestjs/common';
 import { PrivatePlanWithdrawalService } from 'src/business/domain/services/private-plan-withdrawal.service';
-import { WithdrawalResponseDto } from './dtos/process-withdrawal.dto';
+import { CreateWithdrawalDto, WithdrawalResponseDto } from './dtos/process-withdrawal.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { DebitAccountCommand } from 'src/cqrs/withdrawal/commands';
 import { PrivatePlanWithdrawalStep } from 'src/business/domain/entities/private-plan-withdrawal';
 
 @Controller('api/v1/users/:userId/accounts/:accountId/withdrawals')
+@UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 export class WithdrawalController {
   constructor(
     private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService, 
@@ -27,16 +30,27 @@ export class WithdrawalController {
   async createWithdrawal(
     @Param('userId') userId: string,
     @Param('accountId') accountId: string,
-    @Body() body: { bankAccountId: string; amount: number }
+    @Body() dto: CreateWithdrawalDto
   ): Promise<WithdrawalResponseDto> {
     try {
-      console.log('Creating withdrawal with:', { userId, accountId, bankAccountId: body.bankAccountId, amount: body.amount });
+      // Validate that the userId and accountId in the URL match the DTO
+      if (dto.userId !== userId || dto.accountId !== accountId) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'User ID and Account ID in URL must match the request body',
+          error: 'Bad Request',
+          timestamp: new Date().toISOString(),
+          path: `/api/v1/users/${userId}/accounts/${accountId}/withdrawals`
+        });
+      }
+
+      console.log('Creating withdrawal with:', { userId: dto.userId, accountId: dto.accountId, bankAccountId: dto.bankAccountId, amount: dto.amount });
       const withdrawal = await this.privatePlanWithdrawalService.createWithdrawal(
-        userId, 
-        accountId, 
-        body.bankAccountId, 
+        dto.userId, 
+        dto.accountId, 
+        dto.bankAccountId, 
         'whatsapp', 
-        body.amount
+        dto.amount
       );
       console.log('Withdrawal created:', withdrawal);
 
@@ -44,18 +58,18 @@ export class WithdrawalController {
       // TODO: Uncomment this line once the withdrawal creation is working
       // await this.commandBus.execute(
       //   new DebitAccountCommand(
-      //     userId,
-      //     accountId,
+      //     dto.userId,
+      //     dto.accountId,
       //     withdrawal.id
       //   ),
       // );
 
       return new WithdrawalResponseDto({
         id: withdrawal.id,
-        userId: userId,
-        accountId: accountId,
-        bankAccountId: body.bankAccountId,
-        amount: body.amount,
+        userId: dto.userId,
+        accountId: dto.accountId,
+        bankAccountId: dto.bankAccountId,
+        amount: dto.amount,
         status: PrivatePlanWithdrawalStep.CREATED,
         created_at: withdrawal.created_at || new Date()
       });
