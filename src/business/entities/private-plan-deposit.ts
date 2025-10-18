@@ -14,6 +14,7 @@ export class PrivatePlanDeposit {
   canceled: boolean;
   comment: string;
   source: Source;
+  release_at: Date;
   created_at: Date;
   updated_at: Date;
 

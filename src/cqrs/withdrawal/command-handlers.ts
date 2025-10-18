@@ -1,15 +1,6 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { CheckBalanceCommand, DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, RollbackDebitCommand, SendBankTransferCommand } from "./commands";
+import { DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, RollbackDebitCommand, SendBankTransferCommand } from "./commands";
 import { PrivatePlanWithdrawalService } from "src/business/service/private-plan-withdrawal.service";
-
-@CommandHandler(CheckBalanceCommand)
-export class CheckBalanceHandler implements ICommandHandler<CheckBalanceCommand> {
-  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
-
-  async execute(command: CheckBalanceCommand): Promise<void> {
-    await this.privatePlanWithdrawalService.checkBalance(command.withdrawalId);
-  }
-}
 
 @CommandHandler(DebitAccountCommand)
 export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand> {

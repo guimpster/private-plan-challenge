@@ -2,18 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { Saga, ofType } from '@nestjs/cqrs';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { AccountDebitedEvent, TransferFailedEvent, TransferSentEvent, WithdrawalRequestedEvent } from './events';
-import { CheckBalanceCommand, FinalizeWithdrawalCommand, NotifyUserCommand, RollbackDebitCommand, SendBankTransferCommand } from './commands';
+import { AccountDebitedEvent, TransferFailedEvent, TransferSentEvent } from './events';
+import { FinalizeWithdrawalCommand, NotifyUserCommand, RollbackDebitCommand, SendBankTransferCommand } from './commands';
 
 @Injectable()
 export class WithdrawalsSaga {
-  @Saga()
-  onWithdrawalRequested = (events$: Observable<any>) =>
-    events$.pipe(
-      ofType(WithdrawalRequestedEvent),
-      map(e => new CheckBalanceCommand(e.withdrawalId)),
-    );
-
   @Saga()
   onAccountDebited = (events$: Observable<any>) =>
     events$.pipe(
