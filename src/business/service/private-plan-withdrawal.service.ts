@@ -48,7 +48,9 @@ export class PrivatePlanWithdrawalService {
       stepHistory: [{ step: PrivatePlanWithdrawalStep.CREATED, stepRetrialCount: 0, at: new Date() }]
     });
 
-    return this.privatePlanWithdrawalRepository.create(userId, accountId, withdrawal);
+    const createdWithdrawal = await this.privatePlanWithdrawalRepository.create(userId, accountId, withdrawal);
+    console.log('Created withdrawal:', createdWithdrawal);
+    return createdWithdrawal;
   }
 
   async debitAccount(userId: string, accountId: string, withdrawalId: string): Promise<void> {

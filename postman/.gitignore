@@ -1,0 +1,14 @@
+# Postman temporary files
+*.tmp
+*.log
+*.bak
+
+# Test results
+test-results/
+*.json.bak
+
+# Environment overrides (keep the main environment file)
+*-local.postman_environment.json
+*-dev.postman_environment.json
+*-staging.postman_environment.json
+*-prod.postman_environment.json

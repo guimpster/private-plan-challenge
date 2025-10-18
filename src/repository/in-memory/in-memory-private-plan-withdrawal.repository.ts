@@ -20,8 +20,9 @@ export class InMemoryPrivatePlanWithdrawalRepository extends PrivatePlanWithdraw
         const account = user.accounts.find(a => a.id === accountId);
         if (!account) throw new Error(`Account ${accountId} for user ${userId} not found`);
 
-        account.withdrawals.push({ ...privatePlanWithdrawal, id: randomUUID(), created_at: new Date(), updated_at: new Date() });
-        return Promise.resolve(privatePlanWithdrawal);
+        const newWithdrawal = { ...privatePlanWithdrawal, id: randomUUID(), created_at: new Date(), updated_at: new Date() };
+        account.withdrawals.push(newWithdrawal);
+        return Promise.resolve(newWithdrawal);
     }
 
     updateById(userId: string, accountId: string, id: string, privatePlanWithdrawal: PrivatePlanWithdrawal): Promise<PrivatePlanWithdrawal> {

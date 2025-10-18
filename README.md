@@ -1,4 +1,4 @@
-# Stay Challenge - Clean Architecture Financial API
+# Private Plan Challenge - Clean Architecture Financial API
 
 A comprehensive financial operations API built with **NestJS** and **Clean Architecture** principles, implementing CQRS pattern and RESTful API best practices.
 
@@ -75,6 +75,21 @@ Once the application is running, you can access:
 - **Swagger Documentation**: `http://localhost:3000/api/docs`
 - **OpenAPI JSON**: `http://localhost:3000/api/docs-json`
 - **Health Check**: `http://localhost:3000/health`
+
+### 🧪 Testing the API
+
+We provide comprehensive testing resources in the `postman/` folder:
+
+- **Postman Collection**: `postman/Private-Plan-Challenge-API.postman_collection.json`
+- **Environment Variables**: `postman/Private-Plan-Challenge-Environment.postman_environment.json`
+- **Test Script**: `postman/test-api.sh` (automated testing)
+- **cURL Examples**: `postman/curl-examples.md` (command-line testing)
+- **Setup Guide**: `postman/README.md` (detailed instructions)
+
+**Quick Start with Postman:**
+1. Import the collection and environment files
+2. Select the "Private Plan Challenge Environment"
+3. Start testing the API endpoints
 
 ## 🔧 API Endpoints
 
@@ -190,6 +205,12 @@ HTTP Request → Controller → QueryBus/CommandBus → Handler → ApplicationS
 
 ```
 ├── openapi.yml              # OpenAPI 3.0 specification (YAML)
+├── postman/                 # API testing resources
+│   ├── Private-Plan-Challenge-API.postman_collection.json
+│   ├── Private-Plan-Challenge-Environment.postman_environment.json
+│   ├── test-api.sh
+│   ├── curl-examples.md
+│   └── README.md
 src/
 ├── business/                 # Domain Layer
 │   ├── common/              # Common base classes and utilities

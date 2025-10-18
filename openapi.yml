@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Stay Challenge API
+  title: Private Plan Challenge API
   description: A clean architecture implementation for financial operations
   version: 1.0.0
   contact:
