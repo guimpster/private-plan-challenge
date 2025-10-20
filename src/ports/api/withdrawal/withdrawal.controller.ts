@@ -44,7 +44,6 @@ export class WithdrawalController {
         });
       }
 
-      console.log('Creating withdrawal with:', { userId: dto.userId, accountId: dto.accountId, bankAccountId: dto.bankAccountId, amount: dto.amount });
       const withdrawal = await this.privatePlanWithdrawalService.createWithdrawal(
         dto.userId, 
         dto.accountId, 
@@ -52,17 +51,14 @@ export class WithdrawalController {
         'whatsapp', 
         dto.amount
       );
-      console.log('Withdrawal created:', withdrawal);
 
-      // Start the withdrawal process asynchronously
-      // TODO: Uncomment this line once the withdrawal creation is working
-      // await this.commandBus.execute(
-      //   new DebitAccountCommand(
-      //     dto.userId,
-      //     dto.accountId,
-      //     withdrawal.id
-      //   ),
-      // );
+      await this.commandBus.execute(
+        new DebitAccountCommand(
+          dto.userId,
+          dto.accountId,
+          withdrawal.id
+        ),
+      );
 
       return new WithdrawalResponseDto({
         id: withdrawal.id,

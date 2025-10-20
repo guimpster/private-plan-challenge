@@ -19,7 +19,7 @@ export class CreateWithdrawalDto extends BaseEntity {
   amount: number;
 }
 
-export class WithdrawalResponseDto extends BaseEntity {
+export class WithdrawalResponseDto {
   id: string;
   userId: string;
   accountId: string;
@@ -27,4 +27,8 @@ export class WithdrawalResponseDto extends BaseEntity {
   amount: number;
   status: string;
   created_at: Date;
+
+  constructor(partial: Partial<WithdrawalResponseDto>) {
+    Object.assign(this, partial);
+  }
 }

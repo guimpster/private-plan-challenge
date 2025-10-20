@@ -52,6 +52,12 @@ export class PrivatePlanWithdrawal extends BaseEntity {
   updated_at: Date;
 
   constructor(partial: Partial<PrivatePlanWithdrawal>) {
-    super({ step: PrivatePlanWithdrawalStep.CREATED, ...partial });
+    super();
+    // Set default values first
+    this.step = PrivatePlanWithdrawalStep.CREATED;
+    // Then assign all other properties
+    if (partial) {
+      Object.assign(this, partial);
+    }
   }
 }

@@ -11,7 +11,22 @@ export abstract class BaseEntity {
    */
   constructor(partial?: any) {
     if (partial) {
+      // Use Object.assign to copy all enumerable properties
       Object.assign(this, partial);
     }
+  }
+
+  /**
+   * Method to ensure proper JSON serialization
+   * This prevents issues with NestJS response serialization
+   */
+  toJSON?() {
+    const obj: any = {};
+    for (const key in this) {
+      if (this.hasOwnProperty(key)) {
+        obj[key] = this[key];
+      }
+    }
+    return obj;
   }
 }
