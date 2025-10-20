@@ -1,14 +1,11 @@
 # Private Plan Challenge API - Postman Collection
 
-This folder contains Postman collections and environment files for testing the Private Plan Challenge API.
+This folder contains the core Postman collection and environment files for testing the Private Plan Challenge API.
 
 ## 📁 Files
 
 - **`Private-Plan-Challenge-API.postman_collection.json`** - Complete Postman collection with all API endpoints
 - **`Private-Plan-Challenge-Environment.postman_environment.json`** - Environment variables for the collection
-- **`test-api.sh`** - Automated test script using cURL
-- **`run-tests.sh`** - Newman (Postman CLI) test runner
-- **`curl-examples.md`** - cURL command examples
 - **`README.md`** - This documentation file
 
 ## 🚀 Quick Start
@@ -41,23 +38,8 @@ pnpm run start
 
 ### 4. Alternative Testing Methods
 
-#### Automated cURL Testing
-```bash
-# Run the automated test script
-./test-api.sh
-```
-
-#### Newman CLI Testing
-```bash
-# Install Newman (Postman CLI)
-npm install -g newman
-
-# Run tests with Newman
-./run-tests.sh
-```
-
 #### Manual cURL Testing
-See `curl-examples.md` for detailed cURL command examples.
+You can test the API directly using cURL commands. See the example requests below for reference.
 
 ## 📚 Collection Overview
 
