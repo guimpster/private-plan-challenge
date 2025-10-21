@@ -7,7 +7,7 @@ import { parse } from 'yaml';
 
 import { AppModule } from './app.module'
 import { ConfigService } from './config/config.service';
-import { GlobalExceptionFilter } from './ports/api/common/global-exception.filter';
+import { GlobalExceptionFilter } from './config/common/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
