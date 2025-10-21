@@ -28,7 +28,7 @@ git clone <repository-url>
 cd stay-challenge
 
 # Install dependencies
-pnpm install
+pnpm install --frozen-lockfile
 ```
 
 ### Development
