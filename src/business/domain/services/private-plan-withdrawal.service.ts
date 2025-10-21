@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { BankTransferStatus, NotificationDeliveryState, PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from '../entities/private-plan-withdrawal';
 import { PrivatePlanWithdrawalRepository } from '../../repository/private-plan-withdrawal.repository';
 import { PrivatePlanAccountRepository } from '../../repository/private-plan-account.repository';
@@ -9,6 +9,8 @@ import { BankService } from './bank.service';
 
 @Injectable()
 export class PrivatePlanWithdrawalService {
+  private readonly logger = new Logger(PrivatePlanWithdrawalService.name);
+
   constructor(
     private readonly privatePlanWithdrawalRepository: PrivatePlanWithdrawalRepository,
     private readonly privatePlanAccountRepository: PrivatePlanAccountRepository,
@@ -49,7 +51,7 @@ export class PrivatePlanWithdrawalService {
     });
 
     const createdWithdrawal = await this.privatePlanWithdrawalRepository.create(userId, accountId, withdrawal);
-    console.log('Created withdrawal:', createdWithdrawal);
+    this.logger.log('Created withdrawal:', createdWithdrawal);
     return createdWithdrawal;
   }
 
@@ -142,7 +144,7 @@ export class PrivatePlanWithdrawalService {
     
     // TODO: Implement proper withdrawal lookup by ID
     // This method should find the withdrawal and update it to completed status
-    console.log(`Finalizing withdrawal ${withdrawalId} with bank transaction ID ${bankTxnId}`);
+    this.logger.log(`Finalizing withdrawal ${withdrawalId} with bank transaction ID ${bankTxnId}`);
   }
 
   async finalizeWithdrawalFailure(withdrawalId: string, reason: string): Promise<void> {
@@ -152,7 +154,7 @@ export class PrivatePlanWithdrawalService {
     
     // TODO: Implement proper withdrawal lookup by ID
     // This method should find the withdrawal and update it to failed status
-    console.log(`Finalizing withdrawal ${withdrawalId} as failed. Reason: ${reason}`);
+    this.logger.log(`Finalizing withdrawal ${withdrawalId} as failed. Reason: ${reason}`);
   }
 
   async getWithdrawalById(userId: string, accountId: string, withdrawalId: string): Promise<PrivatePlanWithdrawal | undefined> {
@@ -200,7 +202,7 @@ export class PrivatePlanWithdrawalService {
       stepHistory: updatedStepHistory
     });
 
-    console.log(`📝 Step History: Added ${step} step for withdrawal ${withdrawalId}`);
+    this.logger.log(`📝 Step History: Added ${step} step for withdrawal ${withdrawalId}`);
   }
 
   /**

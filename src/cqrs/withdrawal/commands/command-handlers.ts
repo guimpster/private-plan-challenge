@@ -1,14 +1,12 @@
 import { CommandHandler, ICommandHandler, EventBus } from "@nestjs/cqrs";
+import { Logger } from "@nestjs/common";
 import { CreateWithdrawalCommand, DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, ReceiveBankTransferCommand, RollbackDebitCommand, SendBankTransferCommand, SendToBankCommand, CompleteWithdrawalCommand } from "./commands";
 import { PrivatePlanWithdrawalService } from "src/business/domain/services/private-plan-withdrawal.service";
 import { NotificationService } from "src/business/domain/services/notification.service";
 import { PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from "src/business/domain/entities/private-plan-withdrawal";
 import { WithdrawalDebitedEvent } from "../events/withdrawal-debited.event";
 import { WithdrawalSentToBankEvent } from "../events/withdrawal-sent-to-bank.event";
-import { BankTransferCompletedEvent } from "../events/bank-transfer-completed.event";
-import { WithdrawalFailedEvent } from "../events/withdrawal-failed.event";
 import { WithdrawalInsufficientFundsEvent } from "../events/withdrawal-insufficient-funds.event";
-import { BadRequestException } from "@nestjs/common";
 
 @CommandHandler(CreateWithdrawalCommand)
 export class CreateWithdrawalHandler implements ICommandHandler<CreateWithdrawalCommand> {
@@ -27,6 +25,8 @@ export class CreateWithdrawalHandler implements ICommandHandler<CreateWithdrawal
 
 @CommandHandler(DebitAccountCommand)
 export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand> {
+  private readonly logger = new Logger(DebitAccountHandler.name);
+
   constructor(
     private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService,
     private readonly eventBus: EventBus
@@ -43,10 +43,10 @@ export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand>
     );
     
     if (withdrawal) {
-      console.log(`🔍 DebitAccountHandler: Withdrawal ${command.withdrawalId} is in step: ${withdrawal.step}`);
+      this.logger.log(`🔍 DebitAccountHandler: Withdrawal ${command.withdrawalId} is in step: ${withdrawal.step}`);
       if (withdrawal.step === PrivatePlanWithdrawalStep.SENDING_TO_BANK) {
         // Debit was successful, emit WithdrawalDebitedEvent
-        console.log(`✅ DebitAccountHandler: Emitting WithdrawalDebitedEvent for withdrawal ${command.withdrawalId}`);
+        this.logger.log(`✅ DebitAccountHandler: Emitting WithdrawalDebitedEvent for withdrawal ${command.withdrawalId}`);
         this.eventBus.publish(
           new WithdrawalDebitedEvent(
             command.withdrawalId,
@@ -59,7 +59,7 @@ export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand>
         );
       } else if (withdrawal.step === PrivatePlanWithdrawalStep.INSUFFICIENT_FUNDS) {
         // Debit failed due to insufficient funds, emit WithdrawalInsufficientFundsEvent
-        console.log(`❌ DebitAccountHandler: Emitting WithdrawalInsufficientFundsEvent for withdrawal ${command.withdrawalId}`);
+        this.logger.log(`❌ DebitAccountHandler: Emitting WithdrawalInsufficientFundsEvent for withdrawal ${command.withdrawalId}`);
         this.eventBus.publish(
           new WithdrawalInsufficientFundsEvent(
             command.withdrawalId,
@@ -71,7 +71,7 @@ export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand>
         );
         
         // Immediately transition to FAILED
-        console.log(`🔄 DebitAccountHandler: Transitioning withdrawal ${command.withdrawalId} to FAILED`);
+        this.logger.log(`🔄 DebitAccountHandler: Transitioning withdrawal ${command.withdrawalId} to FAILED`);
         await this.privatePlanWithdrawalService.addStepToHistory(
           command.userId,
           command.accountId,
@@ -86,7 +86,7 @@ export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand>
         );
       }
     } else {
-      console.log(`❌ DebitAccountHandler: Withdrawal ${command.withdrawalId} not found`);
+      this.logger.log(`❌ DebitAccountHandler: Withdrawal ${command.withdrawalId} not found`);
     }
   }
 }

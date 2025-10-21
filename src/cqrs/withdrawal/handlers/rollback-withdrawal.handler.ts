@@ -1,7 +1,6 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
+import { Injectable, Inject, Logger } from '@nestjs/common';
+import { ICommandHandler, CommandHandler, EventBus } from '@nestjs/cqrs';
 import { RollbackWithdrawalCommand } from '../commands/commands';
-import { EventBus } from '@nestjs/cqrs';
 import { WithdrawalFailedEvent } from '../events/withdrawal-failed.event';
 import { PrivatePlanWithdrawalRepository } from '../../../business/repository/private-plan-withdrawal.repository';
 import { PrivatePlanAccountRepository } from '../../../business/repository/private-plan-account.repository';
@@ -9,6 +8,8 @@ import { PrivatePlanAccountRepository } from '../../../business/repository/priva
 @Injectable()
 @CommandHandler(RollbackWithdrawalCommand)
 export class RollbackWithdrawalHandler implements ICommandHandler<RollbackWithdrawalCommand> {
+  private readonly logger = new Logger(RollbackWithdrawalHandler.name);
+
   constructor(
     @Inject('PrivatePlanWithdrawalRepository')
     private readonly withdrawalRepository: PrivatePlanWithdrawalRepository,
@@ -21,19 +22,19 @@ export class RollbackWithdrawalHandler implements ICommandHandler<RollbackWithdr
     const { withdrawalId, reason } = command;
 
     try {
-      console.log('🔄 Rollback Handler: Starting rollback for withdrawal ID:', withdrawalId);
+      this.logger.log(`🔄 Rollback Handler: Starting rollback for withdrawal ID: ${withdrawalId}`);
 
       // Get the withdrawal to find user and account IDs
       const withdrawal = await this.findWithdrawalById(withdrawalId);
       if (!withdrawal) {
-        console.error('❌ Rollback Handler: Withdrawal not found for ID:', withdrawalId);
+        this.logger.error(`❌ Rollback Handler: Withdrawal not found for ID: ${withdrawalId}`);
         return;
       }
 
       // Rollback the account balance (credit back the amount)
       await this.rollbackAccountBalance(withdrawal);
 
-      console.log('✅ Rollback Handler: Successfully rolled back withdrawal ID:', withdrawalId);
+      this.logger.log(`✅ Rollback Handler: Successfully rolled back withdrawal ID: ${withdrawalId}`);
 
       // Emit withdrawal failed event to complete the saga
       this.eventBus.publish(
@@ -47,7 +48,7 @@ export class RollbackWithdrawalHandler implements ICommandHandler<RollbackWithdr
       );
 
     } catch (error) {
-      console.error('❌ Rollback Handler: Failed to rollback withdrawal ID:', withdrawalId, 'Error:', error.message);
+      this.logger.error(`❌ Rollback Handler: Failed to rollback withdrawal ID: ${withdrawalId}, Error: ${error.message}`);
       
       // Even if rollback fails, we still need to mark the withdrawal as failed
       this.eventBus.publish(
@@ -80,7 +81,7 @@ export class RollbackWithdrawalHandler implements ICommandHandler<RollbackWithdr
     // 2. Add the withdrawal amount back to the account balance
     // 3. Update the account in the repository
     
-    console.log('🔄 Rollback Handler: Crediting back amount:', withdrawal.amount, 'to account');
+    this.logger.log(`🔄 Rollback Handler: Crediting back amount: ${withdrawal.amount} to account`);
     
     // Mock implementation - in reality you'd update the account balance
     // await this.accountRepository.updateBalance(accountId, withdrawal.amount);

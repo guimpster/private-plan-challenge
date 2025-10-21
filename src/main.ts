@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parse } from 'yaml';
@@ -10,6 +10,7 @@ import { ConfigService } from './config/config.service';
 import { GlobalExceptionFilter } from './config/common/global-exception.filter';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
 
   // Global validation pipe
@@ -40,7 +41,7 @@ async function bootstrap() {
   // Run the application
   await app.listen(port, host);
   
-  console.log(`🚀 Application is running on: http://${host}:${port}`);
-  console.log(`📚 API Documentation: http://${host}:${port}/api/docs`);
+  logger.log(`🚀 Application is running on: http://${host}:${port}`);
+  logger.log(`📚 API Documentation: http://${host}:${port}/api/docs`);
 }
 bootstrap();

@@ -3,17 +3,14 @@ import { ICommand, IEvent, ofType, Saga } from '@nestjs/cqrs';
 import { Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { WithdrawalCreatedEvent } from '../events/withdrawal-created.event';
-import { DebitAccountCommand } from '../commands/commands';
+import { DebitAccountCommand, SendToBankCommand, RollbackDebitCommand, CompleteWithdrawalCommand, RollbackWithdrawalCommand } from '../commands/commands';
 import { WithdrawalDebitedEvent } from '../events/withdrawal-debited.event';
-import { SendToBankCommand, RollbackDebitCommand } from '../commands/commands';
 import { WithdrawalSentToBankEvent } from '../events/withdrawal-sent-to-bank.event';
 import { BankResponseReceivedEvent } from '../events/bank-response-received.event';
 import { WithdrawalRollingBackEvent } from '../events/withdrawal-rolling-back.event';
 import { BankTransferCompletedEvent } from '../events/bank-transfer-completed.event';
 import { WithdrawalInsufficientFundsEvent } from '../events/withdrawal-insufficient-funds.event';
-import { CompleteWithdrawalCommand } from '../commands/commands';
 import { WithdrawalFailedEvent } from '../events/withdrawal-failed.event';
-import { RollbackWithdrawalCommand } from '../commands/commands';
 import { PrivatePlanWithdrawalService } from '../../../business/domain/services/private-plan-withdrawal.service';
 import { PrivatePlanWithdrawalStep } from '../../../business/domain/entities/private-plan-withdrawal';
 

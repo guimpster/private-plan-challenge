@@ -1,5 +1,3 @@
-import { BaseEntity } from 'src/business/common/base-entity';
-
 export class AccountDto {
   id: string;
   cashAvailableForWithdrawal: number;

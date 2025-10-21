@@ -1,27 +1,25 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Logger } from '@nestjs/common';
 import { BradescoWebHookDto } from './dtos/bradesco.dto';
-import { CommandBus, EventBus } from '@nestjs/cqrs';
-import { ReceiveBankTransferCommand } from 'src/cqrs/withdrawal/commands/commands';
-import { CouldNotTransferError } from 'src/business/errors/errors';
+import { EventBus } from '@nestjs/cqrs';
 import { BankResponseReceivedEvent, WithdrawalRollingBackEvent } from 'src/cqrs/withdrawal/events';
 
 @Controller('bradesco')
 export class BradescoController {
+  private readonly logger = new Logger(BradescoController.name);
+
   constructor(
-    private readonly commandBus: CommandBus,
     private readonly eventBus: EventBus
   ) {}
 
   @Post('')
   async findOne(@Body() dto: BradescoWebHookDto): Promise<void> {
     if (dto.success) {
-      // Emit bank response event for successful transfer
       this.eventBus.publish(
         new BankResponseReceivedEvent(
           dto.withdrawalId,
           dto.userId,
           dto.accountId,
-          `bradesco_${Date.now()}`, // Generate bank transaction ID
+          `bradesco_${Date.now()}`,
           'SUCCESS',
           '200',
           'Transfer completed successfully',
@@ -29,8 +27,7 @@ export class BradescoController {
         )
       );
     } else {
-      // Emit rolling back event for failed transfer
-      console.log('🔄 Bradesco Controller: Publishing WithdrawalRollingBackEvent for withdrawal:', dto.withdrawalId);
+      this.logger.log(`🔄 Bradesco Controller: Publishing WithdrawalRollingBackEvent for withdrawal: ${dto.withdrawalId}`);
       this.eventBus.publish(
         new WithdrawalRollingBackEvent(
           dto.withdrawalId,
@@ -40,10 +37,7 @@ export class BradescoController {
           new Date()
         )
       );
-      console.log('✅ Bradesco Controller: WithdrawalRollingBackEvent published successfully');
+      this.logger.log('✅ Bradesco Controller: WithdrawalRollingBackEvent published successfully');
     }
-
-    // Let the saga handle the complete flow - no direct command execution needed
-    return;
   }
 }
