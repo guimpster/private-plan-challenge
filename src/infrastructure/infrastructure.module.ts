@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 import { InMemoryPrivatePlanModule } from '../repository/in-memory/in-memory-private-plan-account.module';
 import { BankService } from '../business/domain/services/bank.service';
 import { BradescoProxy } from '../ports/proxy/bradesco.proxy';
@@ -8,7 +9,7 @@ import { PrivatePlanWithdrawalRepository } from '../business/repository/private-
 import { InMemoryPrivatePlanWithdrawalRepository } from '../repository/in-memory/in-memory-private-plan-withdrawal.repository';
 
 @Module({
-  imports: [InMemoryPrivatePlanModule],
+  imports: [CqrsModule, InMemoryPrivatePlanModule],
   providers: [
     {
       provide: BankService,
