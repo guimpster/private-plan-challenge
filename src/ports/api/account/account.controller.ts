@@ -34,6 +34,7 @@ export class AccountController {
       id: deposit.id,
       amount: deposit.amount,
       userCredited: deposit.userCredited,
+      release_at: deposit.release_at,
       created_at: deposit.created_at,
       updated_at: deposit.updated_at
     })) || [];

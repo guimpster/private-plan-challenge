@@ -91,6 +91,40 @@ export class PrivatePlanDepositService {
   }
 
   /**
+   * Create a new deposit and add it to the account's cash balance (but not available for withdrawal)
+   */
+  async createDeposit(deposit: PrivatePlanDeposit): Promise<PrivatePlanDeposit> {
+    this.logger.log(`🔄 Creating deposit ${deposit.id} for user ${deposit.userId} and account ${deposit.accountId}`);
+
+    // Get the account
+    const account = await this.privatePlanAccountRepository.getByUserId(deposit.userId, deposit.accountId);
+    if (!account) {
+      throw new Error(`Account ${deposit.accountId} not found for user ${deposit.userId}`);
+    }
+
+    this.logger.log(`📊 Found account ${deposit.accountId} with balance ${account.cashBalance}`);
+
+    // Add to cash balance only (not available for withdrawal until release date)
+    const updatedAccount = await this.privatePlanAccountRepository.updateByUserId(
+      deposit.userId,
+      deposit.accountId,
+      {
+        cashBalance: account.cashBalance + deposit.amount,
+        updated_at: new Date()
+      }
+    );
+
+    if (!updatedAccount) {
+      throw new Error(`Failed to update account ${deposit.accountId}`);
+    }
+
+    this.logger.log(`💰 Added ${deposit.amount} to account ${deposit.accountId} cash balance. New balance: ${updatedAccount.cashBalance}`);
+
+    // Create the deposit record
+    return this.privatePlanDepositRepository.createDeposit(deposit);
+  }
+
+  /**
    * Get deposits for a specific account
    */
   async getDepositsByAccountId(accountId: string): Promise<PrivatePlanDeposit[]> {

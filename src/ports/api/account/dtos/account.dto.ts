@@ -2,6 +2,7 @@ export class DepositDto {
   id: string;
   amount: number;
   userCredited: boolean;
+  release_at: Date;
   created_at: Date;
   updated_at: Date;
 
