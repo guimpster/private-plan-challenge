@@ -71,9 +71,15 @@ export class PrivatePlanWithdrawalService {
     const result = await this.privatePlanAccountRepository.checkAndDebitAccount(userId, accountId, withdrawal.amount);
 
     if (!result.ok) {
-        const step = result.error instanceof NotEnoughFunds ? PrivatePlanWithdrawalStep.INSUFFICIENT_FUNDS : PrivatePlanWithdrawalStep.FAILED;
-
-        await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step });
+        if (result.error instanceof NotEnoughFunds) {
+            // Add INSUFFICIENT_FUNDS step to history
+            await this.addStepToHistory(userId, accountId, withdrawalId, PrivatePlanWithdrawalStep.INSUFFICIENT_FUNDS);
+            await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step: PrivatePlanWithdrawalStep.INSUFFICIENT_FUNDS });
+        } else {
+            // Add FAILED step to history for other errors
+            await this.addStepToHistory(userId, accountId, withdrawalId, PrivatePlanWithdrawalStep.FAILED);
+            await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step: PrivatePlanWithdrawalStep.FAILED });
+        }
 
         return;
     }

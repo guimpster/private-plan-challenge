@@ -5,3 +5,4 @@ export { BankResponseReceivedEvent } from './bank-response-received.event';
 export { WithdrawalRollingBackEvent } from './withdrawal-rolling-back.event';
 export { BankTransferCompletedEvent } from './bank-transfer-completed.event';
 export { WithdrawalFailedEvent } from './withdrawal-failed.event';
+export { WithdrawalInsufficientFundsEvent } from './withdrawal-insufficient-funds.event';

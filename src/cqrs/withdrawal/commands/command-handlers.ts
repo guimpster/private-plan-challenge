@@ -7,6 +7,7 @@ import { WithdrawalDebitedEvent } from "../events/withdrawal-debited.event";
 import { WithdrawalSentToBankEvent } from "../events/withdrawal-sent-to-bank.event";
 import { BankTransferCompletedEvent } from "../events/bank-transfer-completed.event";
 import { WithdrawalFailedEvent } from "../events/withdrawal-failed.event";
+import { WithdrawalInsufficientFundsEvent } from "../events/withdrawal-insufficient-funds.event";
 import { BadRequestException } from "@nestjs/common";
 
 @CommandHandler(CreateWithdrawalCommand)
@@ -34,7 +35,7 @@ export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand>
   async execute(command: DebitAccountCommand): Promise<void> {
     await this.privatePlanWithdrawalService.debitAccount(command.userId, command.accountId, command.withdrawalId);
     
-    // Get the withdrawal to emit the event with all necessary data
+    // Get the withdrawal to check if the debit was successful
     const withdrawal = await this.privatePlanWithdrawalService.getWithdrawalById(
       command.userId, 
       command.accountId, 
@@ -42,16 +43,50 @@ export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand>
     );
     
     if (withdrawal) {
-      this.eventBus.publish(
-        new WithdrawalDebitedEvent(
-          command.withdrawalId,
+      console.log(`🔍 DebitAccountHandler: Withdrawal ${command.withdrawalId} is in step: ${withdrawal.step}`);
+      if (withdrawal.step === PrivatePlanWithdrawalStep.SENDING_TO_BANK) {
+        // Debit was successful, emit WithdrawalDebitedEvent
+        console.log(`✅ DebitAccountHandler: Emitting WithdrawalDebitedEvent for withdrawal ${command.withdrawalId}`);
+        this.eventBus.publish(
+          new WithdrawalDebitedEvent(
+            command.withdrawalId,
+            command.userId,
+            command.accountId,
+            withdrawal.amount,
+            withdrawal.destinationBankAccountId,
+            new Date()
+          )
+        );
+      } else if (withdrawal.step === PrivatePlanWithdrawalStep.INSUFFICIENT_FUNDS) {
+        // Debit failed due to insufficient funds, emit WithdrawalInsufficientFundsEvent
+        console.log(`❌ DebitAccountHandler: Emitting WithdrawalInsufficientFundsEvent for withdrawal ${command.withdrawalId}`);
+        this.eventBus.publish(
+          new WithdrawalInsufficientFundsEvent(
+            command.withdrawalId,
+            command.userId,
+            command.accountId,
+            withdrawal.amount,
+            new Date()
+          )
+        );
+        
+        // Immediately transition to FAILED
+        console.log(`🔄 DebitAccountHandler: Transitioning withdrawal ${command.withdrawalId} to FAILED`);
+        await this.privatePlanWithdrawalService.addStepToHistory(
           command.userId,
           command.accountId,
-          withdrawal.amount,
-          withdrawal.destinationBankAccountId,
-          new Date()
-        )
-      );
+          command.withdrawalId,
+          PrivatePlanWithdrawalStep.FAILED
+        );
+        await this.privatePlanWithdrawalService.updateWithdrawalStep(
+          command.userId,
+          command.accountId,
+          command.withdrawalId,
+          PrivatePlanWithdrawalStep.FAILED
+        );
+      }
+    } else {
+      console.log(`❌ DebitAccountHandler: Withdrawal ${command.withdrawalId} not found`);
     }
   }
 }

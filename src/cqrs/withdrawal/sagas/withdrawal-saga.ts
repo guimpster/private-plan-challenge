@@ -10,6 +10,7 @@ import { WithdrawalSentToBankEvent } from '../events/withdrawal-sent-to-bank.eve
 import { BankResponseReceivedEvent } from '../events/bank-response-received.event';
 import { WithdrawalRollingBackEvent } from '../events/withdrawal-rolling-back.event';
 import { BankTransferCompletedEvent } from '../events/bank-transfer-completed.event';
+import { WithdrawalInsufficientFundsEvent } from '../events/withdrawal-insufficient-funds.event';
 import { CompleteWithdrawalCommand } from '../commands/commands';
 import { WithdrawalFailedEvent } from '../events/withdrawal-failed.event';
 import { RollbackWithdrawalCommand } from '../commands/commands';
@@ -89,6 +90,50 @@ export class WithdrawalSaga {
       catchError((error) => {
         this.logger.error(`❌ Error in withdrawalCreated saga: ${error.message}`, error.stack);
         // Return a no-op command to prevent the saga from crashing
+        return of(null);
+      })
+    );
+  };
+
+  @Saga()
+  withdrawalInsufficientFunds = (events$: Observable<IEvent>): Observable<ICommand | null> => {
+    return events$.pipe(
+      ofType(WithdrawalInsufficientFundsEvent),
+      tap((event: WithdrawalInsufficientFundsEvent) => {
+        this.logger.log(`🔄 Withdrawal Saga: Received WithdrawalInsufficientFundsEvent for ID: ${event.withdrawalId}`);
+        this.logger.log(`🔄 Withdrawal Saga: Withdrawal has insufficient funds for ID: ${event.withdrawalId}, Amount: ${event.amount}`);
+      }),
+      tap(async (event: WithdrawalInsufficientFundsEvent) => {
+        try {
+          // Wait a moment to ensure the withdrawal is available
+          await new Promise(resolve => setTimeout(resolve, 50));
+          
+          // Add FAILED step to history
+          await this.withdrawalService.addStepToHistory(
+            event.userId,
+            event.accountId,
+            event.withdrawalId,
+            PrivatePlanWithdrawalStep.FAILED
+          );
+          
+          // Update the withdrawal step to FAILED
+          await this.withdrawalService.updateWithdrawalStep(
+            event.userId,
+            event.accountId,
+            event.withdrawalId,
+            PrivatePlanWithdrawalStep.FAILED
+          );
+          
+          this.logger.log(`✅ Withdrawal Saga: Successfully transitioned withdrawal ${event.withdrawalId} to FAILED`);
+        } catch (error) {
+          this.logger.error(`❌ Error transitioning withdrawal ${event.withdrawalId} to FAILED: ${error.message}`, error.stack);
+        }
+      }),
+      map((event: WithdrawalInsufficientFundsEvent) => {
+        return null; // No command to dispatch
+      }),
+      catchError((error) => {
+        this.logger.error(`❌ Error in withdrawalInsufficientFunds saga: ${error.message}`, error.stack);
         return of(null);
       })
     );
@@ -239,4 +284,5 @@ export class WithdrawalSaga {
       })
     );
   };
+
 }
