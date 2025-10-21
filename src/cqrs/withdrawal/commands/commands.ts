@@ -1,4 +1,15 @@
 import { BusinessError } from "src/business/errors/errors";
+import { Source } from "src/business/domain/entities/source";
+
+export class CreateWithdrawalCommand {
+  constructor(
+    public readonly userId: string,
+    public readonly accountId: string,
+    public readonly bankAccountId: string,
+    public readonly source: Source,
+    public readonly amount: number
+  ) {}
+}
 
 export class DebitAccountCommand {
   constructor(
@@ -58,6 +69,8 @@ export class NotifyUserCommand {
 export class SendToBankCommand {
   constructor(
     public readonly withdrawalId: string,
+    public readonly userId: string,
+    public readonly accountId: string,
     public readonly amount: number,
     public readonly bankAccountId: string
   ) {}
@@ -66,6 +79,8 @@ export class SendToBankCommand {
 export class CompleteWithdrawalCommand {
   constructor(
     public readonly withdrawalId: string,
+    public readonly userId: string,
+    public readonly accountId: string,
     public readonly transactionId: string
   ) {}
 }

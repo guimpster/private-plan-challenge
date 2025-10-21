@@ -1,23 +1,125 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, ReceiveBankTransferCommand, RollbackDebitCommand, SendBankTransferCommand } from "./commands";
+import { CommandHandler, ICommandHandler, EventBus } from "@nestjs/cqrs";
+import { CreateWithdrawalCommand, DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, ReceiveBankTransferCommand, RollbackDebitCommand, SendBankTransferCommand, SendToBankCommand, CompleteWithdrawalCommand } from "./commands";
 import { PrivatePlanWithdrawalService } from "src/business/domain/services/private-plan-withdrawal.service";
 import { NotificationService } from "src/business/domain/services/notification.service";
+import { PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from "src/business/domain/entities/private-plan-withdrawal";
+import { WithdrawalDebitedEvent } from "../events/withdrawal-debited.event";
+import { WithdrawalSentToBankEvent } from "../events/withdrawal-sent-to-bank.event";
+import { BankTransferCompletedEvent } from "../events/bank-transfer-completed.event";
+import { WithdrawalFailedEvent } from "../events/withdrawal-failed.event";
+import { BadRequestException } from "@nestjs/common";
+
+@CommandHandler(CreateWithdrawalCommand)
+export class CreateWithdrawalHandler implements ICommandHandler<CreateWithdrawalCommand> {
+  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
+
+  async execute(command: CreateWithdrawalCommand): Promise<PrivatePlanWithdrawal> {
+    return this.privatePlanWithdrawalService.createWithdrawal(
+      command.userId,
+      command.accountId,
+      command.bankAccountId,
+      command.source,
+      command.amount
+    );
+  }
+}
 
 @CommandHandler(DebitAccountCommand)
 export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand> {
-  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
+  constructor(
+    private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService,
+    private readonly eventBus: EventBus
+  ) {}
 
   async execute(command: DebitAccountCommand): Promise<void> {
     await this.privatePlanWithdrawalService.debitAccount(command.userId, command.accountId, command.withdrawalId);
+    
+    // Get the withdrawal to emit the event with all necessary data
+    const withdrawal = await this.privatePlanWithdrawalService.getWithdrawalById(
+      command.userId, 
+      command.accountId, 
+      command.withdrawalId
+    );
+    
+    if (withdrawal) {
+      this.eventBus.publish(
+        new WithdrawalDebitedEvent(
+          command.withdrawalId,
+          command.userId,
+          command.accountId,
+          withdrawal.amount,
+          withdrawal.destinationBankAccountId,
+          new Date()
+        )
+      );
+    }
   }
 }
 
 @CommandHandler(SendBankTransferCommand)
 export class SendBankTransferHandler implements ICommandHandler<SendBankTransferCommand> {
-  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
+  constructor(
+    private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService,
+    private readonly eventBus: EventBus
+  ) {}
 
   async execute(command: SendBankTransferCommand): Promise<void> {
     await this.privatePlanWithdrawalService.sendBankTransfer(command.userId, command.accountId, command.withdrawalId);
+    
+    // Get the withdrawal to emit the event with all necessary data
+    const withdrawal = await this.privatePlanWithdrawalService.getWithdrawalById(
+      command.userId, 
+      command.accountId, 
+      command.withdrawalId
+    );
+    
+    if (withdrawal) {
+      this.eventBus.publish(
+        new WithdrawalSentToBankEvent(
+          command.withdrawalId,
+          command.userId,
+          command.accountId,
+          withdrawal.destinationBankAccountId,
+          withdrawal.amount,
+          new Date()
+        )
+      );
+    }
+  }
+}
+
+@CommandHandler(SendToBankCommand)
+export class SendToBankHandler implements ICommandHandler<SendToBankCommand> {
+  constructor(
+    private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService,
+    private readonly eventBus: EventBus
+  ) {}
+
+  async execute(command: SendToBankCommand): Promise<void> {
+    // Update step to SENDING_TO_BANK and add to history
+    await this.privatePlanWithdrawalService.addStepToHistory(
+      command.userId, 
+      command.accountId, 
+      command.withdrawalId, 
+      PrivatePlanWithdrawalStep.SENDING_TO_BANK
+    );
+    
+    await this.privatePlanWithdrawalService.sendBankTransfer(
+      command.userId, 
+      command.accountId, 
+      command.withdrawalId
+    );
+    
+    this.eventBus.publish(
+      new WithdrawalSentToBankEvent(
+        command.withdrawalId,
+        command.userId,
+        command.accountId,
+        command.bankAccountId,
+        command.amount,
+        new Date()
+      )
+    );
   }
 }
 
@@ -35,7 +137,71 @@ export class RollbackDebitHandler implements ICommandHandler<RollbackDebitComman
   constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
 
   async execute(command: RollbackDebitCommand): Promise<void> {
+    // Add RECEIVED_BANK_RESPONSE step to history first
+    await this.privatePlanWithdrawalService.addStepToHistory(
+      command.userId,
+      command.accountId,
+      command.withdrawalId,
+      PrivatePlanWithdrawalStep.RECEIVED_BANK_RESPONSE
+    );
+
+    // Add ROLLING_BACK step to history
+    await this.privatePlanWithdrawalService.addStepToHistory(
+      command.userId,
+      command.accountId,
+      command.withdrawalId,
+      PrivatePlanWithdrawalStep.ROLLING_BACK
+    );
+
+    // Update the withdrawal step to ROLLING_BACK
+    await this.privatePlanWithdrawalService.updateWithdrawalStep(
+      command.userId,
+      command.accountId,
+      command.withdrawalId,
+      PrivatePlanWithdrawalStep.ROLLING_BACK
+    );
+    
+    // Execute the rollback (credits the account and updates step to FAILED)
     await this.privatePlanWithdrawalService.rollbackDebit(command.userId, command.accountId, command.withdrawalId);
+    
+    // Add FAILED step to history
+    await this.privatePlanWithdrawalService.addStepToHistory(
+      command.userId,
+      command.accountId,
+      command.withdrawalId,
+      PrivatePlanWithdrawalStep.FAILED
+    );
+  }
+}
+
+@CommandHandler(CompleteWithdrawalCommand)
+export class CompleteWithdrawalHandler implements ICommandHandler<CompleteWithdrawalCommand> {
+  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
+
+  async execute(command: CompleteWithdrawalCommand): Promise<void> {
+    // Add RECEIVED_BANK_RESPONSE step to history first
+    await this.privatePlanWithdrawalService.addStepToHistory(
+      command.userId,
+      command.accountId,
+      command.withdrawalId,
+      PrivatePlanWithdrawalStep.RECEIVED_BANK_RESPONSE
+    );
+
+    // Add COMPLETED step to history
+    await this.privatePlanWithdrawalService.addStepToHistory(
+      command.userId,
+      command.accountId,
+      command.withdrawalId,
+      PrivatePlanWithdrawalStep.COMPLETED
+    );
+
+    // Update the withdrawal step to COMPLETED
+    await this.privatePlanWithdrawalService.updateWithdrawalStep(
+      command.userId,
+      command.accountId,
+      command.withdrawalId,
+      PrivatePlanWithdrawalStep.COMPLETED
+    );
   }
 }
 

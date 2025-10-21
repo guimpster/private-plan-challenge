@@ -6,14 +6,24 @@ import { PrivatePlanWithdrawalRepository } from '../../../business/repository/pr
 import { PrivatePlanAccountRepository } from '../../../business/repository/private-plan-account.repository';
 import { InMemoryPrivatePlanWithdrawalRepository } from '../../../repository/in-memory/in-memory-private-plan-withdrawal.repository';
 import { InMemoryPrivatePlanAccountRepository } from '../../../repository/in-memory/in-memory-private-plan-account.repository';
-import { RollbackWithdrawalHandler } from '../handlers/rollback-withdrawal.handler';
+import { InfrastructureModule } from '../../../infrastructure/infrastructure.module';
+import { InMemoryDbModule } from '../../../infrastructure/db/in-memory/in-memory-db';
 
 @Module({
-  imports: [CqrsModule],
+  imports: [CqrsModule, InfrastructureModule, InMemoryDbModule.forRoot()],
   providers: [
     WithdrawalSaga,
     PrivatePlanWithdrawalService,
-    RollbackWithdrawalHandler,
+    InMemoryPrivatePlanWithdrawalRepository,
+    InMemoryPrivatePlanAccountRepository,
+    {
+      provide: PrivatePlanWithdrawalRepository,
+      useExisting: InMemoryPrivatePlanWithdrawalRepository
+    },
+    {
+      provide: PrivatePlanAccountRepository,
+      useExisting: InMemoryPrivatePlanAccountRepository
+    },
     {
       provide: 'PrivatePlanWithdrawalRepository',
       useExisting: InMemoryPrivatePlanWithdrawalRepository

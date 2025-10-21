@@ -63,6 +63,8 @@ export class PrivatePlanWithdrawalService {
 
     // TODO: calculate taxes irpf, fees, and actual value to debit
 
+    // Update step and add to history
+    await this.addStepToHistory(userId, accountId, withdrawalId, PrivatePlanWithdrawalStep.DEBITING);
     await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step: PrivatePlanWithdrawalStep.DEBITING });
 
     // TODO: debit the right value from the calculated above
@@ -85,7 +87,7 @@ export class PrivatePlanWithdrawalService {
       throw new BadRequestException(`Withdrawal ${withdrawalId} not found for account ${accountId} and user ${userId}`);
     }
 
-    this.assertStep(withdrawal, PrivatePlanWithdrawalStep.SENDING_TO_BANK);
+    this.assertStep(withdrawal, PrivatePlanWithdrawalStep.DEBITING);
 
     // TODO: change to calculated withdrawal amount (after fees, taxes, etc)
     const result = await this.bankService.sendTransfer(userId, withdrawal.destinationBankAccountId, withdrawal.amount);
@@ -95,6 +97,9 @@ export class PrivatePlanWithdrawalService {
 
         return;
     }
+
+    // Bank transfer was successful, update step to SENDING_TO_BANK
+    await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step: PrivatePlanWithdrawalStep.SENDING_TO_BANK });
   }
 
   async receiveBankTransferNotification(userId: string, accountId: string, withdrawalId: string, success: boolean, error?: CouldNotTransferError): Promise<void> {
@@ -105,8 +110,9 @@ export class PrivatePlanWithdrawalService {
 
     this.assertStep(withdrawal, PrivatePlanWithdrawalStep.SENDING_TO_BANK);
 
+    // Update the step based on success/failure
+    // Note: Step history is now managed by the saga, not here
     const step = success ? PrivatePlanWithdrawalStep.COMPLETED : PrivatePlanWithdrawalStep.ROLLING_BACK;
-
     await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawal.id, { step, comment: error ? error.message : '' });
   }
 
@@ -145,6 +151,14 @@ export class PrivatePlanWithdrawalService {
 
   async getWithdrawalById(userId: string, accountId: string, withdrawalId: string): Promise<PrivatePlanWithdrawal | undefined> {
     return this.privatePlanWithdrawalRepository.getById(userId, accountId, withdrawalId);
+  }
+
+  async findWithdrawalById(withdrawalId: string): Promise<PrivatePlanWithdrawal | undefined> {
+    return this.privatePlanWithdrawalRepository.findById(withdrawalId);
+  }
+
+  async updateWithdrawalStep(userId: string, accountId: string, withdrawalId: string, step: PrivatePlanWithdrawalStep): Promise<void> {
+    await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawalId, { step });
   }
 
   /**

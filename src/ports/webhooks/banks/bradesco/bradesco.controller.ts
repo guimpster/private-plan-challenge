@@ -30,6 +30,7 @@ export class BradescoController {
       );
     } else {
       // Emit rolling back event for failed transfer
+      console.log('🔄 Bradesco Controller: Publishing WithdrawalRollingBackEvent for withdrawal:', dto.withdrawalId);
       this.eventBus.publish(
         new WithdrawalRollingBackEvent(
           dto.withdrawalId,
@@ -39,19 +40,10 @@ export class BradescoController {
           new Date()
         )
       );
+      console.log('✅ Bradesco Controller: WithdrawalRollingBackEvent published successfully');
     }
 
-    // Also execute the existing command for backward compatibility
-    await this.commandBus.execute(
-      new ReceiveBankTransferCommand(
-        dto.userId,
-        dto.accountId,
-        dto.withdrawalId,
-        dto.success,
-        dto.error === 'Invalid transfer' ? new CouldNotTransferError(dto.error) : undefined,
-      ),
-    );
-
+    // Let the saga handle the complete flow - no direct command execution needed
     return;
   }
 }

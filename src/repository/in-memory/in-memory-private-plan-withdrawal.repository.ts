@@ -48,4 +48,16 @@ export class InMemoryPrivatePlanWithdrawalRepository extends PrivatePlanWithdraw
         const withdrawalIndex = account.withdrawals.findIndex(w => w.id === id);
         return Promise.resolve(withdrawalIndex >= 0 ? account.withdrawals[withdrawalIndex] : undefined);
     }
+
+    findById(id: string): Promise<PrivatePlanWithdrawal | undefined> {
+        for (const user of this.db.users) {
+            for (const account of user.accounts) {
+                const withdrawal = account.withdrawals.find(w => w.id === id);
+                if (withdrawal) {
+                    return Promise.resolve(withdrawal);
+                }
+            }
+        }
+        return Promise.resolve(undefined);
+    }
 }

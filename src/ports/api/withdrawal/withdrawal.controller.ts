@@ -13,16 +13,20 @@ import {
 } from '@nestjs/common';
 import { PrivatePlanWithdrawalService } from 'src/business/domain/services/private-plan-withdrawal.service';
 import { CreateWithdrawalDto, WithdrawalResponseDto } from './dtos/process-withdrawal.dto';
-import { EventBus } from '@nestjs/cqrs';
+import { EventBus, QueryBus, CommandBus } from '@nestjs/cqrs';
 import { PrivatePlanWithdrawalStep } from 'src/business/domain/entities/private-plan-withdrawal';
 import { WithdrawalCreatedEvent } from 'src/cqrs/withdrawal/events';
+import { GetWithdrawalByIdQuery } from 'src/cqrs/withdrawal/queries/queries';
+import { CreateWithdrawalCommand } from 'src/cqrs/withdrawal/commands/commands';
 
 @Controller('api/v1/users/:userId/accounts/:accountId/withdrawals')
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 export class WithdrawalController {
   constructor(
     private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService, 
-    private readonly eventBus: EventBus
+    private readonly eventBus: EventBus,
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus
   ) {}
 
   @Post()
@@ -44,12 +48,14 @@ export class WithdrawalController {
         });
       }
 
-      const withdrawal = await this.privatePlanWithdrawalService.createWithdrawal(
-        dto.userId, 
-        dto.accountId, 
-        dto.bankAccountId, 
-        'whatsapp', 
-        dto.amount
+      const withdrawal = await this.commandBus.execute(
+        new CreateWithdrawalCommand(
+          dto.userId, 
+          dto.accountId, 
+          dto.bankAccountId, 
+          'whatsapp', 
+          dto.amount
+        )
       );
 
       // Emit event to start the saga
@@ -95,10 +101,8 @@ export class WithdrawalController {
     @Param('accountId') accountId: string,
     @Param('withdrawalId') withdrawalId: string
   ): Promise<WithdrawalResponseDto> {
-    const withdrawal = await this.privatePlanWithdrawalService.getWithdrawalById(
-      userId, 
-      accountId, 
-      withdrawalId
+    const withdrawal = await this.queryBus.execute(
+      new GetWithdrawalByIdQuery(userId, accountId, withdrawalId)
     );
 
     if (!withdrawal) {
