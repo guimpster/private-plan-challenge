@@ -183,6 +183,7 @@ POST /api/v1/webhooks/bradesco
 - **Commands**: Write operations
 - **Queries**: Read operations
 - **Command/Query Handlers**: Process operations
+- **Sagas**: Orchestrate complex business processes
 
 ## 🔄 Data Flow
 
@@ -224,11 +225,12 @@ src/
 │   ├── event-handlers/      # Domain event handlers
 │   └── services/            # External service implementations
 ├── cqrs/                    # CQRS Layer
-│   ├── account/             # Account-related commands/queries
-│   └── withdrawal/          # Withdrawal-related commands/queries
-├── ports/                   # Interface Adapters Layer
+│   ├── account/             # Account-related commands/queries (AccountCqrsModule)
+│   └── withdrawal/          # Withdrawal-related commands/queries (WithdrawalCqrsModule)
+├── ports/                   # Interface Adapters Layer (PortsModule)
 │   ├── api/                 # REST API controllers
 │   ├── webhooks/            # Webhook handlers
+│   ├── proxy/               # External service proxies
 │   └── mail/                # Email adapters
 ├── infrastructure/          # Infrastructure implementations
 │   ├── db/                  # Database implementations

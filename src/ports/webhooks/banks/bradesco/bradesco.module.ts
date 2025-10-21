@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { BradescoController } from './bradesco.controller';
-import { WithdrawalsModule } from 'src/cqrs/withdrawal/withdrawal.module';
+import { WithdrawalCqrsModule } from 'src/cqrs/withdrawal/withdrawal.module';
 
 @Module({
-  imports: [WithdrawalsModule],
+  imports: [WithdrawalCqrsModule],
   controllers: [BradescoController],
 })
 export class BradescoWebHookModule {}

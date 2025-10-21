@@ -4,8 +4,7 @@ import { AccountController } from './api/account/account.controller';
 import { WithdrawalController } from './api/withdrawal/withdrawal.controller';
 import { BradescoController } from './webhooks/banks/bradesco/bradesco.controller';
 import { AccountCqrsModule } from '../cqrs/account/account.module';
-import { WithdrawalsModule } from '../cqrs/withdrawal/withdrawal.module';
-import { InfrastructureModule } from '../infrastructure/infrastructure.module';
+import { WithdrawalCqrsModule } from '../cqrs/withdrawal/withdrawal.module';
 
 export interface PortsModuleOptions {
   database: 'inMemory';
@@ -25,9 +24,8 @@ export class PortsModule {
       module: PortsModule,
       imports: [
         CqrsModule,
-        InfrastructureModule,
         AccountCqrsModule,
-        WithdrawalsModule,
+        WithdrawalCqrsModule,
       ],
       controllers: [
         AccountController,

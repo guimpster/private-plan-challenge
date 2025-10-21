@@ -101,11 +101,12 @@ src/
 │   ├── services/            # Infrastructure services
 │   └── infrastructure.module.ts
 ├── cqrs/                    # CQRS Layer
-│   ├── account/             # Account-related commands/queries
-│   └── withdrawal/          # Withdrawal-related commands/queries
-├── ports/                   # Interface Adapters Layer
+│   ├── account/             # Account-related commands/queries (AccountCqrsModule)
+│   └── withdrawal/          # Withdrawal-related commands/queries (WithdrawalCqrsModule)
+├── ports/                   # Interface Adapters Layer (PortsModule)
 │   ├── api/                 # REST API controllers
 │   ├── webhooks/            # Webhook handlers
+│   ├── proxy/               # External service proxies
 │   └── mail/                # Email adapters
 ├── repository/              # Infrastructure implementations
 │   ├── in-memory/           # In-memory database implementations
@@ -386,17 +387,23 @@ const withdrawal = await withdrawalService.createWithdrawal(
 
 ### Configuration
 
-To use the saga, add the `WithdrawalSagaModule` to your application:
+The application uses a modular approach with the `PortsModule` that registers all necessary modules:
 
 ```typescript
 @Module({
   imports: [
-    WithdrawalSagaModule,
-    // ... other modules
+    ConfigModule.register({ type: 'json' }),
+    PortsModule.register({ database: 'inMemory' }),
   ],
 })
 export class AppModule {}
 ```
+
+The `PortsModule` internally imports:
+- `AccountCqrsModule` - Account-related CQRS operations
+- `WithdrawalCqrsModule` - Withdrawal-related CQRS operations  
+- `WithdrawalSagaModule` - Withdrawal saga orchestration
+- All necessary controllers and services
 
 ### Monitoring and Logging
 
