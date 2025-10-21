@@ -19,8 +19,8 @@
                 {
                     "id": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
                     "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d",
-                    "cashAvailableForWithdrawal": 4183.94,
-                    "cashBalance": 6949.54,
+                    "cashAvailableForWithdrawal": 4143.73,
+                    "cashBalance": 6747.36,
                     "source": "system",
                     "withdrawals": [
                         {
@@ -275,8 +275,8 @@
                 {
                     "id": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
                     "userId": "45974916-e884-4d6b-b15f-20bac251437b",
-                    "cashAvailableForWithdrawal": 1838.79,
-                    "cashBalance": 4162.75,
+                    "cashAvailableForWithdrawal": 2557.27,
+                    "cashBalance": 3813.32,
                     "source": "system",
                     "withdrawals": [
                         {
@@ -293,8 +293,45 @@
                             "canceled": false,
                             "comment": "Withdrawal #1",
                             "source": "system",
+                            "step": "COMPLETED",
+                            "stepRetrialCount": 0,
+                            "stepHistory": [
+                                {
+                                    "step": "CREATED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:03Z"
+                                },
+                                {
+                                    "step": "DEBITING",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:05Z"
+                                },
+                                {
+                                    "step": "SENDING_TO_BANK",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:10Z"
+                                },
+                                {
+                                    "step": "RECEIVED_BANK_RESPONSE",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:15Z"
+                                },
+                                {
+                                    "step": "COMPLETED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:20Z"
+                                }
+                            ],
+                            "notifications": [
+                                {
+                                    "type": "SUCCESS",
+                                    "message": "Your withdrawal of $369.17 has been completed successfully",
+                                    "sentAt": "2025-10-03T23:15:20Z",
+                                    "userId": "45974916-e884-4d6b-b15f-20bac251437b"
+                                }
+                            ],
                             "created_at": "2025-10-03T23:15:03Z",
-                            "updated_at": "2025-10-03T23:15:03Z"
+                            "updated_at": "2025-10-03T23:15:20Z"
                         },
                         {
                             "id": "6861e40e-2136-442e-bff8-f5bd58c3763b",
@@ -310,8 +347,45 @@
                             "canceled": false,
                             "comment": "Withdrawal #2",
                             "source": "system",
+                            "step": "COMPLETED",
+                            "stepRetrialCount": 0,
+                            "stepHistory": [
+                                {
+                                    "step": "CREATED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:03Z"
+                                },
+                                {
+                                    "step": "DEBITING",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:05Z"
+                                },
+                                {
+                                    "step": "SENDING_TO_BANK",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:10Z"
+                                },
+                                {
+                                    "step": "RECEIVED_BANK_RESPONSE",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:15Z"
+                                },
+                                {
+                                    "step": "COMPLETED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:20Z"
+                                }
+                            ],
+                            "notifications": [
+                                {
+                                    "type": "SUCCESS",
+                                    "message": "Your withdrawal of $136.88 has been completed successfully",
+                                    "sentAt": "2025-10-05T23:15:20Z",
+                                    "userId": "45974916-e884-4d6b-b15f-20bac251437b"
+                                }
+                            ],
                             "created_at": "2025-10-05T23:15:03Z",
-                            "updated_at": "2025-10-05T23:15:03Z"
+                            "updated_at": "2025-10-05T23:15:20Z"
                         }
                     ],
                     "deposits": [
@@ -427,8 +501,8 @@
                 {
                     "id": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
                     "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
-                    "cashAvailableForWithdrawal": 6369.12,
-                    "cashBalance": 9507.53,
+                    "cashAvailableForWithdrawal": 1663.33,
+                    "cashBalance": 2634.30,
                     "source": "system",
                     "withdrawals": [
                         {
@@ -445,8 +519,45 @@
                             "canceled": false,
                             "comment": "Withdrawal #1",
                             "source": "system",
+                            "step": "COMPLETED",
+                            "stepRetrialCount": 0,
+                            "stepHistory": [
+                                {
+                                    "step": "CREATED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:03Z"
+                                },
+                                {
+                                    "step": "DEBITING",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:05Z"
+                                },
+                                {
+                                    "step": "SENDING_TO_BANK",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:10Z"
+                                },
+                                {
+                                    "step": "RECEIVED_BANK_RESPONSE",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:15Z"
+                                },
+                                {
+                                    "step": "COMPLETED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:20Z"
+                                }
+                            ],
+                            "notifications": [
+                                {
+                                    "type": "SUCCESS",
+                                    "message": "Your withdrawal of $746.61 has been completed successfully",
+                                    "sentAt": "2025-10-03T23:15:20Z",
+                                    "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df"
+                                }
+                            ],
                             "created_at": "2025-10-03T23:15:03Z",
-                            "updated_at": "2025-10-03T23:15:03Z"
+                            "updated_at": "2025-10-03T23:15:20Z"
                         },
                         {
                             "id": "cf09e694-9d5e-475d-b487-cb193b7e3f34",
@@ -462,8 +573,45 @@
                             "canceled": false,
                             "comment": "Withdrawal #2",
                             "source": "system",
+                            "step": "COMPLETED",
+                            "stepRetrialCount": 0,
+                            "stepHistory": [
+                                {
+                                    "step": "CREATED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:03Z"
+                                },
+                                {
+                                    "step": "DEBITING",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:05Z"
+                                },
+                                {
+                                    "step": "SENDING_TO_BANK",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:10Z"
+                                },
+                                {
+                                    "step": "RECEIVED_BANK_RESPONSE",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:15Z"
+                                },
+                                {
+                                    "step": "COMPLETED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:20Z"
+                                }
+                            ],
+                            "notifications": [
+                                {
+                                    "type": "SUCCESS",
+                                    "message": "Your withdrawal of $224.36 has been completed successfully",
+                                    "sentAt": "2025-10-05T23:15:20Z",
+                                    "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df"
+                                }
+                            ],
                             "created_at": "2025-10-05T23:15:03Z",
-                            "updated_at": "2025-10-05T23:15:03Z"
+                            "updated_at": "2025-10-05T23:15:20Z"
                         }
                     ],
                     "deposits": [
@@ -516,8 +664,8 @@
                 {
                     "id": "bf68782d-633d-488b-bc80-ddaacf53628e",
                     "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
-                    "cashAvailableForWithdrawal": 5103.75,
-                    "cashBalance": 6027.57,
+                    "cashAvailableForWithdrawal": 2970.26,
+                    "cashBalance": 4199.19,
                     "source": "system",
                     "withdrawals": [
                         {
@@ -534,8 +682,45 @@
                             "canceled": false,
                             "comment": "Withdrawal #1",
                             "source": "system",
+                            "step": "COMPLETED",
+                            "stepRetrialCount": 0,
+                            "stepHistory": [
+                                {
+                                    "step": "CREATED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:03Z"
+                                },
+                                {
+                                    "step": "DEBITING",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:05Z"
+                                },
+                                {
+                                    "step": "SENDING_TO_BANK",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:10Z"
+                                },
+                                {
+                                    "step": "RECEIVED_BANK_RESPONSE",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:15Z"
+                                },
+                                {
+                                    "step": "COMPLETED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:20Z"
+                                }
+                            ],
+                            "notifications": [
+                                {
+                                    "type": "SUCCESS",
+                                    "message": "Your withdrawal of $750.17 has been completed successfully",
+                                    "sentAt": "2025-10-03T23:15:20Z",
+                                    "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df"
+                                }
+                            ],
                             "created_at": "2025-10-03T23:15:03Z",
-                            "updated_at": "2025-10-03T23:15:03Z"
+                            "updated_at": "2025-10-03T23:15:20Z"
                         },
                         {
                             "id": "5c73bc50-a777-4880-861f-67aef62acc4c",
@@ -551,8 +736,45 @@
                             "canceled": false,
                             "comment": "Withdrawal #2",
                             "source": "system",
+                            "step": "COMPLETED",
+                            "stepRetrialCount": 0,
+                            "stepHistory": [
+                                {
+                                    "step": "CREATED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:03Z"
+                                },
+                                {
+                                    "step": "DEBITING",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:05Z"
+                                },
+                                {
+                                    "step": "SENDING_TO_BANK",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:10Z"
+                                },
+                                {
+                                    "step": "RECEIVED_BANK_RESPONSE",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:15Z"
+                                },
+                                {
+                                    "step": "COMPLETED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:20Z"
+                                }
+                            ],
+                            "notifications": [
+                                {
+                                    "type": "SUCCESS",
+                                    "message": "Your withdrawal of $478.76 has been completed successfully",
+                                    "sentAt": "2025-10-05T23:15:20Z",
+                                    "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df"
+                                }
+                            ],
                             "created_at": "2025-10-05T23:15:03Z",
-                            "updated_at": "2025-10-05T23:15:03Z"
+                            "updated_at": "2025-10-05T23:15:20Z"
                         }
                     ],
                     "deposits": [

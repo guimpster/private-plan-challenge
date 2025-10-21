@@ -66,12 +66,11 @@ export class PrivatePlanDepositService {
 
     this.logger.log(`📊 Found account ${accountId} with balance ${account.cashBalance}`);
 
-    // Credit the account
+    // Credit the account - only add to cashAvailableForWithdrawal since cashBalance already includes all deposits
     const updatedAccount = await this.privatePlanAccountRepository.updateByUserId(
       userId,
       accountId,
       {
-        cashBalance: account.cashBalance + amount,
         cashAvailableForWithdrawal: account.cashAvailableForWithdrawal + amount,
         updated_at: new Date()
       }
