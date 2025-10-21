@@ -7,6 +7,7 @@ import { PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from "src/business/d
 import { WithdrawalDebitedEvent } from "../events/withdrawal-debited.event";
 import { WithdrawalSentToBankEvent } from "../events/withdrawal-sent-to-bank.event";
 import { WithdrawalInsufficientFundsEvent } from "../events/withdrawal-insufficient-funds.event";
+import { NotEnoughFunds } from "src/business/errors/errors";
 
 @CommandHandler(CreateWithdrawalCommand)
 export class CreateWithdrawalHandler implements ICommandHandler<CreateWithdrawalCommand> {
@@ -29,7 +30,8 @@ export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand>
 
   constructor(
     private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService,
-    private readonly eventBus: EventBus
+    private readonly eventBus: EventBus,
+    private readonly notificationService: NotificationService
   ) {}
 
   async execute(command: DebitAccountCommand): Promise<void> {
@@ -83,6 +85,15 @@ export class DebitAccountHandler implements ICommandHandler<DebitAccountCommand>
           command.accountId,
           command.withdrawalId,
           PrivatePlanWithdrawalStep.FAILED
+        );
+
+        // Notify user of failure
+        this.logger.log(`📧 DebitAccountHandler: Notifying user of withdrawal failure for ${command.withdrawalId}`);
+        await this.notificationService.notifyUserOfFailure(
+          command.userId,
+          command.accountId,
+          command.withdrawalId,
+          new NotEnoughFunds()
         );
       }
     } else {
@@ -169,7 +180,12 @@ export class ReceiveBankTransferHandler implements ICommandHandler<ReceiveBankTr
 
 @CommandHandler(RollbackDebitCommand)
 export class RollbackDebitHandler implements ICommandHandler<RollbackDebitCommand> {
-  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
+  private readonly logger = new Logger(RollbackDebitHandler.name);
+
+  constructor(
+    private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService,
+    private readonly notificationService: NotificationService
+  ) {}
 
   async execute(command: RollbackDebitCommand): Promise<void> {
     // Add RECEIVED_BANK_RESPONSE step to history first
@@ -206,12 +222,26 @@ export class RollbackDebitHandler implements ICommandHandler<RollbackDebitComman
       command.withdrawalId,
       PrivatePlanWithdrawalStep.FAILED
     );
+
+    // Notify user of failure
+    this.logger.log(`📧 RollbackDebitHandler: Notifying user of withdrawal failure for ${command.withdrawalId}`);
+    await this.notificationService.notifyUserOfFailure(
+      command.userId,
+      command.accountId,
+      command.withdrawalId,
+      new Error('Bank transfer failed and funds have been rolled back')
+    );
   }
 }
 
 @CommandHandler(CompleteWithdrawalCommand)
 export class CompleteWithdrawalHandler implements ICommandHandler<CompleteWithdrawalCommand> {
-  constructor(private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService) {}
+  private readonly logger = new Logger(CompleteWithdrawalHandler.name);
+
+  constructor(
+    private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService,
+    private readonly notificationService: NotificationService
+  ) {}
 
   async execute(command: CompleteWithdrawalCommand): Promise<void> {
     // Add RECEIVED_BANK_RESPONSE step to history first
@@ -236,6 +266,14 @@ export class CompleteWithdrawalHandler implements ICommandHandler<CompleteWithdr
       command.accountId,
       command.withdrawalId,
       PrivatePlanWithdrawalStep.COMPLETED
+    );
+
+    // Notify user of success
+    this.logger.log(`📧 CompleteWithdrawalHandler: Notifying user of withdrawal success for ${command.withdrawalId}`);
+    await this.notificationService.notifyUserOfSuccess(
+      command.userId,
+      command.accountId,
+      command.withdrawalId
     );
   }
 }
