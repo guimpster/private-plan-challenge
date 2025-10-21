@@ -29,6 +29,11 @@
                             "sourceTransactionId": "6b533489-a1f9-439f-9cea-c2ae31e81300",
                             "destinationBankAccountId": "b61648ba-0323-4e9a-8046-413c88de1245",
                             "destinationTransactionId": "b067ec56-a3a5-484a-a80e-b953a8d8935e",
+                            "bankStatus": "ACCEPTED",
+                            "bankAttemptCount": 1,
+                            "notifySuccessState": "SENT",
+                            "notifyFailureState": "PENDING",
+                            "notifyAttemptCount": 1,
                             "processed": true,
                             "sentToDestination": true,
                             "userCredited": true,
@@ -37,8 +42,45 @@
                             "canceled": false,
                             "comment": "Withdrawal #1",
                             "source": "system",
+                            "step": "COMPLETED",
+                            "stepRetrialCount": 0,
+                            "stepHistory": [
+                                {
+                                    "step": "CREATED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:03Z"
+                                },
+                                {
+                                    "step": "DEBITING",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:05Z"
+                                },
+                                {
+                                    "step": "SENDING_TO_BANK",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:10Z"
+                                },
+                                {
+                                    "step": "RECEIVED_BANK_RESPONSE",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:15Z"
+                                },
+                                {
+                                    "step": "COMPLETED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-03T23:15:20Z"
+                                }
+                            ],
+                            "notifications": [
+                                {
+                                    "type": "SUCCESS",
+                                    "message": "Your withdrawal of $492.48 has been completed successfully",
+                                    "sentAt": "2025-10-03T23:15:20Z",
+                                    "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d"
+                                }
+                            ],
                             "created_at": "2025-10-03T23:15:03Z",
-                            "updated_at": "2025-10-03T23:15:03Z"
+                            "updated_at": "2025-10-03T23:15:20Z"
                         },
                         {
                             "id": "14ea502f-c4ef-4dbb-a893-debf0d8679e7",
@@ -46,6 +88,11 @@
                             "sourceTransactionId": "8093e7e4-8105-4633-a8a1-730cef4107e9",
                             "destinationBankAccountId": "b61648ba-0323-4e9a-8046-413c88de1245",
                             "destinationTransactionId": "16d27b95-57ec-4003-81ed-ef2637777372",
+                            "bankStatus": "ACCEPTED",
+                            "bankAttemptCount": 1,
+                            "notifySuccessState": "SENT",
+                            "notifyFailureState": "PENDING",
+                            "notifyAttemptCount": 1,
                             "processed": true,
                             "sentToDestination": true,
                             "userCredited": true,
@@ -54,13 +101,52 @@
                             "canceled": false,
                             "comment": "Withdrawal #2",
                             "source": "system",
+                            "step": "COMPLETED",
+                            "stepRetrialCount": 0,
+                            "stepHistory": [
+                                {
+                                    "step": "CREATED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:03Z"
+                                },
+                                {
+                                    "step": "DEBITING",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:05Z"
+                                },
+                                {
+                                    "step": "SENDING_TO_BANK",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:10Z"
+                                },
+                                {
+                                    "step": "RECEIVED_BANK_RESPONSE",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:15Z"
+                                },
+                                {
+                                    "step": "COMPLETED",
+                                    "stepRetrialCount": 0,
+                                    "at": "2025-10-05T23:15:20Z"
+                                }
+                            ],
+                            "notifications": [
+                                {
+                                    "type": "SUCCESS",
+                                    "message": "Your withdrawal of $611.15 has been completed successfully",
+                                    "sentAt": "2025-10-05T23:15:20Z",
+                                    "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d"
+                                }
+                            ],
                             "created_at": "2025-10-05T23:15:03Z",
-                            "updated_at": "2025-10-05T23:15:03Z"
+                            "updated_at": "2025-10-05T23:15:20Z"
                         }
                     ],
                     "deposits": [
                         {
                             "id": "55df886b-0684-454a-aaeb-b95c391ca243",
+                            "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d",
+                            "accountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
                             "sourceBankAccountId": "096f0bdc-2a6c-4fa4-910c-840ed45e4d13",
                             "sourceTransactionId": "9f53bd63-1c53-408a-9816-275e9ebae458",
                             "destinationPrivatePlanAccountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
@@ -73,11 +159,14 @@
                             "canceled": false,
                             "comment": "Initial deposit #1",
                             "source": "system",
+                            "release_at": "2025-09-18T23:15:03Z",
                             "created_at": "2025-09-18T23:15:03Z",
                             "updated_at": "2025-09-18T23:15:03Z"
                         },
                         {
                             "id": "3760d14d-17bf-4deb-a3eb-8b2438ec25df",
+                            "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d",
+                            "accountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
                             "sourceBankAccountId": "096f0bdc-2a6c-4fa4-910c-840ed45e4d13",
                             "sourceTransactionId": "317e662f-cbcd-499c-a045-26e20b71e334",
                             "destinationPrivatePlanAccountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
@@ -90,6 +179,7 @@
                             "canceled": false,
                             "comment": "Initial deposit #2",
                             "source": "system",
+                            "release_at": "2025-09-20T23:15:03Z",
                             "created_at": "2025-09-20T23:15:03Z",
                             "updated_at": "2025-09-20T23:15:03Z"
                         }
@@ -187,6 +277,8 @@
                     "deposits": [
                         {
                             "id": "1d7d6a04-7844-4ea2-923b-e8db359fb4b7",
+                            "userId": "45974916-e884-4d6b-b15f-20bac251437b",
+                            "accountId": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
                             "sourceBankAccountId": "b2918e91-5ec6-4188-990d-66343cb978b1",
                             "sourceTransactionId": "be39f865-826f-45bf-ab96-0051c1e8e749",
                             "destinationPrivatePlanAccountId": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
@@ -199,11 +291,14 @@
                             "canceled": false,
                             "comment": "Initial deposit #1",
                             "source": "system",
+                            "release_at": "2025-09-18T23:15:03Z",
                             "created_at": "2025-09-18T23:15:03Z",
                             "updated_at": "2025-09-18T23:15:03Z"
                         },
                         {
                             "id": "f843be68-3a08-4b1b-a8dc-398d0ab50667",
+                            "userId": "45974916-e884-4d6b-b15f-20bac251437b",
+                            "accountId": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
                             "sourceBankAccountId": "b2918e91-5ec6-4188-990d-66343cb978b1",
                             "sourceTransactionId": "d7e109a0-9aae-4af6-b029-84981b060620",
                             "destinationPrivatePlanAccountId": "925957d0-3d72-4635-8c89-5fd1df5ed8b2",
@@ -216,6 +311,7 @@
                             "canceled": false,
                             "comment": "Initial deposit #2",
                             "source": "system",
+                            "release_at": "2025-09-20T23:15:03Z",
                             "created_at": "2025-09-20T23:15:03Z",
                             "updated_at": "2025-09-20T23:15:03Z"
                         }
@@ -313,6 +409,8 @@
                     "deposits": [
                         {
                             "id": "7943208a-0afd-4d05-9340-32859c84847f",
+                            "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+                            "accountId": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
                             "sourceBankAccountId": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
                             "sourceTransactionId": "b23d146f-1fd7-4f11-b04c-6fa875f09b1d",
                             "destinationPrivatePlanAccountId": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
@@ -325,11 +423,14 @@
                             "canceled": false,
                             "comment": "Initial deposit #1",
                             "source": "system",
+                            "release_at": "2025-09-18T23:15:03Z",
                             "created_at": "2025-09-18T23:15:03Z",
                             "updated_at": "2025-09-18T23:15:03Z"
                         },
                         {
                             "id": "85d0ee07-81cf-4cc8-a763-bc7db1b49769",
+                            "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+                            "accountId": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
                             "sourceBankAccountId": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
                             "sourceTransactionId": "17fa5ef5-7a92-49b0-ab03-7c45e990fc4b",
                             "destinationPrivatePlanAccountId": "81e996c7-b842-4a2f-89b0-f835c7a3decc",
@@ -342,6 +443,7 @@
                             "canceled": false,
                             "comment": "Initial deposit #2",
                             "source": "system",
+                            "release_at": "2025-09-20T23:15:03Z",
                             "created_at": "2025-09-20T23:15:03Z",
                             "updated_at": "2025-09-20T23:15:03Z"
                         }
@@ -396,6 +498,8 @@
                     "deposits": [
                         {
                             "id": "2fbe0696-82ef-437f-b8d4-9ffed69c5795",
+                            "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+                            "accountId": "bf68782d-633d-488b-bc80-ddaacf53628e",
                             "sourceBankAccountId": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
                             "sourceTransactionId": "8191f21d-2b7f-43dd-b524-c3a90c78a238",
                             "destinationPrivatePlanAccountId": "bf68782d-633d-488b-bc80-ddaacf53628e",
@@ -408,11 +512,14 @@
                             "canceled": false,
                             "comment": "Initial deposit #1",
                             "source": "system",
+                            "release_at": "2025-09-18T23:15:03Z",
                             "created_at": "2025-09-18T23:15:03Z",
                             "updated_at": "2025-09-18T23:15:03Z"
                         },
                         {
                             "id": "eb025f88-f130-40c4-bdd2-cfe018fa0a6d",
+                            "userId": "c5b81b11-77c2-410e-b08c-a2ce1e8da3df",
+                            "accountId": "bf68782d-633d-488b-bc80-ddaacf53628e",
                             "sourceBankAccountId": "4896c35b-cae0-4e8a-acb7-6c91b7c69988",
                             "sourceTransactionId": "912708d5-4e93-4148-944e-19c857a222d3",
                             "destinationPrivatePlanAccountId": "bf68782d-633d-488b-bc80-ddaacf53628e",
@@ -425,6 +532,7 @@
                             "canceled": false,
                             "comment": "Initial deposit #2",
                             "source": "system",
+                            "release_at": "2025-09-20T23:15:03Z",
                             "created_at": "2025-09-20T23:15:03Z",
                             "updated_at": "2025-09-20T23:15:03Z"
                         }

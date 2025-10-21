@@ -8,9 +8,9 @@ This project follows Clean Architecture principles as defined by Robert C. Marti
 The innermost layer containing the core business logic and entities.
 
 **Components:**
-- **Entities**: Core business objects (`User`, `PrivatePlanAccount`, etc.)
+- **Entities**: Core business objects (`User`, `PrivatePlanAccount`, `PrivatePlanDeposit`, etc.)
 - **Value Objects**: Immutable objects representing concepts (`Money`, `AccountId`, `UserId`)
-- **Domain Services**: Business logic that doesn't belong to a single entity (`AccountDomainService`)
+- **Domain Services**: Business logic that doesn't belong to a single entity (`PrivatePlanAccountService`, `PrivatePlanDepositService`)
 - **Domain Events**: Events that occur within the domain (`AccountDebitedEvent`, `InsufficientFundsEvent`)
 - **Domain Event Dispatcher**: Infrastructure for handling domain events
 
@@ -62,6 +62,20 @@ Implements Command Query Responsibility Segregation pattern.
 - **Command/Query Handlers**: Process commands and queries
 - **Events**: Represent domain events
 
+### 6. Jobs Layer (`src/jobs/`)
+Handles scheduled and background tasks.
+
+**Components:**
+- **Cron Jobs**: Scheduled tasks using `@nestjs/schedule`
+- **Job Services**: Business logic for background processing
+- **Test Data Management**: Utilities for setting up test scenarios
+- **Job Controllers**: API endpoints for manual job triggering
+
+**Key Features:**
+- **Daily Deposit Release**: Automatically processes deposits on their release date
+- **Manual Triggering**: API endpoints for testing and manual execution
+- **Test Data Setup**: Utilities for creating test deposits with proper user/account references
+
 ## Dependency Rule
 
 The fundamental rule of Clean Architecture is that **source code dependencies can only point inward**. 
@@ -84,34 +98,33 @@ The fundamental rule of Clean Architecture is that **source code dependencies ca
 ```
 src/
 ├── business/                 # Domain Layer
+│   ├── common/              # Common base classes and utilities
 │   ├── domain/              # Core business entities and logic
-│   │   ├── entities/        # Domain entities
-│   │   ├── value-objects/   # Value objects
-│   │   ├── events/          # Domain events
-│   │   └── services/        # Domain services
+│   │   ├── entities/        # Domain entities (User, PrivatePlanAccount, PrivatePlanDeposit, etc.)
+│   │   └── services/        # Domain services (PrivatePlanAccountService, PrivatePlanDepositService)
 │   ├── repository/          # Repository interfaces (ports)
 │   └── errors/              # Domain-specific errors
-├── application/             # Application Layer
-│   └── services/            # Application services
-├── infrastructure/          # Infrastructure Layer
-│   ├── db/                  # Database implementations
-│   │   ├── in-memory/       # In-memory database
-│   │   └── sqlite/          # SQLite database
-│   ├── event-handlers/      # Domain event handlers
-│   ├── services/            # Infrastructure services
-│   └── infrastructure.module.ts
 ├── cqrs/                    # CQRS Layer
 │   ├── account/             # Account-related commands/queries (AccountCqrsModule)
 │   └── withdrawal/          # Withdrawal-related commands/queries (WithdrawalCqrsModule)
+├── jobs/                    # Jobs Layer
+│   ├── deposit-release.job.ts    # Daily deposit release job
+│   ├── test-data-setup.ts        # Test data management
+│   └── jobs.module.ts            # Jobs module configuration
 ├── ports/                   # Interface Adapters Layer (PortsModule)
 │   ├── api/                 # REST API controllers
+│   │   ├── account/         # Account management endpoints
+│   │   ├── withdrawal/      # Withdrawal management endpoints
+│   │   └── jobs/            # Job management endpoints
 │   ├── webhooks/            # Webhook handlers
+│   │   └── banks/           # Bank webhook integrations
 │   ├── proxy/               # External service proxies
 │   └── mail/                # Email adapters
-├── repository/              # Infrastructure implementations
-│   ├── in-memory/           # In-memory database implementations
-│   ├── mongodb/             # MongoDB implementations
-│   └── sqlite/              # SQLite implementations
+├── infrastructure/          # Infrastructure implementations
+│   └── db/                  # Database implementations
+│       └── in-memory/       # In-memory database
+├── repository/              # Repository implementations
+│   └── in-memory/           # In-memory repository implementations
 └── config/                  # Configuration layer
 ```
 
@@ -142,6 +155,27 @@ const account = await accountApplicationService.getAccount({
 const account = await this.queryBus.execute(
   new GetAccountByIdQuery(userId, accountId)
 );
+```
+
+### Deposit Management System
+```typescript
+// Daily job processes deposits for release
+@Cron(CronExpression.EVERY_DAY_AT_2AM)
+async handleCron(): Promise<void> {
+  const today = new Date();
+  await this.privatePlanDepositService.processDepositsForRelease(today);
+}
+
+// Deposit entity with proper user/account references
+class PrivatePlanDeposit {
+  id: string;
+  userId: string;           // User who owns the deposit
+  accountId: string;        // Account where deposit will be credited
+  amount: number;
+  release_at: Date;         // When deposit becomes available
+  userCredited: boolean;    // Prevents double-crediting
+  // ... other fields
+}
 ```
 
 ## Testing Strategy

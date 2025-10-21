@@ -57,6 +57,7 @@ export class PrivatePlanWithdrawal extends BaseEntity {
     super();
     // Set default values first
     this.step = PrivatePlanWithdrawalStep.CREATED;
+    this.stepHistory = [];
     this.notifications = [];
     // Then assign all other properties
     if (partial) {

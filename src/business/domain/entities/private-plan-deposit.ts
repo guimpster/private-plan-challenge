@@ -3,6 +3,8 @@ import { BaseEntity } from "../../common/base-entity";
 
 export class PrivatePlanDeposit extends BaseEntity {
   id: string;
+  userId: string;
+  accountId: string;
   sourceBankAccountId: string;
   sourceTransactionId: string;
   destinationPrivatePlanAccountId: string;

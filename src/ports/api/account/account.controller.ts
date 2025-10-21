@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { GetAccountByIdQuery } from '../../../cqrs/account/queries/queries';
-import { AccountDto } from './dtos/account.dto';
+import { AccountDto, DepositDto, WithdrawalDto } from './dtos/account.dto';
 
 @Controller('api/v1/users/:userId/accounts')
 export class AccountController {
@@ -30,10 +30,30 @@ export class AccountController {
       });
     }
 
+    const deposits = account.deposits?.map(deposit => new DepositDto({
+      id: deposit.id,
+      amount: deposit.amount,
+      userCredited: deposit.userCredited,
+      created_at: deposit.created_at,
+      updated_at: deposit.updated_at
+    })) || [];
+
+    const withdrawals = account.withdrawals?.map(withdrawal => new WithdrawalDto({
+      id: withdrawal.id,
+      amount: withdrawal.amount,
+      step: withdrawal.step,
+      stepHistory: withdrawal.stepHistory || [],
+      notifications: withdrawal.notifications || [],
+      created_at: withdrawal.created_at,
+      updated_at: withdrawal.updated_at
+    })) || [];
+
     return new AccountDto({
       id: account.id,
       cashAvailableForWithdrawal: account.cashAvailableForWithdrawal,
       cashBalance: account.cashBalance,
+      deposits,
+      withdrawals,
       created_at: account.created_at,
       updated_at: account.updated_at
     });

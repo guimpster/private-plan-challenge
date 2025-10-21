@@ -3,8 +3,10 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { AccountController } from './api/account/account.controller';
 import { WithdrawalController } from './api/withdrawal/withdrawal.controller';
 import { BradescoController } from './webhooks/banks/bradesco/bradesco.controller';
+import { JobsController } from './api/jobs/jobs.controller';
 import { AccountCqrsModule } from '../cqrs/account/account.module';
 import { WithdrawalCqrsModule } from '../cqrs/withdrawal/withdrawal.module';
+import { JobsModule } from '../jobs/jobs.module';
 
 export interface PortsModuleOptions {
   database: 'inMemory';
@@ -26,11 +28,13 @@ export class PortsModule {
         CqrsModule,
         AccountCqrsModule,
         WithdrawalCqrsModule,
+        JobsModule,
       ],
       controllers: [
         AccountController,
         WithdrawalController,
         BradescoController,
+        JobsController,
       ],
       providers: [],
       exports: [],

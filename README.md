@@ -99,7 +99,7 @@ We provide comprehensive testing resources in the `postman/` folder:
 GET /api/v1/users/{userId}/accounts/{accountId}
 ```
 
-**Description**: Retrieve account details including balance and metadata.
+**Description**: Retrieve account details including balance, deposits, and withdrawals with their step history and notifications.
 
 **Response Example**:
 ```json
@@ -107,6 +107,43 @@ GET /api/v1/users/{userId}/accounts/{accountId}
   "id": "acc_123456789",
   "cashAvailableForWithdrawal": 1000.50,
   "cashBalance": 1500.75,
+  "deposits": [
+    {
+      "id": "deposit_123",
+      "amount": 500.00,
+      "userCredited": true,
+      "created_at": "2023-10-18T14:30:00.000Z",
+      "updated_at": "2023-10-18T14:30:00.000Z"
+    }
+  ],
+  "withdrawals": [
+    {
+      "id": "withdrawal_456",
+      "amount": 200.00,
+      "step": "COMPLETED",
+      "stepHistory": [
+        {
+          "step": "CREATED",
+          "stepRetrialCount": 0,
+          "at": "2023-10-18T14:30:00.000Z"
+        },
+        {
+          "step": "COMPLETED",
+          "stepRetrialCount": 0,
+          "at": "2023-10-18T14:35:00.000Z"
+        }
+      ],
+      "notifications": [
+        {
+          "type": "email",
+          "message": "Your withdrawal of $200.00 has been completed successfully",
+          "sentAt": "2023-10-18T14:35:00.000Z"
+        }
+      ],
+      "created_at": "2023-10-18T14:30:00.000Z",
+      "updated_at": "2023-10-18T14:35:00.000Z"
+    }
+  ],
   "created_at": "2023-10-18T14:30:00.000Z",
   "updated_at": "2023-10-18T15:45:00.000Z"
 }
@@ -138,6 +175,14 @@ POST /api/v1/users/{userId}/accounts/{accountId}/withdrawals
   "bankAccountId": "bank_987654321",
   "amount": 500.00,
   "status": "CREATED",
+  "stepHistory": [
+    {
+      "step": "CREATED",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:00.000Z"
+    }
+  ],
+  "notifications": [],
   "created_at": "2023-10-18T14:30:00.000Z"
 }
 ```
@@ -147,14 +192,134 @@ POST /api/v1/users/{userId}/accounts/{accountId}/withdrawals
 GET /api/v1/users/{userId}/accounts/{accountId}/withdrawals/{withdrawalId}
 ```
 
+**Response**:
+```json
+{
+  "id": "withdrawal_123456789",
+  "userId": "user_123456789",
+  "accountId": "acc_123456789",
+  "bankAccountId": "bank_987654321",
+  "amount": 500.00,
+  "status": "COMPLETED",
+  "stepHistory": [
+    {
+      "step": "CREATED",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:00.000Z"
+    },
+    {
+      "step": "DEBITING",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:05.000Z"
+    },
+    {
+      "step": "SENDING_TO_BANK",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:10.000Z"
+    },
+    {
+      "step": "RECEIVED_BANK_RESPONSE",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:15.000Z"
+    },
+    {
+      "step": "COMPLETED",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:20.000Z"
+    }
+  ],
+  "notifications": [
+    {
+      "type": "email",
+      "message": "Your withdrawal of $500.00 has been completed successfully",
+      "sentAt": "2023-10-18T14:30:20.000Z"
+    }
+  ],
+  "created_at": "2023-10-18T14:30:00.000Z"
+}
+```
+
+### Job Management
+
+#### Trigger Deposit Release Job
+```http
+POST /api/v1/jobs/deposit-release
+```
+
+**Description**: Manually trigger the deposit release job for a specific date.
+
+**Request Body**:
+```json
+{
+  "date": "2025-10-21"
+}
+```
+
+**Response**:
+```json
+{
+  "message": "Deposit release job completed successfully",
+  "date": "2025-10-21"
+}
+```
+
+#### Setup Test Data
+```http
+POST /api/v1/jobs/setup-test-data
+```
+
+**Description**: Setup test deposits for testing the daily job functionality.
+
+**Response**:
+```json
+{
+  "message": "Test data setup completed successfully",
+  "depositsCount": 3
+}
+```
+
+#### Get Test Deposits
+```http
+GET /api/v1/jobs/test-deposits
+```
+
+**Description**: Retrieve all test deposits with their current status.
+
+**Response**:
+```json
+[
+  {
+    "id": "deposit_1",
+    "userId": "19ca04c6-9c96-40f4-b7db-a55394b5a58d",
+    "accountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
+    "amount": 1000,
+    "release_at": "2025-10-21T16:43:37.311Z",
+    "userCredited": false,
+    "destinationAccountId": "e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472",
+    "comment": "Test deposit for today"
+  }
+]
+```
+
 ### Webhook Endpoints
 
 #### Bradesco Bank Webhook
 ```http
-POST /api/v1/webhooks/bradesco
+POST /bradesco
 ```
 
 **Description**: Receives bank transfer notifications from Bradesco.
+
+**Request Body**:
+```json
+{
+  "userId": "{{user_id}}",
+  "accountId": "{{account_id}}",
+  "withdrawalId": "{{withdrawal_id}}",
+  "success": true,
+  "error": null
+}
+```
 
 ## 🏛️ Architecture Layers
 
@@ -216,36 +381,42 @@ src/
 ├── business/                 # Domain Layer
 │   ├── common/              # Common base classes and utilities
 │   ├── domain/              # Core business entities and logic
+│   │   ├── entities/        # Domain entities (User, PrivatePlanAccount, PrivatePlanDeposit, etc.)
+│   │   └── services/        # Domain services
 │   ├── repository/          # Repository interfaces (ports)
-│   ├── service/             # Domain services
 │   └── errors/              # Domain-specific errors
-├── application/             # Application Layer
-│   └── services/            # Application services
-├── infrastructure/          # Infrastructure Layer
-│   ├── event-handlers/      # Domain event handlers
-│   └── services/            # External service implementations
 ├── cqrs/                    # CQRS Layer
 │   ├── account/             # Account-related commands/queries (AccountCqrsModule)
 │   └── withdrawal/          # Withdrawal-related commands/queries (WithdrawalCqrsModule)
+├── jobs/                    # Scheduled Jobs Layer
+│   ├── deposit-release.job.ts    # Daily deposit release job
+│   ├── test-data-setup.ts        # Test data management
+│   └── jobs.module.ts            # Jobs module configuration
 ├── ports/                   # Interface Adapters Layer (PortsModule)
 │   ├── api/                 # REST API controllers
+│   │   ├── account/         # Account management endpoints
+│   │   ├── withdrawal/      # Withdrawal management endpoints
+│   │   └── jobs/            # Job management endpoints
 │   ├── webhooks/            # Webhook handlers
+│   │   └── banks/           # Bank webhook integrations
 │   ├── proxy/               # External service proxies
 │   └── mail/                # Email adapters
 ├── infrastructure/          # Infrastructure implementations
-│   ├── db/                  # Database implementations
-│   │   ├── in-memory/       # In-memory database
-│   │   └── sqlite/          # SQLite database
-│   ├── event-handlers/      # Domain event handlers
-│   └── services/            # Infrastructure services
+│   └── db/                  # Database implementations
+│       └── in-memory/       # In-memory database
 ├── repository/              # Repository implementations
-│   ├── in-memory/           # In-memory repository implementations
-│   ├── mongodb/             # MongoDB repository implementations
-│   └── sqlite/              # SQLite repository implementations
+│   └── in-memory/           # In-memory repository implementations
 └── config/                  # Configuration management
 ```
 
 ## 🎯 Key Features
+
+### Deposit Management
+- **Scheduled Release**: Daily cron job automatically processes deposits on their release date
+- **User & Account Tracking**: Deposits include `userId` and `accountId` for proper account management
+- **Release Date Control**: Deposits have a `release_at` field to control when funds become available
+- **Credit Tracking**: `userCredited` flag prevents double-crediting of deposits
+- **Manual Testing**: Job endpoints allow manual triggering and test data setup
 
 ### Clean Architecture Benefits
 - **Independence**: Business rules are independent of frameworks and databases
