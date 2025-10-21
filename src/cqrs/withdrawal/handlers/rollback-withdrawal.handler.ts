@@ -1,9 +1,7 @@
-import { Injectable, Inject, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ICommandHandler, CommandHandler, EventBus } from '@nestjs/cqrs';
 import { RollbackWithdrawalCommand } from '../commands/commands';
 import { WithdrawalFailedEvent } from '../events/withdrawal-failed.event';
-import { PrivatePlanWithdrawalRepository } from '../../../business/repository/private-plan-withdrawal.repository';
-import { PrivatePlanAccountRepository } from '../../../business/repository/private-plan-account.repository';
 
 @Injectable()
 @CommandHandler(RollbackWithdrawalCommand)
@@ -11,10 +9,6 @@ export class RollbackWithdrawalHandler implements ICommandHandler<RollbackWithdr
   private readonly logger = new Logger(RollbackWithdrawalHandler.name);
 
   constructor(
-    @Inject('PrivatePlanWithdrawalRepository')
-    private readonly withdrawalRepository: PrivatePlanWithdrawalRepository,
-    @Inject('PrivatePlanAccountRepository')
-    private readonly accountRepository: PrivatePlanAccountRepository,
     private readonly eventBus: EventBus
   ) {}
 

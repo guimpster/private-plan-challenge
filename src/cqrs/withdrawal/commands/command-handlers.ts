@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler, EventBus } from "@nestjs/cqrs";
 import { Logger } from "@nestjs/common";
-import { CreateWithdrawalCommand, DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, ReceiveBankTransferCommand, RollbackDebitCommand, SendBankTransferCommand, SendToBankCommand, CompleteWithdrawalCommand } from "./commands";
+import { CreateWithdrawalCommand, DebitAccountCommand, FinalizeWithdrawalCommand, NotifyUserCommand, ReceiveBankTransferCommand, RollbackDebitCommand, SendBankTransferCommand, SendToBankCommand, CompleteWithdrawalCommand, RecordNotificationCommand } from "./commands";
 import { PrivatePlanWithdrawalService } from "src/business/domain/services/private-plan-withdrawal.service";
 import { NotificationService } from "src/business/domain/services/notification.service";
 import { PrivatePlanWithdrawal, PrivatePlanWithdrawalStep } from "src/business/domain/entities/private-plan-withdrawal";
@@ -8,6 +8,7 @@ import { WithdrawalDebitedEvent } from "../events/withdrawal-debited.event";
 import { WithdrawalSentToBankEvent } from "../events/withdrawal-sent-to-bank.event";
 import { WithdrawalInsufficientFundsEvent } from "../events/withdrawal-insufficient-funds.event";
 import { NotEnoughFunds } from "src/business/errors/errors";
+import { PrivatePlanWithdrawalRepository } from "src/business/repository/private-plan-withdrawal.repository";
 
 @CommandHandler(CreateWithdrawalCommand)
 export class CreateWithdrawalHandler implements ICommandHandler<CreateWithdrawalCommand> {
@@ -301,6 +302,48 @@ export class NotifyUserHandler implements ICommandHandler<NotifyUserCommand> {
       await this.notificationService.notifyUserOfSuccess(command.userId, command.accountId, command.withdrawalId);
     } else {
       await this.notificationService.notifyUserOfFailure(command.userId, command.accountId, command.withdrawalId, command.error);
+    }
+  }
+}
+
+@CommandHandler(RecordNotificationCommand)
+export class RecordNotificationHandler implements ICommandHandler<RecordNotificationCommand> {
+  private readonly logger = new Logger(RecordNotificationHandler.name);
+
+  constructor(
+    private readonly withdrawalRepository: PrivatePlanWithdrawalRepository
+  ) {}
+
+  async execute(command: RecordNotificationCommand): Promise<void> {
+    const { userId, accountId, withdrawalId, type, message } = command;
+
+    try {
+      const withdrawal = await this.withdrawalRepository.getById(userId, accountId, withdrawalId);
+      
+      if (!withdrawal) {
+        this.logger.error(`Withdrawal ${withdrawalId} not found for user ${userId} and account ${accountId}`);
+        return;
+      }
+
+      // Add the notification to the withdrawal's notifications array
+      const notification = {
+        type,
+        message,
+        sentAt: new Date(),
+        userId
+      };
+
+      const updatedNotifications = [...(withdrawal.notifications || []), notification];
+
+      // Update the withdrawal with the new notification
+      await this.withdrawalRepository.updateById(userId, accountId, withdrawalId, {
+        notifications: updatedNotifications,
+        updated_at: new Date()
+      });
+
+      this.logger.log(`Notification recorded for withdrawal ${withdrawalId}: ${type}`);
+    } catch (error) {
+      this.logger.error(`Failed to record notification for withdrawal ${withdrawalId}:`, error.message);
     }
   }
 }
