@@ -25,7 +25,7 @@ export class InMemoryPrivatePlanWithdrawalRepository extends PrivatePlanWithdraw
         return Promise.resolve(newWithdrawal);
     }
 
-    updateById(userId: string, accountId: string, id: string, privatePlanWithdrawal: PrivatePlanWithdrawal): Promise<PrivatePlanWithdrawal> {
+    updateById(userId: string, accountId: string, id: string, privatePlanWithdrawal: Partial<PrivatePlanWithdrawal>): Promise<PrivatePlanWithdrawal> {
         const user = this.db.users.find(u => u.id === userId);
         if (!user) throw new Error(`User ${userId} not found`);
 

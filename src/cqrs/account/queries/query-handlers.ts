@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { GetAccountByIdQuery } from "./queries";
-import { AccountApplicationService } from "src/application/services/account-application-service";
+import { AccountApplicationService } from "src/business/domain/services/account-application-service";
 import { PrivatePlanAccount } from "src/business/domain/entities/private-plan-account";
 
 @QueryHandler(GetAccountByIdQuery)

@@ -27,6 +27,7 @@ export class WithdrawalResponseDto {
   amount: number;
   status: string;
   created_at: Date;
+  stepHistory: { step: string; stepRetrialCount: number; at: Date }[];
 
   constructor(partial: Partial<WithdrawalResponseDto>) {
     Object.assign(this, partial);

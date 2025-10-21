@@ -324,6 +324,7 @@ components:
             - CREATED
             - DEBITING
             - SENDING_TO_BANK
+            - RECEIVED_BANK_RESPONSE
             - COMPLETED
             - FAILED
             - ROLLING_BACK
@@ -334,6 +335,94 @@ components:
           format: date-time
           description: Withdrawal creation timestamp
           example: '2023-10-18T14:30:00.000Z'
+        stepHistory:
+          type: array
+          description: History of withdrawal steps with timestamps
+          items:
+            type: object
+            required:
+              - step
+              - stepRetrialCount
+              - at
+            properties:
+              step:
+                type: string
+                description: Step name
+                enum:
+                  - CREATED
+                  - DEBITING
+                  - SENDING_TO_BANK
+                  - RECEIVED_BANK_RESPONSE
+                  - COMPLETED
+                  - FAILED
+                  - ROLLING_BACK
+                  - INSUFFICIENT_FUNDS
+                example: CREATED
+              stepRetrialCount:
+                type: number
+                description: Number of retries for this step
+                example: 0
+              at:
+                type: string
+                format: date-time
+                description: Timestamp when this step occurred
+                example: '2023-10-18T14:30:00.000Z'
+          example:
+            - step: CREATED
+              stepRetrialCount: 0
+              at: '2023-10-18T14:30:00.000Z'
+            - step: DEBITING
+              stepRetrialCount: 0
+              at: '2023-10-18T14:30:05.000Z'
+            - step: SENDING_TO_BANK
+              stepRetrialCount: 0
+              at: '2023-10-18T14:30:10.000Z'
+            - step: RECEIVED_BANK_RESPONSE
+              stepRetrialCount: 0
+              at: '2023-10-18T14:30:15.000Z'
+            - step: COMPLETED
+              stepRetrialCount: 0
+              at: '2023-10-18T14:30:20.000Z'
+          examples:
+            successful_flow:
+              summary: Successful withdrawal flow
+              value:
+                - step: CREATED
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:00.000Z'
+                - step: DEBITING
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:05.000Z'
+                - step: SENDING_TO_BANK
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:10.000Z'
+                - step: RECEIVED_BANK_RESPONSE
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:15.000Z'
+                - step: COMPLETED
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:20.000Z'
+            failed_flow_with_rollback:
+              summary: Failed withdrawal flow with rollback
+              value:
+                - step: CREATED
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:00.000Z'
+                - step: DEBITING
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:05.000Z'
+                - step: SENDING_TO_BANK
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:10.000Z'
+                - step: RECEIVED_BANK_RESPONSE
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:15.000Z'
+                - step: ROLLING_BACK
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:20.000Z'
+                - step: FAILED
+                  stepRetrialCount: 0
+                  at: '2023-10-18T14:30:25.000Z'
 
     ErrorResponseDto:
       type: object

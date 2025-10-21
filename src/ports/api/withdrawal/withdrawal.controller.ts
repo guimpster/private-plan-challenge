@@ -13,16 +13,16 @@ import {
 } from '@nestjs/common';
 import { PrivatePlanWithdrawalService } from 'src/business/domain/services/private-plan-withdrawal.service';
 import { CreateWithdrawalDto, WithdrawalResponseDto } from './dtos/process-withdrawal.dto';
-import { CommandBus } from '@nestjs/cqrs';
-import { DebitAccountCommand } from 'src/cqrs/withdrawal/commands';
+import { EventBus } from '@nestjs/cqrs';
 import { PrivatePlanWithdrawalStep } from 'src/business/domain/entities/private-plan-withdrawal';
+import { WithdrawalCreatedEvent } from 'src/cqrs/withdrawal/events';
 
 @Controller('api/v1/users/:userId/accounts/:accountId/withdrawals')
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 export class WithdrawalController {
   constructor(
     private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService, 
-    private readonly commandBus: CommandBus
+    private readonly eventBus: EventBus
   ) {}
 
   @Post()
@@ -52,12 +52,16 @@ export class WithdrawalController {
         dto.amount
       );
 
-      await this.commandBus.execute(
-        new DebitAccountCommand(
+      // Emit event to start the saga
+      this.eventBus.publish(
+        new WithdrawalCreatedEvent(
+          withdrawal.id,
           dto.userId,
           dto.accountId,
-          withdrawal.id
-        ),
+          dto.bankAccountId,
+          dto.amount,
+          withdrawal.created_at
+        )
       );
 
       return new WithdrawalResponseDto({
@@ -67,7 +71,8 @@ export class WithdrawalController {
         bankAccountId: dto.bankAccountId,
         amount: dto.amount,
         status: PrivatePlanWithdrawalStep.CREATED,
-        created_at: withdrawal.created_at || new Date()
+        created_at: withdrawal.created_at,
+        stepHistory: withdrawal.stepHistory || []
       });
     } catch (error) {
       if (error.message?.includes('not found')) {
@@ -112,7 +117,8 @@ export class WithdrawalController {
       bankAccountId: withdrawal.destinationBankAccountId,
       amount: withdrawal.amount,
       status: withdrawal.step,
-      created_at: withdrawal.created_at || new Date()
+      created_at: withdrawal.created_at,
+      stepHistory: withdrawal.stepHistory || []
     });
   }
 }

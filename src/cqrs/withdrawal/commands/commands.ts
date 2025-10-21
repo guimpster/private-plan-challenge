@@ -53,3 +53,26 @@ export class NotifyUserCommand {
     public readonly error: BusinessError,
   ) {}
 }
+
+// Additional commands for the saga
+export class SendToBankCommand {
+  constructor(
+    public readonly withdrawalId: string,
+    public readonly amount: number,
+    public readonly bankAccountId: string
+  ) {}
+}
+
+export class CompleteWithdrawalCommand {
+  constructor(
+    public readonly withdrawalId: string,
+    public readonly transactionId: string
+  ) {}
+}
+
+export class RollbackWithdrawalCommand {
+  constructor(
+    public readonly withdrawalId: string,
+    public readonly reason: string
+  ) {}
+}
