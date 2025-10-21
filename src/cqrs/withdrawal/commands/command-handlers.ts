@@ -8,7 +8,6 @@ import { WithdrawalDebitedEvent } from "../events/withdrawal-debited.event";
 import { WithdrawalSentToBankEvent } from "../events/withdrawal-sent-to-bank.event";
 import { WithdrawalInsufficientFundsEvent } from "../events/withdrawal-insufficient-funds.event";
 import { NotEnoughFunds } from "src/business/errors/errors";
-import { PrivatePlanWithdrawalRepository } from "src/business/repository/private-plan-withdrawal.repository";
 
 @CommandHandler(CreateWithdrawalCommand)
 export class CreateWithdrawalHandler implements ICommandHandler<CreateWithdrawalCommand> {
@@ -311,14 +310,14 @@ export class RecordNotificationHandler implements ICommandHandler<RecordNotifica
   private readonly logger = new Logger(RecordNotificationHandler.name);
 
   constructor(
-    private readonly withdrawalRepository: PrivatePlanWithdrawalRepository
+    private readonly privatePlanWithdrawalService: PrivatePlanWithdrawalService
   ) {}
 
   async execute(command: RecordNotificationCommand): Promise<void> {
     const { userId, accountId, withdrawalId, type, message } = command;
 
     try {
-      const withdrawal = await this.withdrawalRepository.getById(userId, accountId, withdrawalId);
+      const withdrawal = await this.privatePlanWithdrawalService.getWithdrawalById(userId, accountId, withdrawalId);
       
       if (!withdrawal) {
         this.logger.error(`Withdrawal ${withdrawalId} not found for user ${userId} and account ${accountId}`);
@@ -335,11 +334,13 @@ export class RecordNotificationHandler implements ICommandHandler<RecordNotifica
 
       const updatedNotifications = [...(withdrawal.notifications || []), notification];
 
-      // Update the withdrawal with the new notification
-      await this.withdrawalRepository.updateById(userId, accountId, withdrawalId, {
-        notifications: updatedNotifications,
-        updated_at: new Date()
-      });
+      // Update the withdrawal with the new notification using the service
+      await this.privatePlanWithdrawalService.updateWithdrawalNotifications(
+        userId, 
+        accountId, 
+        withdrawalId, 
+        updatedNotifications
+      );
 
       this.logger.log(`Notification recorded for withdrawal ${withdrawalId}: ${type}`);
     } catch (error) {

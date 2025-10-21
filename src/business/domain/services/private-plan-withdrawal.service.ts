@@ -231,4 +231,21 @@ export class PrivatePlanWithdrawalService {
 
     return withdrawal.stepHistory;
   }
+
+  /**
+   * Updates the notifications array for a withdrawal
+   */
+  async updateWithdrawalNotifications(
+    userId: string,
+    accountId: string,
+    withdrawalId: string,
+    notifications: any[]
+  ): Promise<void> {
+    await this.privatePlanWithdrawalRepository.updateById(userId, accountId, withdrawalId, {
+      notifications,
+      updated_at: new Date()
+    });
+
+    this.logger.log(`📧 Notifications updated for withdrawal ${withdrawalId}`);
+  }
 }

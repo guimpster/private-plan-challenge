@@ -9,9 +9,14 @@ import { PrivatePlanWithdrawalRepository } from 'src/business/repository/private
 import { InMemoryPrivatePlanWithdrawalRepository } from 'src/repository/in-memory/in-memory-private-plan-withdrawal.repository';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { WithdrawalSagaModule } from './sagas/withdrawal-saga.module';
+import { BankService } from 'src/business/domain/services/bank.service';
+import { NotificationService } from 'src/business/domain/services/notification.service';
+import { BradescoProxy } from 'src/ports/proxy/bradesco.proxy';
+import { MockNotificationService } from 'src/ports/mail/mock.notification';
+import { InMemoryPrivatePlanModule } from 'src/repository/in-memory/in-memory-private-plan-account.module';
 
 @Module({
-  imports: [CqrsModule, InfrastructureModule, WithdrawalSagaModule],
+  imports: [CqrsModule, InfrastructureModule, WithdrawalSagaModule, InMemoryPrivatePlanModule],
   providers: [
     ...Object.values(CommandHandlers).filter(v => typeof v === 'function'),
     ...Object.values(QueryHandlers).filter(v => typeof v === 'function'),
@@ -23,7 +28,15 @@ import { WithdrawalSagaModule } from './sagas/withdrawal-saga.module';
     {
       provide: PrivatePlanWithdrawalRepository,
       useExisting: InMemoryPrivatePlanWithdrawalRepository,
-    }
+    },
+    {
+      provide: BankService,
+      useClass: BradescoProxy,
+    },
+    {
+      provide: NotificationService,
+      useClass: MockNotificationService,
+    },
   ],
   exports: [PrivatePlanWithdrawalService, CqrsModule],
 })

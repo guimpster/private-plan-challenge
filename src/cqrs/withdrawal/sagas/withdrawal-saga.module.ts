@@ -2,36 +2,32 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { WithdrawalSaga } from './withdrawal-saga';
 import { PrivatePlanWithdrawalService } from '../../../business/domain/services/private-plan-withdrawal.service';
-import { PrivatePlanWithdrawalRepository } from '../../../business/repository/private-plan-withdrawal.repository';
 import { PrivatePlanAccountRepository } from '../../../business/repository/private-plan-account.repository';
-import { InMemoryPrivatePlanWithdrawalRepository } from '../../../repository/in-memory/in-memory-private-plan-withdrawal.repository';
 import { InMemoryPrivatePlanAccountRepository } from '../../../repository/in-memory/in-memory-private-plan-account.repository';
+import { PrivatePlanWithdrawalRepository } from '../../../business/repository/private-plan-withdrawal.repository';
+import { InMemoryPrivatePlanWithdrawalRepository } from '../../../repository/in-memory/in-memory-private-plan-withdrawal.repository';
+import { BankService } from '../../../business/domain/services/bank.service';
+import { BradescoProxy } from '../../../ports/proxy/bradesco.proxy';
 import { InfrastructureModule } from '../../../infrastructure/infrastructure.module';
-import { InMemoryDbModule } from '../../../infrastructure/db/in-memory/in-memory-db';
+import { InMemoryPrivatePlanModule } from '../../../repository/in-memory/in-memory-private-plan-account.module';
 
 @Module({
-  imports: [CqrsModule, InfrastructureModule, InMemoryDbModule.forRoot()],
+  imports: [CqrsModule, InfrastructureModule, InMemoryPrivatePlanModule],
   providers: [
     WithdrawalSaga,
     PrivatePlanWithdrawalService,
-    InMemoryPrivatePlanWithdrawalRepository,
-    InMemoryPrivatePlanAccountRepository,
-    {
-      provide: PrivatePlanWithdrawalRepository,
-      useExisting: InMemoryPrivatePlanWithdrawalRepository
-    },
     {
       provide: PrivatePlanAccountRepository,
-      useExisting: InMemoryPrivatePlanAccountRepository
+      useExisting: InMemoryPrivatePlanAccountRepository,
     },
     {
-      provide: 'PrivatePlanWithdrawalRepository',
-      useExisting: InMemoryPrivatePlanWithdrawalRepository
+      provide: PrivatePlanWithdrawalRepository,
+      useExisting: InMemoryPrivatePlanWithdrawalRepository,
     },
     {
-      provide: 'PrivatePlanAccountRepository',
-      useExisting: InMemoryPrivatePlanAccountRepository
-    }
+      provide: BankService,
+      useClass: BradescoProxy,
+    },
   ],
 })
 export class WithdrawalSagaModule {}

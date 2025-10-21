@@ -5,9 +5,10 @@ import { PrivatePlanAccountService } from 'src/business/domain/services/private-
 import { PrivatePlanAccountRepository } from 'src/business/repository/private-plan-account.repository';
 import { InMemoryPrivatePlanAccountRepository } from 'src/repository/in-memory/in-memory-private-plan-account.repository';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
+import { InMemoryPrivatePlanModule } from 'src/repository/in-memory/in-memory-private-plan-account.module';
 
 @Module({
-  imports: [CqrsModule, InfrastructureModule],
+  imports: [CqrsModule, InfrastructureModule, InMemoryPrivatePlanModule],
   providers: [
     GetAccountByIdHandler,
     PrivatePlanAccountService,
