@@ -7,13 +7,13 @@ import { AccountCqrsModule } from '../cqrs/account/account.module';
 import { WithdrawalsModule } from '../cqrs/withdrawal/withdrawal.module';
 import { InfrastructureModule } from '../infrastructure/infrastructure.module';
 
-export interface PortModuleOptions {
+export interface PortsModuleOptions {
   database: 'inMemory';
 }
 
 @Module({})
-export class PortModule {
-  static register(options: PortModuleOptions): DynamicModule {
+export class PortsModule {
+  static register(options: PortsModuleOptions): DynamicModule {
     const { database } = options;
 
     // Validate database option
@@ -22,7 +22,7 @@ export class PortModule {
     }
 
     return {
-      module: PortModule,
+      module: PortsModule,
       imports: [
         CqrsModule,
         InfrastructureModule,
