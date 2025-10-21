@@ -84,13 +84,6 @@ export class CompleteWithdrawalCommand {
   ) {}
 }
 
-export class RollbackWithdrawalCommand {
-  constructor(
-    public readonly withdrawalId: string,
-    public readonly reason: string
-  ) {}
-}
-
 export class RecordNotificationCommand {
   constructor(
     public readonly userId: string,

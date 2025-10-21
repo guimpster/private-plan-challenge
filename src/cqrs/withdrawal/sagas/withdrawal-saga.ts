@@ -3,7 +3,7 @@ import { ICommand, IEvent, ofType, Saga } from '@nestjs/cqrs';
 import { Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { WithdrawalCreatedEvent } from '../events/withdrawal-created.event';
-import { DebitAccountCommand, SendToBankCommand, RollbackDebitCommand, CompleteWithdrawalCommand, RollbackWithdrawalCommand } from '../commands/commands';
+import { DebitAccountCommand, SendToBankCommand, RollbackDebitCommand, CompleteWithdrawalCommand } from '../commands/commands';
 import { WithdrawalDebitedEvent } from '../events/withdrawal-debited.event';
 import { WithdrawalSentToBankEvent } from '../events/withdrawal-sent-to-bank.event';
 import { BankResponseReceivedEvent } from '../events/bank-response-received.event';
