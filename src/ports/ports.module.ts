@@ -6,7 +6,7 @@ import { BradescoController } from './webhooks/banks/bradesco/bradesco.controlle
 import { JobsController } from './api/jobs/jobs.controller';
 import { AccountCqrsModule } from '../cqrs/account/account.module';
 import { WithdrawalCqrsModule } from '../cqrs/withdrawal/withdrawal.module';
-import { JobsModule } from '../jobs/jobs.module';
+import { DepositCqrsModule } from '../cqrs/deposit/deposit.module';
 
 export interface PortsModuleOptions {
   database: 'inMemory';
@@ -28,7 +28,7 @@ export class PortsModule {
         CqrsModule,
         AccountCqrsModule,
         WithdrawalCqrsModule,
-        JobsModule,
+        DepositCqrsModule,
       ],
       controllers: [
         AccountController,

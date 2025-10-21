@@ -1,14 +1,13 @@
 import { Controller, Post, Body, Get, Logger } from '@nestjs/common';
-import { DepositReleaseJob } from '../../../jobs/deposit-release.job';
-import { TestDataSetup } from '../../../jobs/test-data-setup';
+import { CommandBus } from '@nestjs/cqrs';
+import { ProcessDepositsForReleaseCommand, SetupTestDataCommand, GetTestDepositsCommand } from '../../../cqrs/deposit/commands/commands';
 
 @Controller('api/v1/jobs')
 export class JobsController {
   private readonly logger = new Logger(JobsController.name);
 
   constructor(
-    private readonly depositReleaseJob: DepositReleaseJob,
-    private readonly testDataSetup: TestDataSetup,
+    private readonly commandBus: CommandBus,
   ) {}
 
   /**
@@ -22,7 +21,7 @@ export class JobsController {
     this.logger.log(`🔧 Manual trigger requested for deposit release job on ${date.toISOString().split('T')[0]}`);
     
     try {
-      await this.depositReleaseJob.processDepositsForDate(date);
+      await this.commandBus.execute(new ProcessDepositsForReleaseCommand(date));
       
       return {
         message: 'Deposit release job completed successfully',
@@ -42,8 +41,8 @@ export class JobsController {
     this.logger.log('🔧 Setting up test data for deposit release job');
     
     try {
-      this.testDataSetup.setupTestDeposits();
-      const deposits = this.testDataSetup.getAllTestDeposits();
+      await this.commandBus.execute(new SetupTestDataCommand());
+      const deposits = await this.commandBus.execute(new GetTestDepositsCommand());
       
       return {
         message: 'Test data setup completed successfully',
@@ -63,17 +62,8 @@ export class JobsController {
     this.logger.log('📊 Retrieving test deposits');
     
     try {
-      const deposits = this.testDataSetup.getAllTestDeposits();
-      return deposits.map(deposit => ({
-        id: deposit.id,
-        userId: deposit.userId,
-        accountId: deposit.accountId,
-        amount: deposit.amount,
-        release_at: deposit.release_at,
-        userCredited: deposit.userCredited,
-        destinationAccountId: deposit.destinationPrivatePlanAccountId,
-        comment: deposit.comment
-      }));
+      const deposits = await this.commandBus.execute(new GetTestDepositsCommand());
+      return deposits;
     } catch (error) {
       this.logger.error('❌ Failed to retrieve test deposits:', error.message);
       throw error;
