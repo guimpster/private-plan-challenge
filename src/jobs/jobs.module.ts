@@ -34,3 +34,4 @@ import { DepositCqrsModule } from '../cqrs/deposit/deposit.module';
   exports: [DepositReleaseJob, PrivatePlanDepositService, TestDataSetup],
 })
 export class JobsModule {}
+

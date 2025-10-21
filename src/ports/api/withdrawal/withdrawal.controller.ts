@@ -18,6 +18,7 @@ import { PrivatePlanWithdrawalStep } from 'src/business/domain/entities/private-
 import { WithdrawalCreatedEvent } from 'src/cqrs/withdrawal/events';
 import { GetWithdrawalByIdQuery } from 'src/cqrs/withdrawal/queries/queries';
 import { CreateWithdrawalCommand } from 'src/cqrs/withdrawal/commands/commands';
+import { GetAccountByIdQuery } from 'src/cqrs/account/queries/queries';
 
 @Controller('api/v1/users/:userId/accounts/:accountId/withdrawals')
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -48,13 +49,45 @@ export class WithdrawalController {
         });
       }
 
+      // If no amount is provided, use the entire cashAvailableForWithdrawal
+      let withdrawalAmount: number;
+      if (!dto.amount) {
+        const account = await this.queryBus.execute(
+          new GetAccountByIdQuery(userId, accountId)
+        );
+        
+        if (!account) {
+          throw new NotFoundException({
+            statusCode: HttpStatus.NOT_FOUND,
+            message: `Account ${accountId} not found for user ${userId}`,
+            error: 'Not Found',
+            timestamp: new Date().toISOString(),
+            path: `/api/v1/users/${userId}/accounts/${accountId}/withdrawals`
+          });
+        }
+
+        withdrawalAmount = account.cashAvailableForWithdrawal;
+        
+        if (withdrawalAmount <= 0) {
+          throw new BadRequestException({
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: 'No funds available for withdrawal',
+            error: 'Bad Request',
+            timestamp: new Date().toISOString(),
+            path: `/api/v1/users/${userId}/accounts/${accountId}/withdrawals`
+          });
+        }
+      } else {
+        withdrawalAmount = dto.amount;
+      }
+
       const withdrawal = await this.commandBus.execute(
         new CreateWithdrawalCommand(
           dto.userId, 
           dto.accountId, 
           dto.bankAccountId, 
           'whatsapp', 
-          dto.amount
+          withdrawalAmount
         )
       );
 
@@ -65,7 +98,7 @@ export class WithdrawalController {
           dto.userId,
           dto.accountId,
           dto.bankAccountId,
-          dto.amount,
+          withdrawalAmount,
           withdrawal.created_at
         )
       );
@@ -75,7 +108,7 @@ export class WithdrawalController {
         userId: dto.userId,
         accountId: dto.accountId,
         bankAccountId: dto.bankAccountId,
-        amount: dto.amount,
+        amount: withdrawalAmount,
         status: PrivatePlanWithdrawalStep.CREATED,
         created_at: withdrawal.created_at,
         stepHistory: withdrawal.stepHistory || [],

@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsNotEmpty, Min } from 'class-validator';
+import { IsString, IsNumber, IsNotEmpty, Min, IsOptional } from 'class-validator';
 import { BaseEntity } from 'src/business/common/base-entity';
 
 export class CreateWithdrawalDto extends BaseEntity {
@@ -16,7 +16,8 @@ export class CreateWithdrawalDto extends BaseEntity {
 
   @IsNumber()
   @Min(0.01)
-  amount: number;
+  @IsOptional()
+  amount?: number;
 }
 
 export class WithdrawalResponseDto {
