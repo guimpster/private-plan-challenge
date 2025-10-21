@@ -1,24 +1,26 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { WithdrawalSaga } from './withdrawal-saga';
-import { WithdrawalStepHistoryService } from '../../../business/domain/services/withdrawal-step-history.service';
+import { PrivatePlanWithdrawalService } from '../../../business/domain/services/private-plan-withdrawal.service';
 import { PrivatePlanWithdrawalRepository } from '../../../business/repository/private-plan-withdrawal.repository';
 import { PrivatePlanAccountRepository } from '../../../business/repository/private-plan-account.repository';
+import { InMemoryPrivatePlanWithdrawalRepository } from '../../../repository/in-memory/in-memory-private-plan-withdrawal.repository';
+import { InMemoryPrivatePlanAccountRepository } from '../../../repository/in-memory/in-memory-private-plan-account.repository';
 import { RollbackWithdrawalHandler } from '../handlers/rollback-withdrawal.handler';
 
 @Module({
   imports: [CqrsModule],
   providers: [
     WithdrawalSaga,
-    WithdrawalStepHistoryService,
+    PrivatePlanWithdrawalService,
     RollbackWithdrawalHandler,
     {
       provide: 'PrivatePlanWithdrawalRepository',
-      useClass: PrivatePlanWithdrawalRepository
+      useExisting: InMemoryPrivatePlanWithdrawalRepository
     },
     {
       provide: 'PrivatePlanAccountRepository',
-      useClass: PrivatePlanAccountRepository
+      useExisting: InMemoryPrivatePlanAccountRepository
     }
   ],
 })

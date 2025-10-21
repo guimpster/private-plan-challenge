@@ -412,6 +412,8 @@
 									"    pm.expect(responseJson).to.have.property('amount');",
 									"    pm.expect(responseJson).to.have.property('status');",
 									"    pm.expect(responseJson).to.have.property('created_at');",
+									"    pm.expect(responseJson).to.have.property('stepHistory');",
+									"    pm.expect(responseJson).to.have.property('notifications');",
 									"});",
 									"",
 									"// Validate that the withdrawal ID matches the requested ID",
@@ -425,7 +427,9 @@
 									"    id: responseJson.id,",
 									"    status: responseJson.status,",
 									"    amount: responseJson.amount,",
-									"    created_at: responseJson.created_at",
+									"    created_at: responseJson.created_at,",
+									"    stepHistory: responseJson.stepHistory,",
+									"    notifications: responseJson.notifications",
 									"});"
 								]
 							}

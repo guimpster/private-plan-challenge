@@ -49,6 +49,7 @@ export class PrivatePlanWithdrawal extends BaseEntity {
   step: PrivatePlanWithdrawalStep;
   stepRetrialCount: number;
   stepHistory: { step: PrivatePlanWithdrawalStep; stepRetrialCount: number; at: Date }[];
+  notifications: { type: 'SUCCESS' | 'FAILURE'; message: string; sentAt: Date; userId: string }[];
   created_at: Date;
   updated_at: Date;
 
@@ -56,6 +57,7 @@ export class PrivatePlanWithdrawal extends BaseEntity {
     super();
     // Set default values first
     this.step = PrivatePlanWithdrawalStep.CREATED;
+    this.notifications = [];
     // Then assign all other properties
     if (partial) {
       Object.assign(this, partial);

@@ -6,7 +6,7 @@ import {
   HttpStatus
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import { GetAccountByIdQuery } from '../../../cqrs/account/queries';
+import { GetAccountByIdQuery } from '../../../cqrs/account/queries/queries';
 import { AccountDto } from './dtos/account.dto';
 
 @Controller('api/v1/users/:userId/accounts')

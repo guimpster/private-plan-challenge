@@ -28,6 +28,7 @@ export class WithdrawalResponseDto {
   status: string;
   created_at: Date;
   stepHistory: { step: string; stepRetrialCount: number; at: Date }[];
+  notifications: { type: 'SUCCESS' | 'FAILURE'; message: string; sentAt: Date; userId: string }[];
 
   constructor(partial: Partial<WithdrawalResponseDto>) {
     Object.assign(this, partial);

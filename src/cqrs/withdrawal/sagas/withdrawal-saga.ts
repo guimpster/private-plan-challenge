@@ -13,13 +13,13 @@ import { BankTransferCompletedEvent } from '../events/bank-transfer-completed.ev
 import { CompleteWithdrawalCommand } from '../commands/commands';
 import { WithdrawalFailedEvent } from '../events/withdrawal-failed.event';
 import { RollbackWithdrawalCommand } from '../commands/commands';
-import { WithdrawalStepHistoryService } from '../../../business/domain/services/withdrawal-step-history.service';
+import { PrivatePlanWithdrawalService } from '../../../business/domain/services/private-plan-withdrawal.service';
 import { PrivatePlanWithdrawalStep } from '../../../business/domain/entities/private-plan-withdrawal';
 
 @Injectable()
 export class WithdrawalSaga {
   constructor(
-    private readonly stepHistoryService: WithdrawalStepHistoryService
+    private readonly withdrawalService: PrivatePlanWithdrawalService
   ) {}
 
   /**
@@ -33,7 +33,7 @@ export class WithdrawalSaga {
       ofType(WithdrawalCreatedEvent),
       tap(async (event: WithdrawalCreatedEvent) => {
         console.log('🔄 Withdrawal Saga: Starting withdrawal process for ID:', event.withdrawalId);
-        await this.stepHistoryService.addStepToHistory(
+            await this.withdrawalService.addStepToHistory(
           event.userId,
           event.accountId,
           event.withdrawalId,
@@ -56,7 +56,7 @@ export class WithdrawalSaga {
       ofType(WithdrawalDebitedEvent),
       tap(async (event: WithdrawalDebitedEvent) => {
         console.log('🔄 Withdrawal Saga: Account debited, sending to bank for ID:', event.withdrawalId);
-        await this.stepHistoryService.addStepToHistory(
+            await this.withdrawalService.addStepToHistory(
           event.userId,
           event.accountId,
           event.withdrawalId,
@@ -74,12 +74,12 @@ export class WithdrawalSaga {
   };
 
   @Saga()
-  withdrawalSentToBank = (events$: Observable<IEvent>): Observable<ICommand> => {
+  withdrawalSentToBank = (events$: Observable<IEvent>): Observable<ICommand | undefined> => {
     return events$.pipe(
       ofType(WithdrawalSentToBankEvent),
       tap(async (event: WithdrawalSentToBankEvent) => {
         console.log('🔄 Withdrawal Saga: Withdrawal sent to bank, waiting for response for ID:', event.withdrawalId);
-        await this.stepHistoryService.addStepToHistory(
+            await this.withdrawalService.addStepToHistory(
           event.userId,
           event.accountId,
           event.withdrawalId,
@@ -89,7 +89,7 @@ export class WithdrawalSaga {
       map((event: WithdrawalSentToBankEvent) => {
         // This would typically start a timeout or polling mechanism
         // For now, we'll just log that it's been sent
-        return null; // No immediate command needed
+        return undefined; // No immediate command needed
       })
     );
   };
@@ -100,7 +100,7 @@ export class WithdrawalSaga {
       ofType(BankResponseReceivedEvent),
       tap(async (event: BankResponseReceivedEvent) => {
         console.log('🔄 Withdrawal Saga: Bank response received for withdrawal ID:', event.withdrawalId, 'Status:', event.status);
-        await this.stepHistoryService.addStepToHistory(
+            await this.withdrawalService.addStepToHistory(
           event.userId,
           event.accountId,
           event.withdrawalId,
@@ -123,7 +123,7 @@ export class WithdrawalSaga {
       ofType(WithdrawalRollingBackEvent),
       tap(async (event: WithdrawalRollingBackEvent) => {
         console.log('🔄 Withdrawal Saga: Starting rollback for withdrawal ID:', event.withdrawalId, 'Reason:', event.reason);
-        await this.stepHistoryService.addStepToHistory(
+            await this.withdrawalService.addStepToHistory(
           event.userId,
           event.accountId,
           event.withdrawalId,
@@ -146,7 +146,7 @@ export class WithdrawalSaga {
       ofType(BankTransferCompletedEvent),
       tap(async (event: BankTransferCompletedEvent) => {
         console.log('🔄 Withdrawal Saga: Bank transfer completed, finalizing withdrawal for ID:', event.withdrawalId);
-        await this.stepHistoryService.addStepToHistory(
+            await this.withdrawalService.addStepToHistory(
           event.userId,
           event.accountId,
           event.withdrawalId,
@@ -163,12 +163,12 @@ export class WithdrawalSaga {
   };
 
   @Saga()
-  withdrawalFailed = (events$: Observable<IEvent>): Observable<ICommand> => {
+  withdrawalFailed = (events$: Observable<IEvent>): Observable<ICommand | undefined> => {
     return events$.pipe(
       ofType(WithdrawalFailedEvent),
       tap(async (event: WithdrawalFailedEvent) => {
         console.log('🔄 Withdrawal Saga: Withdrawal failed for ID:', event.withdrawalId, 'Reason:', event.reason);
-        await this.stepHistoryService.addStepToHistory(
+            await this.withdrawalService.addStepToHistory(
           event.userId,
           event.accountId,
           event.withdrawalId,
@@ -178,7 +178,7 @@ export class WithdrawalSaga {
       map((event: WithdrawalFailedEvent) => {
         // No command needed - this is the final step
         console.log('🔄 Withdrawal Saga: Withdrawal process completed with failure for ID:', event.withdrawalId);
-        return null;
+        return undefined;
       })
     );
   };

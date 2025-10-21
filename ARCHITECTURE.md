@@ -150,3 +150,305 @@ const account = await this.queryBus.execute(
 - **E2E Tests**: Test complete user workflows through the API
 
 This architecture ensures that the business logic remains independent and testable while providing flexibility for changing external concerns.
+
+## Saga Pattern Implementation
+
+The project implements the Saga pattern for orchestrating complex business processes, particularly for withdrawal operations. The Saga pattern manages distributed transactions and ensures data consistency across multiple bounded contexts.
+
+### Withdrawal Saga Overview
+
+The Withdrawal Saga orchestrates the complete withdrawal process from creation to completion or failure. It uses the Saga pattern to manage complex business processes that span multiple bounded contexts.
+
+#### Saga Flow
+
+```mermaid
+graph TD
+    A[Withdrawal Created] --> B[Debit Account]
+    B --> C{Debit Success?}
+    C -->|Yes| D[Send to Bank]
+    C -->|No| E[Withdrawal Failed]
+    D --> F{Bank Response}
+    F -->|Success| G[Complete Withdrawal]
+    F -->|Failure| H[Rollback Withdrawal]
+    E --> I[Notify User]
+    H --> I
+    G --> J[Notify User Success]
+```
+
+### Events and Commands
+
+#### Events (What Happened)
+- `WithdrawalCreatedEvent` - Withdrawal request created
+- `WithdrawalDebitedEvent` - Account successfully debited
+- `WithdrawalSentToBankEvent` - Transfer sent to bank
+- `BankResponseReceivedEvent` - Bank response received (success or failure)
+- `WithdrawalRollingBackEvent` - Withdrawal is being rolled back
+- `BankTransferCompletedEvent` - Bank confirmed transfer
+- `WithdrawalFailedEvent` - Process failed at any step
+
+#### Commands (What to Do)
+- `DebitAccountCommand` - Debit the user's account
+- `SendToBankCommand` - Send transfer to bank
+- `CompleteWithdrawalCommand` - Mark withdrawal as completed
+- `RollbackWithdrawalCommand` - Rollback failed transaction
+
+### Step History Tracking
+
+The saga tracks each step in the withdrawal process and saves it to the `stepHistory` field, providing complete audit trails and debugging capabilities.
+
+#### Step Sequence (Success)
+```
+1. CREATED              → WithdrawalCreatedEvent
+2. DEBITING             → WithdrawalDebitedEvent  
+3. SENDING_TO_BANK      → WithdrawalSentToBankEvent
+4. RECEIVED_BANK_RESPONSE → BankResponseReceivedEvent (SUCCESS)
+5. COMPLETED            → BankTransferCompletedEvent
+```
+
+#### Step Sequence (Failure with Rollback)
+```
+1. CREATED              → WithdrawalCreatedEvent
+2. DEBITING             → WithdrawalDebitedEvent  
+3. SENDING_TO_BANK      → WithdrawalSentToBankEvent
+4. RECEIVED_BANK_RESPONSE → BankResponseReceivedEvent (FAILURE)
+5. ROLLING_BACK         → WithdrawalRollingBackEvent
+6. FAILED               → WithdrawalFailedEvent
+```
+
+### Step History Examples
+
+#### Successful Withdrawal Flow
+```json
+{
+  "id": "withdrawal_123",
+  "userId": "user_456",
+  "accountId": "account_789",
+  "bankAccountId": "bank_101",
+  "amount": 500.00,
+  "status": "COMPLETED",
+  "created_at": "2023-10-18T14:30:00.000Z",
+  "stepHistory": [
+    {
+      "step": "CREATED",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:00.000Z"
+    },
+    {
+      "step": "DEBITING",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:05.000Z"
+    },
+    {
+      "step": "SENDING_TO_BANK",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:10.000Z"
+    },
+    {
+      "step": "RECEIVED_BANK_RESPONSE",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:15.000Z"
+    },
+    {
+      "step": "COMPLETED",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:20.000Z"
+    }
+  ]
+}
+```
+
+#### Failed Withdrawal Flow with Rollback
+```json
+{
+  "id": "withdrawal_123",
+  "userId": "user_456",
+  "accountId": "account_789",
+  "bankAccountId": "bank_101",
+  "amount": 500.00,
+  "status": "FAILED",
+  "created_at": "2023-10-18T14:30:00.000Z",
+  "stepHistory": [
+    {
+      "step": "CREATED",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:00.000Z"
+    },
+    {
+      "step": "DEBITING",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:05.000Z"
+    },
+    {
+      "step": "SENDING_TO_BANK",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:10.000Z"
+    },
+    {
+      "step": "RECEIVED_BANK_RESPONSE",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:15.000Z"
+    },
+    {
+      "step": "ROLLING_BACK",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:20.000Z"
+    },
+    {
+      "step": "FAILED",
+      "stepRetrialCount": 0,
+      "at": "2023-10-18T14:30:25.000Z"
+    }
+  ]
+}
+```
+
+### Bank Response Flow Integration
+
+The saga integrates with the Bradesco webhook to handle bank responses and trigger appropriate rollback mechanisms.
+
+#### Bradesco Webhook Integration
+```typescript
+@Post('')
+async findOne(@Body() dto: BradescoWebHookDto): Promise<void> {
+  if (dto.success) {
+    // Emit bank response event for successful transfer
+    this.eventBus.publish(
+      new BankResponseReceivedEvent(
+        dto.withdrawalId,
+        dto.userId,
+        dto.accountId,
+        `bradesco_${Date.now()}`,
+        'SUCCESS',
+        '200',
+        'Transfer completed successfully',
+        new Date()
+      )
+    );
+  } else {
+    // Emit rolling back event for failed transfer
+    this.eventBus.publish(
+      new WithdrawalRollingBackEvent(
+        dto.withdrawalId,
+        dto.userId,
+        dto.accountId,
+        dto.error,
+        new Date()
+      )
+    );
+  }
+}
+```
+
+### Saga Implementation Benefits
+
+#### 1. **Decoupling**
+- Each step is independent
+- Easy to add/remove steps
+- Clear separation of concerns
+
+#### 2. **Error Handling**
+- Automatic rollback on failures
+- Compensating transactions
+- Event-driven error recovery
+
+#### 3. **Scalability**
+- Each command can be handled by different services
+- Easy to add retry logic
+- Supports distributed systems
+
+#### 4. **Testability**
+- Each step can be tested independently
+- Easy to mock events and commands
+- Clear input/output contracts
+
+#### 5. **Audit Trail**
+- Complete step history tracking
+- Retry count monitoring
+- Timestamp-based debugging
+
+### Usage Example
+
+```typescript
+// 1. Create withdrawal (triggers saga)
+const withdrawal = await withdrawalService.createWithdrawal(
+  userId, 
+  accountId, 
+  bankAccountId, 
+  amount
+);
+
+// 2. Saga automatically handles:
+// - DebitAccountCommand
+// - SendToBankCommand  
+// - CompleteWithdrawalCommand
+// - Or RollbackWithdrawalCommand on failure
+```
+
+### Configuration
+
+To use the saga, add the `WithdrawalSagaModule` to your application:
+
+```typescript
+@Module({
+  imports: [
+    WithdrawalSagaModule,
+    // ... other modules
+  ],
+})
+export class AppModule {}
+```
+
+### Monitoring and Logging
+
+The saga provides comprehensive logging:
+
+```typescript
+// Each step logs its progress
+console.log('🔄 Withdrawal Saga: Starting withdrawal process for ID:', withdrawalId);
+console.log('🔄 Withdrawal Saga: Account debited, sending to bank for ID:', withdrawalId);
+console.log('🔄 Withdrawal Saga: Withdrawal sent to bank, waiting for response for ID:', withdrawalId);
+console.log('🔄 Withdrawal Saga: Bank transfer completed, finalizing withdrawal for ID:', withdrawalId);
+```
+
+### Testing the Saga
+
+Test the saga by:
+1. Publishing events
+2. Verifying commands are generated
+3. Testing error scenarios
+4. Validating rollback behavior
+
+```typescript
+// Test successful flow
+const event = new WithdrawalCreatedEvent(...);
+eventBus.publish(event);
+// Verify DebitAccountCommand is generated
+
+// Test failure flow  
+const failureEvent = new WithdrawalFailedEvent(...);
+eventBus.publish(failureEvent);
+// Verify RollbackWithdrawalCommand is generated
+```
+
+### Step History Flow Summary
+
+| Step | Trigger | Action | Next Step |
+|------|---------|--------|-----------|
+| CREATED | WithdrawalCreatedEvent | Create withdrawal | DEBITING |
+| DEBITING | WithdrawalDebitedEvent | Debit account | SENDING_TO_BANK |
+| SENDING_TO_BANK | WithdrawalSentToBankEvent | Send to bank | RECEIVED_BANK_RESPONSE |
+| RECEIVED_BANK_RESPONSE | BankResponseReceivedEvent | Process bank response | COMPLETED or ROLLING_BACK |
+| ROLLING_BACK | WithdrawalRollingBackEvent | Rollback account balance | FAILED |
+| COMPLETED | BankTransferCompletedEvent | Finalize withdrawal | - |
+| FAILED | WithdrawalFailedEvent | Mark as failed | - |
+
+### Benefits of the Saga Pattern
+
+1. **💰 Account Balance Protection** - Ensures funds are returned to account on failure
+2. **📊 Complete Audit Trail** - Every step is tracked including rollback
+3. **🔄 Automatic Recovery** - System automatically handles failed transfers
+4. **🐛 Better Debugging** - Clear visibility into rollback process
+5. **📈 Error Monitoring** - Track rollback frequency and reasons
+6. **🔍 Compliance** - Maintains data integrity and financial accuracy
+7. **🎯 Independence** - Business rules are independent of external systems
+8. **🧪 Testability** - Each step can be tested independently

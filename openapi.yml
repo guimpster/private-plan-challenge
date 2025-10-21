@@ -423,6 +423,42 @@ components:
                 - step: FAILED
                   stepRetrialCount: 0
                   at: '2023-10-18T14:30:25.000Z'
+        notifications:
+          type: array
+          description: Email notifications sent to the user about this withdrawal
+          items:
+            type: object
+            required:
+              - type
+              - message
+              - sentAt
+              - userId
+            properties:
+              type:
+                type: string
+                description: Type of notification
+                enum:
+                  - SUCCESS
+                  - FAILURE
+                example: SUCCESS
+              message:
+                type: string
+                description: Notification message content
+                example: "Withdrawal of withdrawal_123 has been completed successfully. The funds have been transferred to your bank account."
+              sentAt:
+                type: string
+                format: date-time
+                description: When the notification was sent
+                example: '2023-10-18T14:30:25.000Z'
+              userId:
+                type: string
+                description: User who received the notification
+                example: user_123456789
+          example:
+            - type: SUCCESS
+              message: "Withdrawal of withdrawal_123 has been completed successfully. The funds have been transferred to your bank account."
+              sentAt: '2023-10-18T14:30:25.000Z'
+              userId: user_123456789
 
     ErrorResponseDto:
       type: object

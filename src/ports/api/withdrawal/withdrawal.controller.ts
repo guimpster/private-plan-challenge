@@ -72,7 +72,8 @@ export class WithdrawalController {
         amount: dto.amount,
         status: PrivatePlanWithdrawalStep.CREATED,
         created_at: withdrawal.created_at,
-        stepHistory: withdrawal.stepHistory || []
+        stepHistory: withdrawal.stepHistory || [],
+        notifications: withdrawal.notifications || []
       });
     } catch (error) {
       if (error.message?.includes('not found')) {
@@ -118,7 +119,8 @@ export class WithdrawalController {
       amount: withdrawal.amount,
       status: withdrawal.step,
       created_at: withdrawal.created_at,
-      stepHistory: withdrawal.stepHistory || []
+      stepHistory: withdrawal.stepHistory || [],
+      notifications: withdrawal.notifications || []
     });
   }
 }

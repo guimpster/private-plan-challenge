@@ -3,7 +3,7 @@ import { PrivatePlanAccount } from 'src/business/domain/entities/private-plan-ac
 import { PrivatePlanAccountRepository } from 'src/business/repository/private-plan-account.repository';
 import { IN_MEMORY_DB } from '../../infrastructure/db/in-memory/in-memory-db';
 import type { DBData } from '../../infrastructure/db/in-memory/in-memory-db.entity';
-import { Result } from 'src/business/common';
+import { Result } from 'src/business/common/index';
 import { AccountNotFoundError, NotEnoughFunds, UserNotFoundError } from 'src/business/errors/errors';
 
 @Injectable()
