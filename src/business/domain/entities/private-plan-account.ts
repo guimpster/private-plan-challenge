@@ -6,8 +6,8 @@ import { BaseEntity } from '../../common/base-entity';
 export class PrivatePlanAccount extends BaseEntity {
   id: string;
   userId: string;
-  cashAvailableForWithdrawal: number;
-  cashBalance: number;
+  cashAvailableForWithdrawal: number; // Amount in cents (integer)
+  cashBalance: number; // Amount in cents (integer)
   source: Source;
   withdrawals: PrivatePlanWithdrawal[];
   deposits: PrivatePlanDeposit[];

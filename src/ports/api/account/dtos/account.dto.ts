@@ -1,6 +1,6 @@
 export class DepositDto {
   id: string;
-  amount: number;
+  amount: number; // Amount in cents (integer)
   userCredited: boolean;
   release_at: Date;
   created_at: Date;
@@ -13,7 +13,7 @@ export class DepositDto {
 
 export class WithdrawalDto {
   id: string;
-  amount: number;
+  amount: number; // Amount in cents (integer)
   step: string;
   stepHistory: any[];
   notifications: any[];
@@ -27,8 +27,8 @@ export class WithdrawalDto {
 
 export class AccountDto {
   id: string;
-  cashAvailableForWithdrawal: number;
-  cashBalance: number;
+  cashAvailableForWithdrawal: number; // Amount in cents (integer)
+  cashBalance: number; // Amount in cents (integer)
   deposits: DepositDto[];
   withdrawals: WithdrawalDto[];
   created_at: Date;

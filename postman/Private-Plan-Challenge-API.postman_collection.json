@@ -67,7 +67,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"id\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"cashAvailableForWithdrawal\": 4183.94,\n  \"cashBalance\": 5449.54,\n  \"deposits\": [\n    {\n      \"id\": \"55df886b-0684-454a-aaeb-b95c391ca243\",\n      \"amount\": 2841.98,\n      \"userCredited\": true,\n      \"created_at\": \"2025-09-18T23:15:03Z\",\n      \"updated_at\": \"2025-09-18T23:15:03Z\"\n    },\n    {\n      \"id\": \"3760d14d-17bf-4deb-a3eb-8b2438ec25df\",\n      \"amount\": 2405.38,\n      \"userCredited\": true,\n      \"created_at\": \"2025-09-20T23:15:03Z\",\n      \"updated_at\": \"2025-09-20T23:15:03Z\"\n    }\n  ],\n  \"withdrawals\": [\n    {\n      \"id\": \"350408b1-822c-474b-9f26-24d17098ba07\",\n      \"amount\": 492.48,\n      \"step\": \"COMPLETED\",\n      \"stepHistory\": [\n        {\n          \"step\": \"CREATED\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:03Z\"\n        },\n        {\n          \"step\": \"DEBITING\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:05Z\"\n        },\n        {\n          \"step\": \"SENDING_TO_BANK\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:10Z\"\n        },\n        {\n          \"step\": \"RECEIVED_BANK_RESPONSE\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:15Z\"\n        },\n        {\n          \"step\": \"COMPLETED\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:20Z\"\n        }\n      ],\n      \"notifications\": [\n        {\n          \"type\": \"email\",\n          \"message\": \"Your withdrawal of $492.48 has been completed successfully\",\n          \"sentAt\": \"2025-10-03T23:15:20Z\"\n        }\n      ],\n      \"created_at\": \"2025-10-03T23:15:03Z\",\n      \"updated_at\": \"2025-10-03T23:15:20Z\"\n    },\n    {\n      \"id\": \"14ea502f-c4ef-4dbb-a893-debf0d8679e7\",\n      \"amount\": 611.15,\n      \"step\": \"COMPLETED\",\n      \"stepHistory\": [\n        {\n          \"step\": \"CREATED\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:03Z\"\n        },\n        {\n          \"step\": \"DEBITING\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:05Z\"\n        },\n        {\n          \"step\": \"SENDING_TO_BANK\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:10Z\"\n        },\n        {\n          \"step\": \"RECEIVED_BANK_RESPONSE\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:15Z\"\n        },\n        {\n          \"step\": \"COMPLETED\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:20Z\"\n        }\n      ],\n      \"notifications\": [\n        {\n          \"type\": \"email\",\n          \"message\": \"Your withdrawal of $611.15 has been completed successfully\",\n          \"sentAt\": \"2025-10-05T23:15:20Z\"\n        }\n      ],\n      \"created_at\": \"2025-10-05T23:15:03Z\",\n      \"updated_at\": \"2025-10-05T23:15:20Z\"\n    }\n  ],\n  \"created_at\": \"2025-08-17T23:15:03Z\",\n  \"updated_at\": \"2025-10-11T23:15:03Z\"\n}"
+							"body": "{\n  \"id\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"cashAvailableForWithdrawal\": 418394,\n  \"cashBalance\": 544954,\n  \"deposits\": [\n    {\n      \"id\": \"55df886b-0684-454a-aaeb-b95c391ca243\",\n      \"amount\": 284198,\n      \"userCredited\": true,\n      \"created_at\": \"2025-09-18T23:15:03Z\",\n      \"updated_at\": \"2025-09-18T23:15:03Z\"\n    },\n    {\n      \"id\": \"3760d14d-17bf-4deb-a3eb-8b2438ec25df\",\n      \"amount\": 240538,\n      \"userCredited\": true,\n      \"created_at\": \"2025-09-20T23:15:03Z\",\n      \"updated_at\": \"2025-09-20T23:15:03Z\"\n    }\n  ],\n  \"withdrawals\": [\n    {\n      \"id\": \"350408b1-822c-474b-9f26-24d17098ba07\",\n      \"amount\": 49248,\n      \"step\": \"COMPLETED\",\n      \"stepHistory\": [\n        {\n          \"step\": \"CREATED\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:03Z\"\n        },\n        {\n          \"step\": \"DEBITING\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:05Z\"\n        },\n        {\n          \"step\": \"SENDING_TO_BANK\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:10Z\"\n        },\n        {\n          \"step\": \"RECEIVED_BANK_RESPONSE\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:15Z\"\n        },\n        {\n          \"step\": \"COMPLETED\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-03T23:15:20Z\"\n        }\n      ],\n      \"notifications\": [\n        {\n          \"type\": \"email\",\n          \"message\": \"Your withdrawal of $492.48 has been completed successfully\",\n          \"sentAt\": \"2025-10-03T23:15:20Z\"\n        }\n      ],\n      \"created_at\": \"2025-10-03T23:15:03Z\",\n      \"updated_at\": \"2025-10-03T23:15:20Z\"\n    },\n    {\n      \"id\": \"14ea502f-c4ef-4dbb-a893-debf0d8679e7\",\n      \"amount\": 61115,\n      \"step\": \"COMPLETED\",\n      \"stepHistory\": [\n        {\n          \"step\": \"CREATED\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:03Z\"\n        },\n        {\n          \"step\": \"DEBITING\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:05Z\"\n        },\n        {\n          \"step\": \"SENDING_TO_BANK\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:10Z\"\n        },\n        {\n          \"step\": \"RECEIVED_BANK_RESPONSE\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:15Z\"\n        },\n        {\n          \"step\": \"COMPLETED\",\n          \"stepRetrialCount\": 0,\n          \"at\": \"2025-10-05T23:15:20Z\"\n        }\n      ],\n      \"notifications\": [\n        {\n          \"type\": \"email\",\n          \"message\": \"Your withdrawal of $611.15 has been completed successfully\",\n          \"sentAt\": \"2025-10-05T23:15:20Z\"\n        }\n      ],\n      \"created_at\": \"2025-10-05T23:15:03Z\",\n      \"updated_at\": \"2025-10-05T23:15:20Z\"\n    }\n  ],\n  \"created_at\": \"2025-08-17T23:15:03Z\",\n  \"updated_at\": \"2025-10-11T23:15:03Z\"\n}"
 						},
 						{
 							"name": "Account Not Found",
@@ -121,7 +121,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"userId\": \"{{user_id}}\",\n  \"accountId\": \"{{account_id}}\",\n  \"bankAccountId\": \"{{bank_account_id}}\",\n  \"amount\": 500.00\n}",
+							"raw": "{\n  \"userId\": \"{{user_id}}\",\n  \"accountId\": \"{{account_id}}\",\n  \"bankAccountId\": \"{{bank_account_id}}\",\n  \"amount\": 50000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -158,7 +158,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n  \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"bankAccountId\": \"b61648ba-0323-4e9a-8046-413c88de1245\",\n  \"amount\": 500.00\n}",
+									"raw": "{\n  \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n  \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"bankAccountId\": \"b61648ba-0323-4e9a-8046-413c88de1245\",\n  \"amount\": 50000\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -191,7 +191,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"id\": \"350408b1-822c-474b-9f26-24d17098ba07\",\n  \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n  \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"bankAccountId\": \"b61648ba-0323-4e9a-8046-413c88de1245\",\n  \"amount\": 500.00,\n  \"status\": \"CREATED\",\n  \"created_at\": \"2025-10-03T23:15:03Z\"\n}"
+							"body": "{\n  \"id\": \"350408b1-822c-474b-9f26-24d17098ba07\",\n  \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n  \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"bankAccountId\": \"b61648ba-0323-4e9a-8046-413c88de1245\",\n  \"amount\": 50000,\n  \"status\": \"CREATED\",\n  \"created_at\": \"2025-10-03T23:15:03Z\"\n}"
 						},
 						{
 							"name": "Validation Error",
@@ -205,7 +205,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n  \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"bankAccountId\": \"b61648ba-0323-4e9a-8046-413c88de1245\",\n  \"amount\": 0.001\n}",
+									"raw": "{\n  \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n  \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"bankAccountId\": \"b61648ba-0323-4e9a-8046-413c88de1245\",\n  \"amount\": 0\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -238,7 +238,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"statusCode\": 400,\n  \"message\": [\n    \"amount must not be less than 0.01\"\n  ],\n  \"error\": \"Bad Request\",\n  \"timestamp\": \"2025-10-18T14:30:00.000Z\",\n  \"path\": \"/api/v1/users/19ca04c6-9c96-40f4-b7db-a55394b5a58d/accounts/e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472/withdrawals\"\n}"
+							"body": "{\n  \"statusCode\": 400,\n  \"message\": [\n    \"amount must not be less than 1\"\n  ],\n  \"error\": \"Bad Request\",\n  \"timestamp\": \"2025-10-18T14:30:00.000Z\",\n  \"path\": \"/api/v1/users/19ca04c6-9c96-40f4-b7db-a55394b5a58d/accounts/e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472/withdrawals\"\n}"
 						}
 					],
 					"event": [
@@ -352,7 +352,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"id\": \"350408b1-822c-474b-9f26-24d17098ba07\",\n  \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n  \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"bankAccountId\": \"b61648ba-0323-4e9a-8046-413c88de1245\",\n  \"amount\": 492.48,\n  \"status\": \"COMPLETED\",\n  \"created_at\": \"2025-10-03T23:15:03Z\"\n}"
+							"body": "{\n  \"id\": \"350408b1-822c-474b-9f26-24d17098ba07\",\n  \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n  \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n  \"bankAccountId\": \"b61648ba-0323-4e9a-8046-413c88de1245\",\n  \"amount\": 49248,\n  \"status\": \"COMPLETED\",\n  \"created_at\": \"2025-10-03T23:15:03Z\"\n}"
 						},
 						{
 							"name": "Withdrawal Not Found",
@@ -763,7 +763,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n  {\n    \"id\": \"deposit_1\",\n    \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n    \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n    \"amount\": 1000,\n    \"release_at\": \"2025-10-21T16:43:37.311Z\",\n    \"userCredited\": false,\n    \"destinationAccountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n    \"comment\": \"Test deposit for today\"\n  }\n]"
+							"body": "[\n  {\n    \"id\": \"deposit_1\",\n    \"userId\": \"19ca04c6-9c96-40f4-b7db-a55394b5a58d\",\n    \"accountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n    \"amount\": 100000,\n    \"release_at\": \"2025-10-21T16:43:37.311Z\",\n    \"userCredited\": false,\n    \"destinationAccountId\": \"e05a5f81-8e1c-4bb1-aa01-bb9dfc8d8472\",\n    \"comment\": \"Test deposit for today\"\n  }\n]"
 						}
 					]
 				}

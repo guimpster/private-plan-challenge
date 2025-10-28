@@ -41,7 +41,7 @@ export class PrivatePlanWithdrawal extends BaseEntity {
   processed: boolean;
   sentToDestination: boolean;
   userCredited: boolean;
-  amount: number;
+  amount: number; // Amount in cents (integer)
   cancelRequested: boolean;
   canceled: boolean;
   comment: string;

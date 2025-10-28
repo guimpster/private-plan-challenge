@@ -105,12 +105,12 @@ GET /api/v1/users/{userId}/accounts/{accountId}
 ```json
 {
   "id": "acc_123456789",
-  "cashAvailableForWithdrawal": 1000.50,
-  "cashBalance": 1500.75,
+  "cashAvailableForWithdrawal": 100050,
+  "cashBalance": 150075,
   "deposits": [
     {
       "id": "deposit_123",
-      "amount": 500.00,
+      "amount": 50000,
       "userCredited": true,
       "created_at": "2023-10-18T14:30:00.000Z",
       "updated_at": "2023-10-18T14:30:00.000Z"
@@ -119,7 +119,7 @@ GET /api/v1/users/{userId}/accounts/{accountId}
   "withdrawals": [
     {
       "id": "withdrawal_456",
-      "amount": 200.00,
+      "amount": 20000,
       "step": "COMPLETED",
       "stepHistory": [
         {
@@ -162,7 +162,7 @@ POST /api/v1/users/{userId}/accounts/{accountId}/withdrawals
   "userId": "user_123456789",
   "accountId": "acc_123456789",
   "bankAccountId": "bank_987654321",
-  "amount": 500.00
+  "amount": 50000
 }
 ```
 
@@ -173,7 +173,7 @@ POST /api/v1/users/{userId}/accounts/{accountId}/withdrawals
   "userId": "user_123456789",
   "accountId": "acc_123456789",
   "bankAccountId": "bank_987654321",
-  "amount": 500.00,
+  "amount": 50000,
   "status": "CREATED",
   "stepHistory": [
     {
@@ -199,7 +199,7 @@ GET /api/v1/users/{userId}/accounts/{accountId}/withdrawals/{withdrawalId}
   "userId": "user_123456789",
   "accountId": "acc_123456789",
   "bankAccountId": "bank_987654321",
-  "amount": 500.00,
+  "amount": 50000,
   "status": "COMPLETED",
   "stepHistory": [
     {

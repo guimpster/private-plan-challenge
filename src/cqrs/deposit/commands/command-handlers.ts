@@ -53,7 +53,7 @@ export class SetupTestDataHandler implements ICommandHandler<SetupTestDataComman
         processed: true,
         sentToDestination: true,
         userCredited: false,
-        amount: 1000.00,
+        amount: 100000, // 1000.00 in cents
         cancelRequested: false,
         canceled: false,
         comment: 'Test deposit for today',
@@ -73,7 +73,7 @@ export class SetupTestDataHandler implements ICommandHandler<SetupTestDataComman
         processed: true,
         sentToDestination: true,
         userCredited: false,
-        amount: 500.00,
+        amount: 50000, // 500.00 in cents
         cancelRequested: false,
         canceled: false,
         comment: 'Test deposit for tomorrow',
@@ -93,7 +93,7 @@ export class SetupTestDataHandler implements ICommandHandler<SetupTestDataComman
         processed: true,
         sentToDestination: true,
         userCredited: true,
-        amount: 200.00,
+        amount: 20000, // 200.00 in cents
         cancelRequested: false,
         canceled: false,
         comment: 'Already credited deposit',

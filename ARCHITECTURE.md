@@ -259,7 +259,7 @@ The saga tracks each step in the withdrawal process and saves it to the `stepHis
   "userId": "user_456",
   "accountId": "account_789",
   "bankAccountId": "bank_101",
-  "amount": 500.00,
+  "amount": 50000,
   "status": "COMPLETED",
   "created_at": "2023-10-18T14:30:00.000Z",
   "stepHistory": [
@@ -299,7 +299,7 @@ The saga tracks each step in the withdrawal process and saves it to the `stepHis
   "userId": "user_456",
   "accountId": "account_789",
   "bankAccountId": "bank_101",
-  "amount": 500.00,
+  "amount": 50000,
   "status": "FAILED",
   "created_at": "2023-10-18T14:30:00.000Z",
   "stepHistory": [

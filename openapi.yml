@@ -105,7 +105,7 @@ paths:
               userId: user_123456789
               accountId: acc_123456789
               bankAccountId: bank_987654321
-              amount: 500.00
+              amount: 50000
       responses:
         '201':
           description: Withdrawal created successfully
@@ -197,8 +197,8 @@ paths:
                   enum: [success, failed, pending]
                   description: Transaction status
                 amount:
-                  type: number
-                  description: Transaction amount
+                  type: integer
+                  description: Transaction amount (amount in cents)
                 timestamp:
                   type: string
                   format: date-time
@@ -240,15 +240,15 @@ components:
           description: Unique account identifier
           example: acc_123456789
         cashAvailableForWithdrawal:
-          type: number
-          description: Cash available for withdrawal
+          type: integer
+          description: Cash available for withdrawal (amount in cents)
           minimum: 0
-          example: 1000.50
+          example: 100050
         cashBalance:
-          type: number
-          description: Total cash balance
+          type: integer
+          description: Total cash balance (amount in cents)
           minimum: 0
-          example: 1500.75
+          example: 150075
         created_at:
           type: string
           format: date-time
@@ -281,10 +281,10 @@ components:
           description: Bank account identifier for withdrawal destination
           example: bank_987654321
         amount:
-          type: number
-          description: Withdrawal amount
-          minimum: 0.01
-          example: 500.00
+          type: integer
+          description: Withdrawal amount (amount in cents)
+          minimum: 1
+          example: 50000
 
     WithdrawalResponseDto:
       type: object
@@ -314,9 +314,9 @@ components:
           description: Bank account identifier
           example: bank_987654321
         amount:
-          type: number
-          description: Withdrawal amount
-          example: 500.00
+          type: integer
+          description: Withdrawal amount (amount in cents)
+          example: 50000
         status:
           type: string
           description: Current withdrawal status

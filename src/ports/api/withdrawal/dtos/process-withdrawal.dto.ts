@@ -15,9 +15,9 @@ export class CreateWithdrawalDto extends BaseEntity {
   bankAccountId: string;
 
   @IsNumber()
-  @Min(0.01)
+  @Min(1) // Minimum 1 cent instead of 0.01
   @IsOptional()
-  amount?: number;
+  amount?: number; // Amount in cents (integer)
 }
 
 export class WithdrawalResponseDto {
@@ -25,7 +25,7 @@ export class WithdrawalResponseDto {
   userId: string;
   accountId: string;
   bankAccountId: string;
-  amount: number;
+  amount: number; // Amount in cents (integer)
   status: string;
   created_at: Date;
   stepHistory: { step: string; stepRetrialCount: number; at: Date }[];
