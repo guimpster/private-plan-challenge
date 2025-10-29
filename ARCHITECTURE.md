@@ -10,28 +10,13 @@ The innermost layer containing the core business logic and entities.
 **Components:**
 - **Entities**: Core business objects (`User`, `PrivatePlanAccount`, `PrivatePlanDeposit`, etc.)
 - **Value Objects**: Immutable objects representing concepts (`Money`, `AccountId`, `UserId`)
-- **Domain Services**: Business logic that doesn't belong to a single entity (`PrivatePlanAccountService`, `PrivatePlanDepositService`)
-- **Domain Events**: Events that occur within the domain (`AccountDebitedEvent`, `InsufficientFundsEvent`)
-- **Domain Event Dispatcher**: Infrastructure for handling domain events
 
 **Key Principles:**
 - No dependencies on external layers
 - Contains pure business logic
 - Framework-agnostic
 
-### 2. Application Layer (`src/application/`)
-Orchestrates the flow of data to and from the domain layer.
-
-**Components:**
-- **Application Services**: Coordinate domain objects to perform application tasks
-- **DTOs/Commands/Queries**: Data transfer objects for the application layer
-
-**Key Principles:**
-- Depends only on the domain layer
-- Contains application-specific business rules
-- Orchestrates domain objects
-
-### 3. Infrastructure Layer (`src/infrastructure/`)
+### 2. Infrastructure Layer (`src/infrastructure/`)
 Contains the implementation details of external concerns.
 
 **Components:**
@@ -44,7 +29,7 @@ Contains the implementation details of external concerns.
 - Contains framework-specific code
 - Handles external dependencies
 
-### 4. Interface Adapters Layer (`src/ports/`)
+### 3. Interface Adapters Layer (`src/ports/`)
 Contains adapters that convert data between the use cases and external agencies.
 
 **Components:**
@@ -53,7 +38,7 @@ Contains adapters that convert data between the use cases and external agencies.
 - **Presenters**: Format data for the UI
 - **Gateways**: Interfaces for external services
 
-### 5. CQRS Layer (`src/cqrs/`)
+### 4. CQRS Layer (`src/cqrs/`)
 Implements Command Query Responsibility Segregation pattern.
 
 **Components:**
@@ -62,7 +47,7 @@ Implements Command Query Responsibility Segregation pattern.
 - **Command/Query Handlers**: Process commands and queries
 - **Events**: Represent domain events
 
-### 6. Jobs Layer (`src/jobs/`)
+### 5. Jobs Layer (`src/jobs/`)
 Handles scheduled and background tasks.
 
 **Components:**
@@ -81,10 +66,9 @@ Handles scheduled and background tasks.
 The fundamental rule of Clean Architecture is that **source code dependencies can only point inward**. 
 
 - Domain layer has no dependencies
-- Application layer depends only on Domain layer
-- Infrastructure layer depends on Domain and Application layers
-- Interface Adapters depend on Application and Domain layers
-- CQRS layer depends on Application and Domain layers
+- Infrastructure layer depends on Domain layer
+- Interface Adapters depend on Domain layer
+- CQRS layer depends on Domain layer
 
 ## Key Benefits
 
@@ -140,15 +124,6 @@ const updatedAccount = await AccountDomainService.debitAccount(
 );
 ```
 
-### Application Service Usage
-```typescript
-// Application service orchestrates domain objects
-const account = await accountApplicationService.getAccount({
-  userId: 'user123',
-  accountId: 'account456'
-});
-```
-
 ### CQRS Usage
 ```typescript
 // Controller uses QueryBus for read operations
@@ -181,7 +156,7 @@ class PrivatePlanDeposit {
 ## Testing Strategy
 
 - **Unit Tests**: Test domain logic in isolation
-- **Integration Tests**: Test application services with real repositories
+- **Integration Tests**: Test services with real repositories
 - **E2E Tests**: Test complete user workflows through the API
 
 This architecture ensures that the business logic remains independent and testable while providing flexibility for changing external concerns.
