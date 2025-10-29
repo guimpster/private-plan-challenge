@@ -9,7 +9,6 @@ The innermost layer containing the core business logic and entities.
 
 **Components:**
 - **Entities**: Core business objects (`User`, `PrivatePlanAccount`, `PrivatePlanDeposit`, etc.)
-- **Value Objects**: Immutable objects representing concepts (`Money`, `AccountId`, `UserId`)
 
 **Key Principles:**
 - No dependencies on external layers

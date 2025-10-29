@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrivatePlanAccount } from '../entities/private-plan-account';
 import { PrivatePlanAccountRepository } from '../../repository/private-plan-account.repository';
-import { Money, AccountId, UserId } from '../value-objects/value-objects';
 
 export interface GetAccountQuery {
   userId: string;
@@ -32,43 +31,31 @@ export class PrivatePlanAccountService {
   }
 
   async getAccount(query: GetAccountQuery): Promise<PrivatePlanAccount | undefined> {
-    const userId = new UserId(query.userId);
-    const accountId = new AccountId(query.accountId);
-    
-    return this.findByUserId(userId.value, accountId.value);
+    return this.findByUserId(query.userId, query.accountId);
   }
 
   async debitAccount(command: DebitAccountCommand): Promise<PrivatePlanAccount> {
-    const userId = new UserId(command.userId);
-    const accountId = new AccountId(command.accountId);
-    const amount = new Money(command.amount);
-    const withdrawalId = command.withdrawalId;
-
-    const account = await this.findByUserId(userId.value, accountId.value);
+    const account = await this.findByUserId(command.userId, command.accountId);
     if (!account) {
-      throw new Error(`Account ${accountId.value} not found for user ${userId.value}`);
+      throw new Error(`Account ${command.accountId} not found for user ${command.userId}`);
     }
 
-    const updatedAccount = await this.debitAccountInternal(account, amount.amount, withdrawalId);
+    const updatedAccount = await this.debitAccountInternal(account, command.amount, command.withdrawalId);
     
-    await this.privatePlanAccountRepository.updateByUserId(userId.value, accountId.value, updatedAccount);
+    await this.privatePlanAccountRepository.updateByUserId(command.userId, command.accountId, updatedAccount);
     
     return updatedAccount;
   }
 
   async creditAccount(command: CreditAccountCommand): Promise<PrivatePlanAccount> {
-    const userId = new UserId(command.userId);
-    const accountId = new AccountId(command.accountId);
-    const amount = new Money(command.amount);
-
-    const account = await this.findByUserId(userId.value, accountId.value);
+    const account = await this.findByUserId(command.userId, command.accountId);
     if (!account) {
-      throw new Error(`Account ${accountId.value} not found for user ${userId.value}`);
+      throw new Error(`Account ${command.accountId} not found for user ${command.userId}`);
     }
 
-    const updatedAccount = await this.creditAccountInternal(account, amount.amount, command.reason);
+    const updatedAccount = await this.creditAccountInternal(account, command.amount, command.reason);
     
-    await this.privatePlanAccountRepository.updateByUserId(userId.value, accountId.value, updatedAccount);
+    await this.privatePlanAccountRepository.updateByUserId(command.userId, command.accountId, updatedAccount);
     
     return updatedAccount;
   }

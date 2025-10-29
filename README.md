@@ -333,7 +333,6 @@ POST /bradesco
 
 ### Domain Layer (`src/business/domain/`)
 - **Entities**: Core business objects (`User`, `PrivatePlanAccount`)
-- **Value Objects**: Immutable objects (`Money`, `AccountId`, `UserId`)
 - **Domain Services**: Business logic (`AccountDomainService`)
 - **Domain Events**: Business events (`AccountDebitedEvent`, `InsufficientFundsEvent`)
 
