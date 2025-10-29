@@ -31,6 +31,14 @@ cd stay-challenge
 pnpm install --frozen-lockfile
 ```
 
+### Environment Variables
+
+Before running the application, you'll need to set up environment variables. You can use the provided example file:
+
+- **Example Configuration**: `dev.config-vars.json` - Contains example environment variables for development
+
+You can copy this file and modify it according to your needs, or create a `.env` file with the same structure.
+
 ### Development
 
 ```bash

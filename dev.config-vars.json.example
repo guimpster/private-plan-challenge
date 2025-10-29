@@ -1,0 +1,5 @@
+{
+  "NODE_ENV": "dev",
+  "API_PORT": 3000,
+  "API_HOST": "localhost"
+}
